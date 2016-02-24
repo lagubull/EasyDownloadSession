@@ -2,7 +2,7 @@
 
 * [0.1.0](#0.1.0)
 
-## 0.0.1
+## 0.1.0
 
 - Download task that can be paused and resumed.
 - Session can be configured to allow multiple concurrent downloads.
