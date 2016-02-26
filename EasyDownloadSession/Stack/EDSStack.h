@@ -18,12 +18,12 @@
 /**
  Number of items in the stack.
  */
-@property (nonatomic, assign, readonly) NSInteger count;
+@property (nonatomic, assign, readonly) NSUInteger count;
 
 /**
  Items in the stack.
  */
-@property (nonatomic, strong, readonly) NSMutableArray *objectsArray;
+@property (nonatomic, strong, readonly) NSMutableArray *downloadsArray;
 
 /**
  Inserts in the stack.
@@ -43,5 +43,10 @@
  Empties the stack.
  */
 - (void)clear;
+
+/**
+ Release the data of paused downloads.
+ */
+- (void)releaseMemory;
 
 @end

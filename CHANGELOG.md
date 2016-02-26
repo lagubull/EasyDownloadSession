@@ -1,7 +1,12 @@
 ## Table Of Contents
 
+* [1.0.0](#1.0.0)
 * [0.5.0](#0.5.0)
 * [0.1.0](#0.1.0)
+
+## 1.0.0
+
+- Listen to memory warnings and release the NSData stored.
 
 ## 0.5.0
 
