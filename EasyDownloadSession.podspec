@@ -1,7 +1,7 @@
 Pod::Spec.new do |s|
 
 s.name         = "EasyDownloadSession"
-s.version      = "0.1.0"
+s.version      = "0.5.0"
 s.summary      = "SimpleTableView is an easy way of using a tableView connected to CoreData via a NSFetchedResultsController with pagination capabilities."
 
 s.homepage     = "https://github.com/lagubull/"

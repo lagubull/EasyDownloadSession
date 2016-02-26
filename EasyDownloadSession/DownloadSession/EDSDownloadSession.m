@@ -92,11 +92,15 @@ static NSInteger const kCancelled = -999;
 
 + (void)scheduleDownloadWithID:(NSString *)downloadID
                        fromURL:(NSURL *)url
-               completionBlock:(void (^)(EDSDownloadTaskInfo *downloadTask, NSData *responseData, NSURL *location, NSError *error))completionHandler
+                      progress:(void (^)(EDSDownloadTaskInfo *downloadTask))progress
+                       success:(void (^)(EDSDownloadTaskInfo *downloadTask, NSData *responseData, NSURL *location))success
+                       failure:(void (^)(EDSDownloadTaskInfo *downloadTask,NSError *error))failure
 {
     EDSDownloadTaskInfo *task = [[EDSDownloadTaskInfo alloc] initWithDownloadID:downloadID
                                                                             URL:url
-                                                                completionBlock:completionHandler];
+                                                                       progress:progress
+                                                                        success:success
+                                                                        failure:failure];
     
     if (![[EDSDownloadSession downloadSession] shouldCoalesceDownloadTask:task])
     {
@@ -110,13 +114,17 @@ static NSInteger const kCancelled = -999;
 
 + (void)forceDownloadWithID:(NSString *)downloadID
                     fromURL:(NSURL *)url
-            completionBlock:(void (^)(EDSDownloadTaskInfo *downloadTask, NSData *responseData, NSURL *location, NSError *error))completionHandler
+                   progress:(void (^)(EDSDownloadTaskInfo *downloadTask))progress
+                    success:(void (^)(EDSDownloadTaskInfo *downloadTask, NSData *responseData, NSURL *location))success
+                    failure:(void (^)(EDSDownloadTaskInfo *downloadTask,NSError *error))failure
 {
     [EDSDownloadSession pauseDownloads];
     
     [EDSDownloadSession scheduleDownloadWithID:downloadID
                                        fromURL:url
-                               completionBlock:completionHandler];
+                                      progress:progress
+                                       success:success
+                                       failure:failure];
 }
 
 #pragma mark - NSURLSessionDownloadDelegate
@@ -127,11 +135,11 @@ static NSInteger const kCancelled = -999;
     
     if (taskInProgress)
     {
-        if (taskInProgress.completionHandler)
+        if (taskInProgress.success)
         {
             NSData * data  = [NSData dataWithContentsOfFile:[location path]];
             
-            taskInProgress.completionHandler(self.inProgressDownload, data, location, nil);
+            taskInProgress.success(self.inProgressDownload, data, location);
         }
         
         [self.inProgressDownloadsDictionary removeObjectForKey:@(downloadTask.taskIdentifier)];
@@ -150,9 +158,7 @@ totalBytesExpectedToWrite:(int64_t)totalBytesExpectedToWrite
     
     if (taskInProgress)
     {
-        //TODO: Move this logic within the DownloadTaskInfo
-        taskInProgress.downloadProgress = (double)totalBytesWritten / (double)totalBytesExpectedToWrite;
-        [self.delegate didUpdateProgress:taskInProgress];
+        [taskInProgress didUpdateProgress:[NSNumber numberWithDouble:(double)totalBytesWritten / (double)totalBytesExpectedToWrite]];
     }
 }
 
@@ -164,9 +170,9 @@ totalBytesExpectedToWrite:(int64_t)totalBytesExpectedToWrite
         EDSDownloadTaskInfo *taskInProgress = [self.inProgressDownloadsDictionary objectForKey:@(task.taskIdentifier)];
         
         if (taskInProgress &&
-            taskInProgress.completionHandler)
+            taskInProgress.failure)
         {
-            taskInProgress.completionHandler(self.inProgressDownload, nil, nil, error);
+            taskInProgress.failure(self.inProgressDownload, error);
         }
         
         //  Handle error

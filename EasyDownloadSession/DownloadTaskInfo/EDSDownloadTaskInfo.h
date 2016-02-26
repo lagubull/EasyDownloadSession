@@ -26,7 +26,7 @@
 /**
  Progress of the download.
  */
-@property (nonatomic, assign) double downloadProgress;
+@property (nonatomic, assign) NSNumber *downloadProgress;
 
 /**
  Indicates whethere the task is executing.
@@ -49,9 +49,19 @@
 @property (nonatomic, copy) NSString *taskIdentifier;
 
 /**
- Block to be executed upon finishing.
+ Block to be executed upon success.
  */
-@property (nonatomic, copy) void (^completionHandler)(EDSDownloadTaskInfo *downloadTask, NSData *responseData, NSURL *location, NSError *error);
+@property (nonatomic, copy) void (^success)(EDSDownloadTaskInfo *downloadTask, NSData *responseData, NSURL *location);
+
+/**
+ Block to be executed upon error.
+ */
+@property (nonatomic, copy) void (^failure)(EDSDownloadTaskInfo *downloadTask, NSError *error);
+
+/**
+ Block to be executed upon progress.
+ */
+@property (nonatomic, copy) void (^progress)(EDSDownloadTaskInfo *downloadTask);
 
 /**
  Path to be downloaded.
@@ -67,9 +77,11 @@
  
  @return Instance of the class.
  */
-- (instancetype)initWithDownloadID:(NSString *)dowloadId
+- (instancetype)initWithDownloadID:(NSString *)downloadId
                                URL:(NSURL *)url
-                   completionBlock:(void (^)(EDSDownloadTaskInfo *downloadTask, NSData *responseData, NSURL *location, NSError *error))completionHandler;
+                          progress:(void (^)(EDSDownloadTaskInfo *downloadTask))progress
+                           success:(void (^)(EDSDownloadTaskInfo *downloadTask, NSData *responseData, NSURL *location))success
+                           failure:(void (^)(EDSDownloadTaskInfo *downloadTask,NSError *error))failure;
 
 /**
  Stops the task and stores the progress.
@@ -80,6 +92,8 @@
  Starts the task.
  */
 - (void)resume;
+
+- (void)didUpdateProgress:(NSNumber *)newProgress;
 
 /**
  Checks weather the taskInfo provided equals self.

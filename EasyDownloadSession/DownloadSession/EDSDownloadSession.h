@@ -79,7 +79,9 @@
  */
 + (void)scheduleDownloadWithID:(NSString *)downloadID
                        fromURL:(NSURL *)url
-               completionBlock:(void (^)(EDSDownloadTaskInfo *downloadTask, NSData *responseData, NSURL *location, NSError *error))completionHandler;
+                      progress:(void (^)(EDSDownloadTaskInfo *downloadTask))progress
+                       success:(void (^)(EDSDownloadTaskInfo *downloadTask, NSData *responseData, NSURL *location))success
+                       failure:(void (^)(EDSDownloadTaskInfo *downloadTask,NSError *error))failure;
 
 /**
  Stops the current download and adds it to the stack, the it begins executing this new download.
@@ -89,7 +91,9 @@
  */
 + (void)forceDownloadWithID:(NSString *)downloadID
                     fromURL:(NSURL *)url
-            completionBlock:(void (^)(EDSDownloadTaskInfo *downloadTask, NSData *responseData, NSURL *location, NSError *error))completionHandler;
+                   progress:(void (^)(EDSDownloadTaskInfo *downloadTask))progress
+                    success:(void (^)(EDSDownloadTaskInfo *downloadTask, NSData *responseData, NSURL *location))success
+                    failure:(void (^)(EDSDownloadTaskInfo *downloadTask,NSError *error))failure;
 
 /**
  Creates a download task to download the contents of the given URL.
