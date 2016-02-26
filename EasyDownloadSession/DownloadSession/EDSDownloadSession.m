@@ -8,6 +8,8 @@
 
 #import "EDSDownloadSession.h"
 
+#import <UIKit/UIKit.h>
+
 #import "EDSStack.h"
 #import "EDSDownloadTaskInfo.h"
 
@@ -77,15 +79,23 @@ static NSInteger const kCancelled = -999;
 
 + (EDSDownloadSession *)downloadSession
 {
-    static EDSDownloadSession *session = nil;
+    static EDSDownloadSession *downloadSession = nil;
     static dispatch_once_t onceToken;
     
     dispatch_once(&onceToken, ^
                   {
-                      session = [[self alloc] init];
+                      downloadSession = [[self alloc] init];
+                      
+                      [[NSNotificationCenter defaultCenter] addObserverForName:UIApplicationDidReceiveMemoryWarningNotification
+                                                                        object:nil
+                                                                         queue:[NSOperationQueue mainQueue]
+                                                                    usingBlock:^(NSNotification * __unused notification)
+                       {
+                           [downloadSession.downloadStack releaseMemory];
+                       }];
                   });
     
-    return session;
+    return downloadSession;
 }
 
 #pragma mark - ScheduleDownload
@@ -279,7 +289,7 @@ totalBytesExpectedToWrite:(int64_t)totalBytesExpectedToWrite
     
     if (!didCoalesce)
     {
-        for (EDSDownloadTaskInfo *taskInfo in self.downloadStack.objectsArray)
+        for (EDSDownloadTaskInfo *taskInfo in self.downloadStack.downloadsArray)
         {
             BOOL canAskToCoalesce = [taskInfo isKindOfClass:[EDSDownloadTaskInfo class]];
             

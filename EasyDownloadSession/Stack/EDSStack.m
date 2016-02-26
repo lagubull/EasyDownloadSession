@@ -15,12 +15,12 @@
 /**
  Number of items in the stack.
  */
-@property (nonatomic, assign, readwrite) NSInteger count;
+@property (nonatomic, assign, readwrite) NSUInteger count;
 
 /**
  Items in the stack.
  */
-@property (nonatomic, strong, readwrite) NSMutableArray *objectsArray;
+@property (nonatomic, strong, readwrite) NSMutableArray *downloadsArray;
 
 @end
 
@@ -34,7 +34,7 @@
     
     if(self)
     {
-        _objectsArray = [[NSMutableArray alloc] init];
+        _downloadsArray = [[NSMutableArray alloc] init];
         _count = 0;
     }
     
@@ -45,8 +45,8 @@
 
 - (void)push:(EDSDownloadTaskInfo*)taskInfo
 {
-    [self.objectsArray addObject:taskInfo];
-    self.count = self.objectsArray.count;
+    [self.downloadsArray addObject:taskInfo];
+    self.count = self.downloadsArray.count;
 }
 
 #pragma mark -  Pop
@@ -55,12 +55,12 @@
 {
     EDSDownloadTaskInfo *taskInfo = nil;
     
-    if (self.objectsArray.count > 0)
+    if (self.downloadsArray.count > 0)
     {
-        taskInfo = [self.objectsArray lastObject];
+        taskInfo = [self.downloadsArray lastObject];
         
-        [self.objectsArray removeLastObject];
-        self.count = self.objectsArray.count;
+        [self.downloadsArray removeLastObject];
+        self.count = self.downloadsArray.count;
     }
     
     return taskInfo;
@@ -70,15 +70,28 @@
 
 - (void)clear
 {
-    [self.objectsArray removeAllObjects];
+    [self.downloadsArray removeAllObjects];
     self.count = 0;
+}
+
+#pragma mark - ReleaseMemory
+
+- (void)releaseMemory
+{
+    @synchronized(self.downloadsArray)
+    {
+        for (EDSDownloadTaskInfo *download in self.downloadsArray)
+        {
+            [download releaseMemory];
+        }
+    }
 }
 
 #pragma mark - Dealloc
 
 - (void)dealloc
 {
-    self.objectsArray = nil;
+    self.downloadsArray = nil;
 }
 
 @end

@@ -109,4 +109,9 @@
  */
 - (void)coalesceWithTaskInfo:(EDSDownloadTaskInfo *)taskInfo;
 
+/**
+ Release the data of paused downloads.
+ */
+- (void)releaseMemory;
+
 @end

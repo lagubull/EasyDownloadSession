@@ -205,4 +205,10 @@
     }
 }
 
+- (void)releaseMemory
+{
+    self.downloadProgress = @(0.0);
+    self.taskResumeData = nil;
+}
+
 @end
