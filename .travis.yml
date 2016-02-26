@@ -1,10 +1,6 @@
 language: objective-c
 
-before_install:
-    - rvm use system
-    - sudo gem install cocoapods -v '0.39.0'
+xcode_project: EasyDownloadSession.xcodeproj
+xcode_scheme: EasyDownloadSession
 
-osx_image: xcode7.2
 
-script:
-    xctool -workspace EasyDownloadSession.xcworkspace -scheme EasyDownloadSession build -sdk iphonesimulator
