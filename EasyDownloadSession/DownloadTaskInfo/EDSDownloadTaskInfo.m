@@ -72,7 +72,7 @@
     
     [self.task suspend];
     
-    [self.task cancelByProducingResumeData:^(NSData * _Nullable resumeData)
+    [self.task cancelByProducingResumeData:^(NSData * resumeData)
      {
          self.taskResumeData = [[NSData alloc] initWithData:resumeData];
      }];
