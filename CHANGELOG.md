@@ -14,4 +14,3 @@
 - Download task that can be paused and resumed.
 - Session can be configured to allow multiple concurrent downloads.
 
-
