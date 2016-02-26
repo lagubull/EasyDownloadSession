@@ -3,3 +3,6 @@ language: objective-c
 xcode_project: EasyDownloadSession.xcodeproj
 xcode_scheme: EasyDownloadSession
 xcode_sdk: iphonesimulator
+
+osx_image: xcode7.2
+
