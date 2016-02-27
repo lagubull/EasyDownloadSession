@@ -1,0 +1,18 @@
+//
+//  EasyDownloadSession-Prefix.pch
+//  EasyDownloadSession
+//
+//  Created by Javier Laguna on 27/02/2016.
+//  Copyright © 2016 Javier Laguna. All rights reserved.
+//
+
+#ifndef EasyDownloadSession_Prefix_pch
+#define EasyDownloadSession_Prefix_pch
+
+#ifdef INFO
+#define EDSDebug(__FORMAT__, ...) NSLog((@"%s [Line %d] " __FORMAT__), __PRETTY_FUNCTION__, __LINE__, ##__VA_ARGS__)
+#else
+#define EDSDebug(...)
+#endif
+
+#endif /* EasyDownloadSession_Prefix_pch */

@@ -102,16 +102,6 @@
  */
 - (NSURLSessionDownloadTask *)downloadTaskWithURL:(NSURL *)url;
 
-/*
- * data task convenience methods.  These methods create tasks that
- * bypass the normal delegate calls for response and data delivery,
- * and provide a simple cancelable asynchronous interface to receiving
- * data.  Errors will be returned in the NSURLErrorDomain,
- * see <Foundation/NSURLError.h>.  The delegate, if any, will still be
- * called for authentication challenges.
- */
-- (NSURLSessionDataTask *)dataTaskWithRequest:(NSURLRequest *)request completionHandler:(void (^)(NSData *data, NSURLResponse *response, NSError *error))completionHandler;
-
 /**
  Creates a download task with the resume data.  If the download cannot be successfully resumed, URLSession:task:didCompleteWithError: will be called.
  */

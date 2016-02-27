@@ -39,6 +39,7 @@
 		3B5159B61C7E275500B074E0 /* EDSDownloadTaskInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EDSDownloadTaskInfo.m; sourceTree = "<group>"; };
 		3B5159B91C7E276300B074E0 /* EDSStack.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EDSStack.h; sourceTree = "<group>"; };
 		3B5159BA1C7E276300B074E0 /* EDSStack.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EDSStack.m; sourceTree = "<group>"; };
+		3BF1ACFD1C81A4BB00203161 /* EasyDownloadSession-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "EasyDownloadSession-Prefix.pch"; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -85,6 +86,7 @@
 				3B5159AF1C7E271200B074E0 /* DownloadTaskInfo */,
 				3B5159B01C7E271200B074E0 /* Stack */,
 				3B5159991C7E26A100B074E0 /* Info.plist */,
+				3BF1ACFD1C81A4BB00203161 /* EasyDownloadSession-Prefix.pch */,
 			);
 			path = EasyDownloadSession;
 			sourceTree = "<group>";
@@ -355,6 +357,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				GCC_PREFIX_HEADER = "EasyDownloadSession-Prefix.pch";
 				INFOPLIST_FILE = EasyDownloadSession/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
@@ -371,6 +374,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				GCC_PREFIX_HEADER = "EasyDownloadSession-Prefix.pch";
 				INFOPLIST_FILE = EasyDownloadSession/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
