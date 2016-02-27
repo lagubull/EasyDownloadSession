@@ -84,7 +84,7 @@
 {
     if (self.taskResumeData.length > 0)
     {
-        EDSDebug(@"Resuming task - %@", self.downloadId);
+        DLog(@"Resuming task - %@", self.downloadId);
         
         self.task = [[EDSDownloadSession downloadSession] downloadTaskWithResumeData:self.taskResumeData];
     }
@@ -92,14 +92,14 @@
     {
         if (self.task.state == NSURLSessionTaskStateCompleted)
         {
-            EDSDebug(@"Resuming task - %@", self.downloadId);
+            DLog(@"Resuming task - %@", self.downloadId);
             
             //we cancelled this operation before it actually started
             self.task = [[EDSDownloadSession downloadSession] downloadTaskWithURL:self.url];
         }
         else
         {
-            EDSDebug(@"Starting task - %@", self.downloadId);
+            DLog(@"Starting task - %@", self.downloadId);
         }
     }
     

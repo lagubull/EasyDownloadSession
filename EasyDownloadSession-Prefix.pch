@@ -9,10 +9,17 @@
 #ifndef EasyDownloadSession_Prefix_pch
 #define EasyDownloadSession_Prefix_pch
 
-#ifdef INFO
-#define EDSDebug(__FORMAT__, ...) NSLog((@"%s [Line %d] " __FORMAT__), __PRETTY_FUNCTION__, __LINE__, ##__VA_ARGS__)
+
+#ifdef DEBUG
+#define DLog(...) NSLog(@"%s(%p) %@", __PRETTY_FUNCTION__, self, [NSString stringWithFormat:__VA_ARGS__])
 #else
-#define EDSDebug(...)
+#define DLog(...)
+#endif
+
+#ifdef __OBJC__
+
+#import "EasyDownloadSession.h"
+
 #endif
 
 #endif /* EasyDownloadSession_Prefix_pch */
