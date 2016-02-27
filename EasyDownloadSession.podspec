@@ -17,5 +17,6 @@ s.source       = { :git => "https://github.com/lagubull/EasyDownloadSession.git"
 s.source_files  = "EasyDownloadSession/**/*.{h,m}"
 s.public_header_files = "EasyDownloadSession/**/*.{h}"
 
+s.prefix_header_contents = '#import "EasyDownloadSession.h"'
 s.requires_arc = true
 end

@@ -12,14 +12,12 @@
 #ifndef EasyDownloadSession_h
 #define EasyDownloadSession_h
 
-//#ifdef EDSDEBUG
-//
-//#define EDSDebug(__FORMAT__, ...) NSLog((@"%s [Line %d] " __FORMAT__), __PRETTY_FUNCTION__, __LINE__, ##__VA_ARGS__)
-//#else
-//#define EDSDebug(...)
-//
-//#endif
+#ifdef EDSDEBUG
 
+#define EDSDebug(__FORMAT__, ...) NSLog((@"%s [Line %d] " __FORMAT__), __PRETTY_FUNCTION__, __LINE__, ##__VA_ARGS__)
+#else
+#define EDSDebug(...)
 
+#endif
 
 #endif /* EasyDownloadSession_h */

@@ -13,13 +13,6 @@
 #import "EDSStack.h"
 #import "EDSDownloadTaskInfo.h"
 
-
-#ifdef DEBUG
-#define DLog(...) NSLog(@"%s(%p) %@", __PRETTY_FUNCTION__, self, [NSString stringWithFormat:__VA_ARGS__])
-#else
-#define DLog(...)
-#endif
-
 /**
  Constant to indicate cancelled task.
  */
@@ -244,7 +237,7 @@ totalBytesExpectedToWrite:(int64_t)totalBytesExpectedToWrite
     {
         for (EDSDownloadTaskInfo *taskInfo in [EDSDownloadSession downloadSession].inProgressDownloadsDictionary)
         {
-            DLog(@"Pausing task - %@", taskInfo.downloadId);
+            EDSDebug(@"Pausing task - %@", taskInfo.downloadId);
             
             [taskInfo pause];
             
