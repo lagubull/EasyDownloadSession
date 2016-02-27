@@ -93,6 +93,11 @@
  */
 - (void)resume;
 
+/**
+ Notifies the task of its progress.
+ 
+ @param newProgress - completion status.
+ */
 - (void)didUpdateProgress:(NSNumber *)newProgress;
 
 /**

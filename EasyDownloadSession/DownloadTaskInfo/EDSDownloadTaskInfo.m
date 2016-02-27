@@ -205,6 +205,8 @@
     }
 }
 
+#pragma mark - ReleaseMemory
+
 - (void)releaseMemory
 {
     self.downloadProgress = @(0.0);

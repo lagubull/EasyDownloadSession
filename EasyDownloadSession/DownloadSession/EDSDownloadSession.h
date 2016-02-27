@@ -22,20 +22,12 @@
  */
 - (void)didResumeDownload:(EDSDownloadTaskInfo *)downloadTaskInfo;
 
-/**
- Notifies the delegate a download has progressed.
- 
- @param downloadTaskInfo - metadata on the download.
- */
-- (void)didUpdateProgress:(EDSDownloadTaskInfo *)downloadTaskInfo;
-
 @end
 
 /**
  Defines a session with custom methods to download.
  */
 @interface EDSDownloadSession : NSObject
-
 
 /**
  Delegate for the DownloadSessionDelegate class.
@@ -75,9 +67,11 @@
  Adds a downloading task to the stack.
  
  @param URL - path to download.
- @param completionBlock - to be executed when the task finishes.
+ @param progress - to be executed when as the task progresses.
+ @param success - to be executed when the task finishes succesfully.
+ @param failure - to be executed when the task finishes with an error.
  */
-+ (void)scheduleDownloadWithID:(NSString *)downloadID
++ (void)scheduleDownloadWithId:(NSString *)downloadId
                        fromURL:(NSURL *)url
                       progress:(void (^)(EDSDownloadTaskInfo *downloadTask))progress
                        success:(void (^)(EDSDownloadTaskInfo *downloadTask, NSData *responseData, NSURL *location))success
@@ -87,9 +81,12 @@
  Stops the current download and adds it to the stack, the it begins executing this new download.
  
  @param URL - path to download.
- @param completionBlock - to be executed when the task finishes.
+ @param URL - path to download.
+ @param progress - to be executed when as the task progresses.
+ @param success - to be executed when the task finishes succesfully.
+ @param failure - to be executed when the task finishes with an error.
  */
-+ (void)forceDownloadWithID:(NSString *)downloadID
++ (void)forceDownloadWithId:(NSString *)downloadId
                     fromURL:(NSURL *)url
                    progress:(void (^)(EDSDownloadTaskInfo *downloadTask))progress
                     success:(void (^)(EDSDownloadTaskInfo *downloadTask, NSData *responseData, NSURL *location))success
