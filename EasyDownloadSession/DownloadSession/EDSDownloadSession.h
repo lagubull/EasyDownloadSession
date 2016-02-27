@@ -22,20 +22,12 @@
  */
 - (void)didResumeDownload:(EDSDownloadTaskInfo *)downloadTaskInfo;
 
-/**
- Notifies the delegate a download has progressed.
- 
- @param downloadTaskInfo - metadata on the download.
- */
-- (void)didUpdateProgress:(EDSDownloadTaskInfo *)downloadTaskInfo;
-
 @end
 
 /**
  Defines a session with custom methods to download.
  */
 @interface EDSDownloadSession : NSObject
-
 
 /**
  Delegate for the DownloadSessionDelegate class.
@@ -75,9 +67,11 @@
  Adds a downloading task to the stack.
  
  @param URL - path to download.
- @param completionBlock - to be executed when the task finishes.
+ @param progress - to be executed when as the task progresses.
+ @param success - to be executed when the task finishes succesfully.
+ @param failure - to be executed when the task finishes with an error.
  */
-+ (void)scheduleDownloadWithID:(NSString *)downloadID
++ (void)scheduleDownloadWithId:(NSString *)downloadId
                        fromURL:(NSURL *)url
                       progress:(void (^)(EDSDownloadTaskInfo *downloadTask))progress
                        success:(void (^)(EDSDownloadTaskInfo *downloadTask, NSData *responseData, NSURL *location))success
@@ -87,9 +81,12 @@
  Stops the current download and adds it to the stack, the it begins executing this new download.
  
  @param URL - path to download.
- @param completionBlock - to be executed when the task finishes.
+ @param URL - path to download.
+ @param progress - to be executed when as the task progresses.
+ @param success - to be executed when the task finishes succesfully.
+ @param failure - to be executed when the task finishes with an error.
  */
-+ (void)forceDownloadWithID:(NSString *)downloadID
++ (void)forceDownloadWithId:(NSString *)downloadId
                     fromURL:(NSURL *)url
                    progress:(void (^)(EDSDownloadTaskInfo *downloadTask))progress
                     success:(void (^)(EDSDownloadTaskInfo *downloadTask, NSData *responseData, NSURL *location))success
@@ -101,16 +98,6 @@
  @param URL - path to download.
  */
 - (NSURLSessionDownloadTask *)downloadTaskWithURL:(NSURL *)url;
-
-/*
- * data task convenience methods.  These methods create tasks that
- * bypass the normal delegate calls for response and data delivery,
- * and provide a simple cancelable asynchronous interface to receiving
- * data.  Errors will be returned in the NSURLErrorDomain,
- * see <Foundation/NSURLError.h>.  The delegate, if any, will still be
- * called for authentication challenges.
- */
-- (NSURLSessionDataTask *)dataTaskWithRequest:(NSURLRequest *)request completionHandler:(void (^)(NSData *data, NSURLResponse *response, NSError *error))completionHandler;
 
 /**
  Creates a download task with the resume data.  If the download cannot be successfully resumed, URLSession:task:didCompleteWithError: will be called.

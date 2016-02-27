@@ -61,7 +61,7 @@ static NSInteger const kCancelled = -999;
     
     if (self)
     {
-        NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration backgroundSessionConfigurationWithIdentifier:@"kEDSBackgroundFlingSessionForVideosConfigurationIdentifier"];
+        NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration backgroundSessionConfigurationWithIdentifier:@"kEDSBackgroundEasyDownloadSessionConfigurationIdentifier"];
         
         [configuration setHTTPMaximumConnectionsPerHost:10];
         
@@ -100,13 +100,13 @@ static NSInteger const kCancelled = -999;
 
 #pragma mark - ScheduleDownload
 
-+ (void)scheduleDownloadWithID:(NSString *)downloadID
++ (void)scheduleDownloadWithId:(NSString *)downloadId
                        fromURL:(NSURL *)url
                       progress:(void (^)(EDSDownloadTaskInfo *downloadTask))progress
                        success:(void (^)(EDSDownloadTaskInfo *downloadTask, NSData *responseData, NSURL *location))success
                        failure:(void (^)(EDSDownloadTaskInfo *downloadTask,NSError *error))failure
 {
-    EDSDownloadTaskInfo *task = [[EDSDownloadTaskInfo alloc] initWithDownloadID:downloadID
+    EDSDownloadTaskInfo *task = [[EDSDownloadTaskInfo alloc] initWithDownloadID:downloadId
                                                                             URL:url
                                                                        progress:progress
                                                                         success:success
@@ -122,7 +122,7 @@ static NSInteger const kCancelled = -999;
 
 #pragma mark - ForceDownload
 
-+ (void)forceDownloadWithID:(NSString *)downloadID
++ (void)forceDownloadWithId:(NSString *)downloadId
                     fromURL:(NSURL *)url
                    progress:(void (^)(EDSDownloadTaskInfo *downloadTask))progress
                     success:(void (^)(EDSDownloadTaskInfo *downloadTask, NSData *responseData, NSURL *location))success
@@ -130,7 +130,7 @@ static NSInteger const kCancelled = -999;
 {
     [EDSDownloadSession pauseDownloads];
     
-    [EDSDownloadSession scheduleDownloadWithID:downloadID
+    [EDSDownloadSession scheduleDownloadWithId:downloadId
                                        fromURL:url
                                       progress:progress
                                        success:success
@@ -237,7 +237,7 @@ totalBytesExpectedToWrite:(int64_t)totalBytesExpectedToWrite
     {
         for (EDSDownloadTaskInfo *taskInfo in [EDSDownloadSession downloadSession].inProgressDownloadsDictionary)
         {
-            NSLog(@"Pausing task - %@", taskInfo.downloadId);
+            EDSDebug(@"Pausing task - %@", taskInfo.downloadId);
             
             [taskInfo pause];
             
@@ -258,14 +258,6 @@ totalBytesExpectedToWrite:(int64_t)totalBytesExpectedToWrite
 - (NSURLSessionDownloadTask *)downloadTaskWithResumeData:(NSData *)resumeData
 {
     return [[EDSDownloadSession downloadSession].session downloadTaskWithResumeData:resumeData];
-}
-
-#pragma mark - NSURLSessionDataTask
-
-- (NSURLSessionDataTask *)dataTaskWithRequest:(NSURLRequest *)request completionHandler:(void (^)(NSData *data, NSURLResponse *response, NSError *error))completionHandler
-{
-    return [[EDSDownloadSession downloadSession].session dataTaskWithRequest:request
-                                                           completionHandler:completionHandler];
 }
 
 #pragma mark - Coalescing
