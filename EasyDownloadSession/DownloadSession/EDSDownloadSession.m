@@ -63,7 +63,7 @@ static NSInteger const kCancelled = -999;
     {
         NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration backgroundSessionConfigurationWithIdentifier:@"kEDSBackgroundEasyDownloadSessionConfigurationIdentifier"];
         
-        [configuration setHTTPMaximumConnectionsPerHost:10];
+        [configuration setHTTPMaximumConnectionsPerHost:100];
         
         self.session = [NSURLSession sessionWithConfiguration:configuration
                                                      delegate:self
@@ -209,7 +209,7 @@ totalBytesExpectedToWrite:(int64_t)totalBytesExpectedToWrite
 {
     EDSDownloadTaskInfo *downloadTaskInfo = nil;
     
-    if ([EDSDownloadSession downloadSession].inProgressDownloadsDictionary.count < [EDSDownloadSession downloadSession].maxDownloads.integerValue)
+    while ([EDSDownloadSession downloadSession].inProgressDownloadsDictionary.count < [EDSDownloadSession downloadSession].maxDownloads.integerValue)
     {
         downloadTaskInfo = [[EDSDownloadSession downloadSession].downloadStack pop];
         

@@ -28,7 +28,15 @@ $ pod install
 
 ##Usage
 
-TBD
+EasyDownload Session is built on top of NSURLSession, contains a wrap around the session object that will take care of scheduling new download tasks for you.
+
+It can be configured to run as many concurrent operations as needed but the default behaviour is 1 running task. IMPORTANT: maximum number of downloads per host is 100.
+
+There two ways of adding new downloads:
+
+- scheduleDownloadWithId: It will add the task to a stack and will run whenever there is a free download slot.
+
+- forceDownloadWithId: it will start the task immediately, pausing other download if necessary.
 
 ##Found an issue?
 
