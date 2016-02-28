@@ -5,7 +5,7 @@
 [![CocoaPods](https://img.shields.io/cocoapods/metrics/doc-percent/EasyDownloadSession.svg)](http://cocoapods.org/pods/EasyDownloadSession)
 [![Readme Score](http://readme-score-api.herokuapp.com/score.svg?url=https://github.com/lagubull/EasyDownloadSession)](http://clayallsopp.github.io/readme-score?url=https://github.com/lagubull/EasyDownloadSession)
 
-EasyDownloadSession allows to pause and resume downloads having a full control of the order of execution.
+EasyDownloadSession allows pausing and resuming downloads, giving the developer full control of the order of execution.
 
 ##Installation via [Cocoapods](https://cocoapods.org/)
 
