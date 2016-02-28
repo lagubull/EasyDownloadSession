@@ -209,7 +209,8 @@ totalBytesExpectedToWrite:(int64_t)totalBytesExpectedToWrite
 {
     EDSDownloadTaskInfo *downloadTaskInfo = nil;
     
-    while ([EDSDownloadSession downloadSession].inProgressDownloadsDictionary.count < [EDSDownloadSession downloadSession].maxDownloads.integerValue)
+    while ([EDSDownloadSession downloadSession].inProgressDownloadsDictionary.count < [EDSDownloadSession downloadSession].maxDownloads.integerValue &&
+           [EDSDownloadSession downloadSession].downloadStack.count > 0)
     {
         downloadTaskInfo = [[EDSDownloadSession downloadSession].downloadStack pop];
         
