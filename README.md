@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/lagubull/EasyDownloadSession.svg)](https://travis-ci.org/lagubull/EasyDownloadSession)
+[![Build Status](https://travis-ci.org/lagubull/EasyDownloadSession.svg?branch=master)](https://travis-ci.org/lagubull/EasyDownloadSession?branch=master)
 [![Version](https://img.shields.io/cocoapods/v/EasyDownloadSession.svg?style=flat)](http://cocoapods.org/pods/EasyDownloadSession)
 [![License](https://img.shields.io/cocoapods/l/EasyDownloadSession.svg?style=flat)](http://cocoapods.org/pods/EasyDownloadSession)
 [![Platform](https://img.shields.io/cocoapods/p/EasyDownloadSession.svg?style=flat)](http://cocoapods.org/pods/EasyDownloadSession)
