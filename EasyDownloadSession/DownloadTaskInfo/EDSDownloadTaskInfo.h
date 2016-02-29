@@ -49,21 +49,6 @@
 @property (nonatomic, copy) NSString *taskIdentifier;
 
 /**
- Block to be executed upon success.
- */
-@property (nonatomic, copy) void (^success)(EDSDownloadTaskInfo *downloadTask, NSData *responseData, NSURL *location);
-
-/**
- Block to be executed upon error.
- */
-@property (nonatomic, copy) void (^failure)(EDSDownloadTaskInfo *downloadTask, NSError *error);
-
-/**
- Block to be executed upon progress.
- */
-@property (nonatomic, copy) void (^progress)(EDSDownloadTaskInfo *downloadTask);
-
-/**
  Path to be downloaded.
  */
 @property (nonatomic, strong) NSURL *url;
@@ -99,6 +84,20 @@
  @param newProgress - completion status.
  */
 - (void)didUpdateProgress:(NSNumber *)newProgress;
+
+/**
+ Notifies the task wwhen has finish succesfully.
+ 
+ @param location - local path to the downloaded data.
+ */
+- (void)didSucceedWithLocation:(NSURL *)location;
+
+/**
+ Notifies the task when it is finished with error.
+ 
+ @param error - completion status.
+ */
+- (void)didFailWithError:(NSError *)error;
 
 /**
  Checks weather the taskInfo provided equals self.

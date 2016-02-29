@@ -1,12 +1,18 @@
 ## Table Of Contents
 
+* [1.0.3](#1.0.3)
 * [1.0.2](#1.0.2)
 * [1.0.1](#1.0.1)
 * [1.0.0](#1.0.0)
 * [0.5.0](#0.5.0)
 * [0.1.0](#0.1.0)
 
-## 1.0.1
+## 1.0.3
+
+- MultiDownload bugs.
+- Restoring the completion blocks on the operation they were originally created in.
+
+## 1.0.2
 
 - Multidownload bug fixed.
 
