@@ -88,7 +88,6 @@
 /**
  Notifies the task wwhen has finish succesfully.
  
- @para
  @param location - local path to the downloaded data.
  */
 - (void)didSucceedWithLocation:(NSURL *)location;
