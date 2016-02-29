@@ -13,6 +13,26 @@
 @interface EDSDownloadTaskInfo ()
 
 /**
+ Block to be executed upon success.
+ */
+@property (nonatomic, copy) void (^success)(EDSDownloadTaskInfo *downloadTask, NSData *responseData, NSURL *location);
+
+/**
+ Block to be executed upon error.
+ */
+@property (nonatomic, copy) void (^failure)(EDSDownloadTaskInfo *downloadTask, NSError *error);
+
+/**
+ Block to be executed upon progress.
+ */
+@property (nonatomic, copy) void (^progress)(EDSDownloadTaskInfo *downloadTask);
+
+/**
+ Internal callback queue to make sure callbacks execute on same queue task is created on.
+ */
+@property (nonatomic, strong) NSOperationQueue *callbackQueue;
+
+/**
  Merges success block of new task with self's.
  
  @param taskInfo - new task.
@@ -58,11 +78,11 @@
         _success = success;
         _progress = progress;
         _failure = failure;
+        self.callbackQueue = [NSOperationQueue currentQueue];
     }
     
     return self;
 }
-
 
 #pragma mark - Pause
 
@@ -116,7 +136,38 @@
     
     if (self.progress)
     {
-        self.progress(self);
+        [self.callbackQueue addOperationWithBlock:^
+         {
+             self.progress(self);
+         }];
+    }
+}
+
+#pragma mark - Success
+
+- (void)didSucceedWithLocation:(NSURL *)location
+{
+    if (self.success)
+    {
+        NSData *data = [NSData dataWithContentsOfFile:[location path]];
+        
+        [self.callbackQueue addOperationWithBlock:^
+         {
+             self.success(self, data, location);
+         }];
+    }
+}
+
+#pragma marl - Failure
+
+- (void)didFailWithError:(NSError *)error
+{
+    if (self.failure)
+    {
+        [self.callbackQueue addOperationWithBlock:^
+         {
+             self.failure(self, error);
+         }];
     }
 }
 

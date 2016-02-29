@@ -26,11 +26,6 @@ static NSInteger const kCancelled = -999;
 @property (nonatomic, strong) EDSStack *downloadStack;
 
 /**
- Current download.
- */
-@property (nonatomic, strong) EDSDownloadTaskInfo *inProgressDownload;
-
-/**
  Current downloads.
  */
 @property (nonatomic, strong) NSMutableDictionary *inProgressDownloadsDictionary;
@@ -145,12 +140,7 @@ static NSInteger const kCancelled = -999;
     
     if (taskInProgress)
     {
-        if (taskInProgress.success)
-        {
-            NSData * data  = [NSData dataWithContentsOfFile:[location path]];
-            
-            taskInProgress.success(self.inProgressDownload, data, location);
-        }
+        [taskInProgress didSucceedWithLocation:location];
         
         [self.inProgressDownloadsDictionary removeObjectForKey:@(downloadTask.taskIdentifier)];
         
@@ -179,11 +169,7 @@ totalBytesExpectedToWrite:(int64_t)totalBytesExpectedToWrite
     {
         EDSDownloadTaskInfo *taskInProgress = [self.inProgressDownloadsDictionary objectForKey:@(task.taskIdentifier)];
         
-        if (taskInProgress &&
-            taskInProgress.failure)
-        {
-            taskInProgress.failure(self.inProgressDownload, error);
-        }
+        [taskInProgress didFailWithError:(NSError *)error];
         
         //  Handle error
         NSLog(@"task: %@ Error: %@", taskInProgress.downloadId, error);
@@ -198,8 +184,14 @@ totalBytesExpectedToWrite:(int64_t)totalBytesExpectedToWrite
 
 + (void)cancelDownloads
 {
-    [[EDSDownloadSession downloadSession].inProgressDownload.task cancel];
-    [EDSDownloadSession downloadSession].inProgressDownload = nil;
+    @synchronized([EDSDownloadSession downloadSession].inProgressDownloadsDictionary)
+    {
+        for (EDSDownloadTaskInfo *task in [EDSDownloadSession downloadSession].inProgressDownloadsDictionary)
+        {
+            [task.task cancel];
+        }
+    }
+    
     [[EDSDownloadSession downloadSession].downloadStack clear];
 }
 
@@ -218,15 +210,14 @@ totalBytesExpectedToWrite:(int64_t)totalBytesExpectedToWrite
         {
             [[EDSDownloadSession downloadSession].inProgressDownloadsDictionary setObject:downloadTaskInfo
                                                                                    forKey:@(downloadTaskInfo.task.taskIdentifier)];
+            if (downloadTaskInfo &&
+                !downloadTaskInfo.isDownloading)
+            {
+                [downloadTaskInfo resume];
+                
+                [[EDSDownloadSession downloadSession].delegate didResumeDownload:downloadTaskInfo];
+            }
         }
-    }
-    
-    if (downloadTaskInfo &&
-        !downloadTaskInfo.isDownloading)
-    {
-        [downloadTaskInfo resume];
-        
-        [[EDSDownloadSession downloadSession].delegate didResumeDownload:[EDSDownloadSession downloadSession].inProgressDownload];
     }
 }
 
@@ -242,7 +233,7 @@ totalBytesExpectedToWrite:(int64_t)totalBytesExpectedToWrite
             
             [taskInfo pause];
             
-            [[EDSDownloadSession downloadSession].downloadStack push:[EDSDownloadSession downloadSession].inProgressDownload];
+            [[EDSDownloadSession downloadSession].downloadStack push:taskInfo];
             
             [[EDSDownloadSession downloadSession].inProgressDownloadsDictionary removeObjectForKey:@(taskInfo.task.taskIdentifier)];
         }
