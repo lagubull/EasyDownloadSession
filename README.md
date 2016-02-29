@@ -38,6 +38,10 @@ There two ways of adding new downloads:
 
 - forceDownloadWithId: it will start the task immediately, pausing other download if necessary.
 
+You can use the property maxDownloads to increase the number of concurrent downds.
+
+    [EDSDownloadSession downloadSession].maxDownloads = @(4);
+
 ##Found an issue?
 
 Please open a [new Issue here](https://github.com/lagubull/SimpleTableView/issues/new) if you run into a problem specific to EasyAlert, have a feature request, or want to share a comment.
