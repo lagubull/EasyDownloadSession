@@ -98,7 +98,7 @@ static NSInteger const kCancelled = -999;
 + (void)scheduleDownloadWithId:(NSString *)downloadId
                        fromURL:(NSURL *)url
                       progress:(void (^)(EDSDownloadTaskInfo *downloadTask))progress
-                       success:(void (^)(EDSDownloadTaskInfo *downloadTask, NSData *responseData, NSURL *location))success
+                       success:(void (^)(EDSDownloadTaskInfo *downloadTask, NSData *responseData))success
                        failure:(void (^)(EDSDownloadTaskInfo *downloadTask,NSError *error))failure
 {
     EDSDownloadTaskInfo *task = [[EDSDownloadTaskInfo alloc] initWithDownloadID:downloadId
@@ -120,7 +120,7 @@ static NSInteger const kCancelled = -999;
 + (void)forceDownloadWithId:(NSString *)downloadId
                     fromURL:(NSURL *)url
                    progress:(void (^)(EDSDownloadTaskInfo *downloadTask))progress
-                    success:(void (^)(EDSDownloadTaskInfo *downloadTask, NSData *responseData, NSURL *location))success
+                    success:(void (^)(EDSDownloadTaskInfo *downloadTask, NSData *responseData))success
                     failure:(void (^)(EDSDownloadTaskInfo *downloadTask,NSError *error))failure
 {
     [EDSDownloadSession pauseDownloads];
