@@ -15,7 +15,7 @@
 /**
  Block to be executed upon success.
  */
-@property (nonatomic, copy) void (^success)(EDSDownloadTaskInfo *downloadTask, NSData *responseData, NSURL *location);
+@property (nonatomic, copy) void (^success)(EDSDownloadTaskInfo *downloadTask, NSData *responseData);
 
 /**
  Block to be executed upon error.
@@ -62,7 +62,7 @@
 - (instancetype)initWithDownloadID:(NSString *)downloadId
                                URL:(NSURL *)url
                           progress:(void (^)(EDSDownloadTaskInfo *downloadTask))progress
-                           success:(void (^)(EDSDownloadTaskInfo *downloadTask, NSData *responseData, NSURL *location))success
+                           success:(void (^)(EDSDownloadTaskInfo *downloadTask, NSData *responseData))success
                            failure:(void (^)(EDSDownloadTaskInfo *downloadTask,NSError *error))failure
 {
     self = [super init];
@@ -153,7 +153,7 @@
         
         [self.callbackQueue addOperationWithBlock:^
          {
-             self.success(self, data, location);
+             self.success(self, data);
          }];
     }
 }
@@ -189,22 +189,22 @@
 
 - (void)coalesceSuccesWithTaskInfo:(EDSDownloadTaskInfo *)taskInfo
 {
-    void (^mySuccess)(EDSDownloadTaskInfo *downloadTask, NSData *responseData, NSURL *location) = [_success copy];
+    void (^mySuccess)(EDSDownloadTaskInfo *downloadTask, NSData *responseData) = [_success copy];
     
-    void (^theirSuccess)(EDSDownloadTaskInfo *downloadTask, NSData *responseData, NSURL *location) = [taskInfo->_success copy];
+    void (^theirSuccess)(EDSDownloadTaskInfo *downloadTask, NSData *responseData) = [taskInfo->_success copy];
     
     if (mySuccess != theirSuccess)
     {
-        self.success = ^(EDSDownloadTaskInfo *downloadTask, NSData *responseData, NSURL *location)
+        self.success = ^(EDSDownloadTaskInfo *downloadTask, NSData *responseData)
         {
             if (mySuccess)
             {
-                mySuccess(downloadTask, responseData, location);
+                mySuccess(downloadTask, responseData);
             }
             
             if (theirSuccess)
             {
-                theirSuccess(downloadTask, responseData, location);
+                theirSuccess(downloadTask, responseData);
             }
         };
     }
