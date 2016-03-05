@@ -38,9 +38,146 @@ There two ways of adding new downloads:
 
 - forceDownloadWithId: it will start the task immediately, pausing other download if necessary.
 
-You can use the property maxDownloads to increase the number of concurrent downds.
+We can find a good example of the usage of this code in git@github.com:lagubull/SocialChallenge.git
+
+Where we are using EasyDownload Session to add requests for downloading large images 
+that will be afterwards processed and displayed in a tableview, therefore we use the stack
+provided by this pod as we are more interested in newer requests that old ones.
+
+####Schedule
+
+We add the requests to the task respecting the current download task.
+
+```objc
+
+#pragma mark - Retrieval
+
++ (void)retrieveMediaForPost:(JSCPost *)post
+           retrievalRequired:(void (^)(NSString *postId))retrievalRequired
+                     success:(void (^)(id result, NSString *postId))success
+                     failure:(void (^)(NSError *error, NSString *postId))failure;
+{
+ [EDSDownloadSession scheduleDownloadWithId:post.postId
+                         	        fromURL:[NSURL URLWithString:post.userAvatarRemoteURL]
+									progress:nil
+									 success:^(EDSDownloadTaskInfo *downloadTask,
+									           NSData *responseData)
+                 {
+                     JSCMediaStorageOperation *storeOPeration =
+                      [[JSCMediaStorageOperation alloc] initWithPostID:post.postId
+                                                                  data:responseData];
+                     
+                     storeOPeration.onSuccess = ^(id result)
+                     {
+                         if (result)
+                         {
+                             if (success)
+                             {
+                                 success(result, post.postId);
+                             }
+                         }
+                         else
+                         {
+                             if (failure)
+                             {
+                                 failure(nil, post.postId);
+                             }
+                         }
+                     };
+                     
+                     storeOPeration.onFailure = ^(NSError *error)
+                     {
+                         if (failure)
+                         {
+                             failure(error, post.postId);
+                         }
+                     };
+                     
+                     storeOPeration.targetSchedulerIdentifier = kJSCLocalDataOperationSchedulerTypeIdentifier;
+                     
+                     [[JSCOperationCoordinator sharedInstance] addOperation:storeOPeration];
+                 }
+                                                   failure:^(EDSDownloadTaskInfo *downloadTask, NSError *error)
+                 {
+                     if (failure)
+                     {
+                         failure(error, post.postId);
+                     }
+                 }];
+}
+```
+
+####Force Download
+
+This will effectively pause all downloads start this one and then start any other download
+that can up to maxDownloads.
+
+```objc
+
+#pragma mark - Retrieval
+
++ (void)retrieveMediaForPost:(JSCPost *)post
+           retrievalRequired:(void (^)(NSString *postId))retrievalRequired
+                     success:(void (^)(id result, NSString *postId))success
+                     failure:(void (^)(NSError *error, NSString *postId))failure;
+{
+[EDSDownloadSession forceDownloadWithId:post.postId
+                         	    fromURL:[NSURL URLWithString:post.userAvatarRemoteURL]
+							   progress:nil
+							    success:^(EDSDownloadTaskInfo *downloadTask,
+									           NSData *responseData)
+                 {
+                     JSCMediaStorageOperation *storeOPeration =
+                      [[JSCMediaStorageOperation alloc] initWithPostID:post.postId
+                                                                  data:responseData];
+                     
+                     storeOPeration.onSuccess = ^(id result)
+                     {
+                         if (result)
+                         {
+                             if (success)
+                             {
+                                 success(result, post.postId);
+                             }
+                         }
+                         else
+                         {
+                             if (failure)
+                             {
+                                 failure(nil, post.postId);
+                             }
+                         }
+                     };
+                     
+                     storeOPeration.onFailure = ^(NSError *error)
+                     {
+                         if (failure)
+                         {
+                             failure(error, post.postId);
+                         }
+                     };
+                     
+                     storeOPeration.targetSchedulerIdentifier = kJSCLocalDataOperationSchedulerTypeIdentifier;
+                     
+                     [[JSCOperationCoordinator sharedInstance] addOperation:storeOPeration];
+                 }
+                                                   failure:^(EDSDownloadTaskInfo *downloadTask, NSError *error)
+                 {
+                     if (failure)
+                     {
+                         failure(error, post.postId);
+                     }
+                 }];
+}
+```
+####Concurrent Downloads
+
+You can use the property maxDownloads to increase the number of concurrent downdloads.
+
+```objc
 
     [EDSDownloadSession downloadSession].maxDownloads = @(4);
+```
 
 ##Found an issue?
 
