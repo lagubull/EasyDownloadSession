@@ -32,9 +32,15 @@
  */
 @property (nonatomic, strong) NSOperationQueue *callbackQueue;
 
+/**
+ Session that will own the task.
+ */
 @property (nonatomic, strong) NSURLSession *session;
 
-@property (nonatomic, strong) NSMutableURLRequest *request;
+/**
+ Request for a download.
+ */
+@property (nonatomic, strong) NSURLRequest *request;
 
 /**
  Merges success block of new task with self's.
@@ -64,7 +70,7 @@
 #pragma mark - Init
 
 - (instancetype)initWithDownloadID:(NSString *)downloadId
-                           request:(NSMutableURLRequest *)request
+                           request:(NSURLRequest *)request
                            session:(NSURLSession *)session
                    stackIdentifier:(NSString *)stackIdentifier
                           progress:(void (^)(EDSDownloadTaskInfo *downloadTask))progress
@@ -81,7 +87,6 @@
         _downloadId = downloadId;
         _request = request;
         _stackIdentifier = stackIdentifier;
-        _url = request.URL;
         _downloadProgress = @(0.0);
         _isDownloading = NO;
         _downloadComplete = NO;
@@ -143,7 +148,7 @@
             EDSDebug(@"Resuming task - %@", self.downloadId);
             
             //we cancelled this operation before it actually started
-            self.task = [self.session downloadTaskWithURL:self.url];
+            self.task = [self.session downloadTaskWithRequest:self.request];
         }
         else
         {

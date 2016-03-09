@@ -44,22 +44,24 @@
 @property (nonatomic, strong) NSURLSessionDownloadTask *task;
 
 /**
- Identifies the object.
- */
-@property (nonatomic, copy) NSString *taskIdentifier;
-
-/**
  Identifies the stack.
  */
 @property (nonatomic, copy) NSString *stackIdentifier;
 
 /**
- Path to be downloaded.
+ Creates a new DownloadTaskInfo object.
+ 
+ @param downloadId - used to identify the task.
+ @param request - request for a download.
+ @param session - Session that will own the task.
+ @param progress -  Block to be executed upon progress.
+ @param success -  Block to be executed upon success.
+ @param failure -  Block to be executed upon faiilure.
+ 
+ @return Instance of the class.
  */
-@property (nonatomic, strong) NSURL *url;
-
 - (instancetype)initWithDownloadID:(NSString *)downloadId
-                           request:(NSMutableURLRequest *)request
+                           request:(NSURLRequest *)request
                            session:(NSURLSession *)session
                    stackIdentifier:(NSString *)stackIdentifier
                           progress:(void (^)(EDSDownloadTaskInfo *downloadTask))progress
@@ -69,9 +71,12 @@
 /**
  Creates a new DownloadTaskInfo object.
  
- @param title - used to identify the task.
+ @param downloadId - used to identify the task.
  @param url - URL task will download from.
- @param completionBlock -  Block to be executed upon finishing.
+ @param session - Session that will own the task.
+ @param progress -  Block to be executed upon progress.
+ @param success -  Block to be executed upon success.
+ @param failure -  Block to be executed upon faiilure.
  
  @return Instance of the class.
  */

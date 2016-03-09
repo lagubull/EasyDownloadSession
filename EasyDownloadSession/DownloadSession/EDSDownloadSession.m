@@ -31,12 +31,6 @@ static NSInteger const kEDSCancelled = -999;
 @property (nonatomic, strong) NSMutableDictionary *inProgressDownloadsDictionary;
 
 /**
- Dictioanary of maximum number of downloads allowed per stack, this dictionary is helpful 
- when forcing tasks to pause so other is executed as we will need to restore the stack maximum number of downloads.
- */
-@property (nonatomic, strong) NSMutableDictionary *maximumDownloadsNumberForForcedPausedStacksDictionary;
-
-/**
  Default Session Object.
  */
 @property (nonatomic, strong) NSURLSession *defaultSession;
@@ -103,7 +97,6 @@ static NSInteger const kEDSCancelled = -999;
         
         _mutableStackTableDictionary = [[NSMutableDictionary alloc] init];
         _inProgressDownloadsDictionary = [[NSMutableDictionary alloc] init];
-        _maximumDownloadsNumberForForcedPausedStacksDictionary = [[NSMutableDictionary alloc] init];
     }
     
     return self;
@@ -158,7 +151,7 @@ static NSInteger const kEDSCancelled = -999;
 #pragma mark - ScheduleDownload
 
 + (void)scheduleDownloadWithId:(NSString *)downloadId
-                       request:(NSMutableURLRequest *)request
+                       request:(NSURLRequest *)request
                stackIdentifier:(NSString *)stackIdentifier
                       progress:(void (^)(EDSDownloadTaskInfo *downloadTask))progress
                        success:(void (^)(EDSDownloadTaskInfo *downloadTask, NSData *responseData))success
@@ -211,9 +204,6 @@ static NSInteger const kEDSCancelled = -999;
     NSNumber *maxDownloads = ((EDSStack *)[EDSDownloadSession downloadSession].stackTableDictionary[stackIdentifier]).maxDownloads;
     
     ((EDSStack *)[EDSDownloadSession downloadSession].stackTableDictionary[stackIdentifier]).maxDownloads = @(1);
-    
-    [[EDSDownloadSession downloadSession].maximumDownloadsNumberForForcedPausedStacksDictionary setObject:maxDownloads
-                                                                                                   forKey:stackIdentifier];
     
     [EDSDownloadSession scheduleDownloadWithId:downloadId
                                        request:request

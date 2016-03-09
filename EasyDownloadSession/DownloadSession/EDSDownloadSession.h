@@ -107,7 +107,7 @@
  @param failure - to be executed when the task finishes with an error.
  */
 + (void)scheduleDownloadWithId:(NSString *)downloadId
-                       request:(NSMutableURLRequest *)request
+                       request:(NSURLRequest *)request
                stackIdentifier:(NSString *)stackIdentifier
                       progress:(void (^)(EDSDownloadTaskInfo *downloadTask))progress
                        success:(void (^)(EDSDownloadTaskInfo *downloadTask, NSData *responseData))success
