@@ -49,9 +49,22 @@
 @property (nonatomic, copy) NSString *taskIdentifier;
 
 /**
+ Identifies the stack.
+ */
+@property (nonatomic, copy) NSString *stackIdentifier;
+
+/**
  Path to be downloaded.
  */
 @property (nonatomic, strong) NSURL *url;
+
+- (instancetype)initWithDownloadID:(NSString *)downloadId
+                           request:(NSMutableURLRequest *)request
+                           session:(NSURLSession *)session
+                   stackIdentifier:(NSString *)stackIdentifier
+                          progress:(void (^)(EDSDownloadTaskInfo *downloadTask))progress
+                           success:(void (^)(EDSDownloadTaskInfo *downloadTask, NSData *responseData))success
+                           failure:(void (^)(EDSDownloadTaskInfo *downloadTask,NSError *error))failure;
 
 /**
  Creates a new DownloadTaskInfo object.
@@ -64,6 +77,8 @@
  */
 - (instancetype)initWithDownloadID:(NSString *)downloadId
                                URL:(NSURL *)url
+                           session:(NSURLSession *)session
+                   stackIdentifier:(NSString *)stackIdentifier
                           progress:(void (^)(EDSDownloadTaskInfo *downloadTask))progress
                            success:(void (^)(EDSDownloadTaskInfo *downloadTask, NSData *responseData))success
                            failure:(void (^)(EDSDownloadTaskInfo *downloadTask,NSError *error))failure;

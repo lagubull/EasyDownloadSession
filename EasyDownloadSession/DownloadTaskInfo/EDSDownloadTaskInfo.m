@@ -32,6 +32,10 @@
  */
 @property (nonatomic, strong) NSOperationQueue *callbackQueue;
 
+@property (nonatomic, strong) NSURLSession *session;
+
+@property (nonatomic, strong) NSMutableURLRequest *request;
+
 /**
  Merges success block of new task with self's.
  
@@ -60,18 +64,24 @@
 #pragma mark - Init
 
 - (instancetype)initWithDownloadID:(NSString *)downloadId
-                               URL:(NSURL *)url
+                           request:(NSMutableURLRequest *)request
+                           session:(NSURLSession *)session
+                   stackIdentifier:(NSString *)stackIdentifier
                           progress:(void (^)(EDSDownloadTaskInfo *downloadTask))progress
                            success:(void (^)(EDSDownloadTaskInfo *downloadTask, NSData *responseData))success
                            failure:(void (^)(EDSDownloadTaskInfo *downloadTask,NSError *error))failure
 {
+    
     self = [super init];
     
     if (self)
     {
-        _task = [[EDSDownloadSession downloadSession] downloadTaskWithURL:url];
+        _task = [session downloadTaskWithRequest:request];
+        _session = session;
         _downloadId = downloadId;
-        _url = url;
+        _request = request;
+        _stackIdentifier = stackIdentifier;
+        _url = request.URL;
         _downloadProgress = @(0.0);
         _isDownloading = NO;
         _downloadComplete = NO;
@@ -82,6 +92,24 @@
     }
     
     return self;
+}
+
+- (instancetype)initWithDownloadID:(NSString *)downloadId
+                               URL:(NSURL *)url
+                           session:(NSURLSession *)session
+                   stackIdentifier:(NSString *)stackIdentifier
+                          progress:(void (^)(EDSDownloadTaskInfo *downloadTask))progress
+                           success:(void (^)(EDSDownloadTaskInfo *downloadTask, NSData *responseData))success
+                           failure:(void (^)(EDSDownloadTaskInfo *downloadTask,NSError *error))failure
+{
+    
+    return [self initWithDownloadID:downloadId
+                            request:[NSURLRequest requestWithURL:url]
+                            session:session
+                    stackIdentifier:stackIdentifier
+                           progress:progress
+                            success:success
+                            failure:failure];
 }
 
 #pragma mark - Pause
@@ -106,7 +134,7 @@
     {
         EDSDebug(@"Resuming task - %@", self.downloadId);
         
-        self.task = [[EDSDownloadSession downloadSession] downloadTaskWithResumeData:self.taskResumeData];
+        self.task = [self.session downloadTaskWithResumeData:self.taskResumeData];
     }
     else
     {
@@ -115,7 +143,7 @@
             EDSDebug(@"Resuming task - %@", self.downloadId);
             
             //we cancelled this operation before it actually started
-            self.task = [[EDSDownloadSession downloadSession] downloadTaskWithURL:self.url];
+            self.task = [self.session downloadTaskWithURL:self.url];
         }
         else
         {
@@ -151,10 +179,17 @@
     {
         NSData *data = [NSData dataWithContentsOfFile:[location path]];
         
-        [self.callbackQueue addOperationWithBlock:^
-         {
-             self.success(self, data);
-         }];
+        if (data.length > 0)
+        {
+            [self.callbackQueue addOperationWithBlock:^
+             {
+                 self.success(self, data);
+             }];
+        }
+        else
+        {
+            [self didFailWithError:nil];
+        }
     }
 }
 

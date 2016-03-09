@@ -26,11 +26,30 @@
 @property (nonatomic, strong, readonly) NSMutableArray *downloadsArray;
 
 /**
+ Maximum number of concurrent downloads.
+ 
+ 1 by default.
+ */
+@property (nonatomic, strong) NSNumber *maxDownloads;
+
+/**
+ Number of downloads that were started off this stack and have not finished yet.
+ */
+@property (nonatomic, strong) NSNumber *currentDownloads;
+
+/**
  Inserts in the stack.
  
  @param anObject - object to insert.
  */
 - (void)push:(EDSDownloadTaskInfo *)anObject;
+
+/**
+ Checks wethere a task can be started from the stack.
+ 
+ @return YES - A task can be started, NO - there are no tasks to start or the maximum running tasks operations has been reached.
+ */
+- (BOOL)canPopTask;
 
 /**
  Retrieves from the stack.
