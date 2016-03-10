@@ -91,6 +91,14 @@
     self.count = 0;
 }
 
+#pragma mark - RemoveTaskInfo
+
+- (void)removeTaskInfo:(EDSDownloadTaskInfo *)taskInfo
+{
+    [self.downloadsArray removeObject:taskInfo];
+    self.count = self.count - 1;
+}
+
 #pragma mark - ReleaseMemory
 
 - (void)releaseMemory
