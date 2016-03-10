@@ -64,6 +64,13 @@
 - (void)clear;
 
 /**
+ Removes the task from the stack.
+ 
+ @param taskInfo - task to remove.
+ */
+- (void)removeTaskInfo:(EDSDownloadTaskInfo *)taskInfo;
+
+/**
  Release the data of paused downloads.
  */
 - (void)releaseMemory;

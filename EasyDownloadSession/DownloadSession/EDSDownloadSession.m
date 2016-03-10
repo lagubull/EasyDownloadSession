@@ -230,7 +230,6 @@ static NSInteger const kEDSCancelled = -999;
          {
              failure(downloadTask, error);
          }
-         
      }];
 }
 
@@ -419,11 +418,11 @@ totalBytesExpectedToWrite:(int64_t)totalBytesExpectedToWrite
             BOOL canAskToCoalesce = [taskInfo isKindOfClass:[EDSDownloadTaskInfo class]];
             
             if (canAskToCoalesce &&
-                [taskInfo canCoalesceWithTaskInfo:newTaskInfo])
+                [newTaskInfo canCoalesceWithTaskInfo:taskInfo])
             {
-                [taskInfo coalesceWithTaskInfo:newTaskInfo];
+                [newTaskInfo coalesceWithTaskInfo:taskInfo];
                 
-                didCoalesce = YES;
+                [((EDSStack *)self.stackTableDictionary[stackIdentifier]) removeTaskInfo:taskInfo];
                 
                 break;
             }
