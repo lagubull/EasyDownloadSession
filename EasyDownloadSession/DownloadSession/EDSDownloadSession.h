@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 
 @class EDSDownloadTaskInfo;
+@class EDSStack;
 
 /**
  Protocol to indicate the status of the downloads.
@@ -35,11 +36,12 @@
 @property (nonatomic, weak) id<EDSDownloadSessionDelegate>delegate;
 
 /**
- Maximum number of concurrent downloads.
+ Registers the stack in the session.
  
- 1 by default.
+ @param stackIdentifier - identifies the stack.
  */
-@property (nonatomic, strong) NSNumber *maxDownloads;
+- (void)registerStack:(EDSStack *)stack
+      stackIdentifier:(NSString *)stackIdentifier;
 
 /**
  Stop and remove all the pending downloads without executing the completion block.
@@ -47,14 +49,28 @@
 + (void)cancelDownloads;
 
 /**
- Resume or starts the next pending download if it is not already executing.
+ Resume or starts the next pending downloads in every stack if there is capacity in each stack.
  */
 + (void)resumeDownloads;
 
 /**
- Stop the current downlad and saves it back in the queue without triggering a new download.
+ Resume or starts the next pending downloads if there is capacity in an specific stack.
+ 
+ @param stackIndetifier - Identifier of the stack for the download.
+ */
++ (void)resumeDownloadsInStack:(NSString *)downloadStackIdentifier;
+
+/**
+ Stop the current downloads in every stack and save them back in the queue.
  */
 + (void)pauseDownloads;
+
+/**
+ Stop the current downloads and save them back in the queue for an specific stack.
+ 
+ @param stackIndetifier - Identifier of the stack for the download.
+ */
++ (void)pauseDownloadsInStack:(NSString *)stackIndetifier;
 
 /**
  Creates an instance od DownloadSession
@@ -66,42 +82,69 @@
 /**
  Adds a downloading task to the stack.
  
+ @param downloadId - identifies the download.
  @param URL - path to download.
+ @param stackIdentifier - identifies the stack in which this download will be placed into.
  @param progress - to be executed when as the task progresses.
  @param success - to be executed when the task finishes succesfully.
  @param failure - to be executed when the task finishes with an error.
  */
 + (void)scheduleDownloadWithId:(NSString *)downloadId
                        fromURL:(NSURL *)url
+               stackIdentifier:(NSString *)stackIdentifier
                       progress:(void (^)(EDSDownloadTaskInfo *downloadTask))progress
                        success:(void (^)(EDSDownloadTaskInfo *downloadTask, NSData *responseData))success
-                       failure:(void (^)(EDSDownloadTaskInfo *downloadTask,NSError *error))failure;
+                       failure:(void (^)(EDSDownloadTaskInfo *downloadTask, NSError *error))failure;
+
+/**
+ Adds a downloading task to the stack.
+ 
+ @param downloadId - identifies the download.
+ @param request - request for a download.
+ @param stackIdentifier - identifies the stack in which this download will be placed into.
+ @param progress - to be executed when as the task progresses.
+ @param success - to be executed when the task finishes succesfully.
+ @param failure - to be executed when the task finishes with an error.
+ */
++ (void)scheduleDownloadWithId:(NSString *)downloadId
+                       request:(NSURLRequest *)request
+               stackIdentifier:(NSString *)stackIdentifier
+                      progress:(void (^)(EDSDownloadTaskInfo *downloadTask))progress
+                       success:(void (^)(EDSDownloadTaskInfo *downloadTask, NSData *responseData))success
+                       failure:(void (^)(EDSDownloadTaskInfo *downloadTask, NSError *error))failure;
 
 /**
  Stops the current download and adds it to the stack, the it begins executing this new download.
  
+ @param downloadId - identifies the download.
  @param URL - path to download.
- @param URL - path to download.
+ @param stackIdentifier - identifies the stack in which this download will be placed into.
  @param progress - to be executed when as the task progresses.
  @param success - to be executed when the task finishes succesfully.
  @param failure - to be executed when the task finishes with an error.
  */
 + (void)forceDownloadWithId:(NSString *)downloadId
                     fromURL:(NSURL *)url
+            stackIdentifier:(NSString *)stackIdentifier
                    progress:(void (^)(EDSDownloadTaskInfo *downloadTask))progress
                     success:(void (^)(EDSDownloadTaskInfo *downloadTask, NSData *responseData))success
-                    failure:(void (^)(EDSDownloadTaskInfo *downloadTask,NSError *error))failure;
+                    failure:(void (^)(EDSDownloadTaskInfo *downloadTask, NSError *error))failure;
+
 
 /**
- Creates a download task to download the contents of the given URL.
+ Stops the current download and adds it to the stack, the it begins executing this new download.
  
- @param URL - path to download.
+ @param downloadId - identifies the download.
+ @param request - request for a download.
+ @param stackIdentifier - identifies the stack in which this download will be placed into.
+ @param progress - to be executed when as the task progresses.
+ @param success - to be executed when the task finishes succesfully.
+ @param failure - to be executed when the task finishes with an error.
  */
-- (NSURLSessionDownloadTask *)downloadTaskWithURL:(NSURL *)url;
-
-/**
- Creates a download task with the resume data.  If the download cannot be successfully resumed, URLSession:task:didCompleteWithError: will be called.
- */
-- (NSURLSessionDownloadTask *)downloadTaskWithResumeData:(NSData *)resumeData;
-
++ (void)forceDownloadWithId:(NSString *)downloadId
+                    request:(NSURLRequest *)request
+            stackIdentifier:(NSString *)stackIdentifier
+                   progress:(void (^)(EDSDownloadTaskInfo *downloadTask))progress
+                    success:(void (^)(EDSDownloadTaskInfo *downloadTask, NSData *responseData))success
+                    failure:(void (^)(EDSDownloadTaskInfo *downloadTask, NSError *error))failure;
 @end

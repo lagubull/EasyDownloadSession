@@ -35,6 +35,8 @@
     if(self)
     {
         _downloadsArray = [[NSMutableArray alloc] init];
+        _maxDownloads = @(0);
+        _currentDownloads = @(0);
         _count = 0;
     }
     
@@ -51,6 +53,20 @@
 
 #pragma mark -  Pop
 
+- (BOOL)canPopTask
+{
+    BOOL canPopTask = NO;
+    
+    if (self.maxDownloads.integerValue == 0 ||
+        (self.currentDownloads.integerValue < self.maxDownloads.integerValue &&
+         self.count > 0))
+    {
+        canPopTask = YES;
+    }
+    
+    return canPopTask;
+}
+
 - (EDSDownloadTaskInfo *)pop
 {
     EDSDownloadTaskInfo *taskInfo = nil;
@@ -61,6 +77,7 @@
         
         [self.downloadsArray removeLastObject];
         self.count = self.downloadsArray.count;
+        self.currentDownloads = @(self.currentDownloads.integerValue + 1);
     }
     
     return taskInfo;
