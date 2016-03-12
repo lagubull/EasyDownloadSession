@@ -18,6 +18,8 @@
  */
 static NSInteger const kEDSCancelled = -999;
 
+static EDSDownloadSession *downloadSession = nil;
+
 @interface EDSDownloadSession () <NSURLSessionDownloadDelegate>
 
 /**
@@ -102,14 +104,13 @@ static NSInteger const kEDSCancelled = -999;
     return self;
 }
 
-+ (EDSDownloadSession *)downloadSession
++ (instancetype)sharedInstance
 {
-    static EDSDownloadSession *downloadSession = nil;
     static dispatch_once_t onceToken;
     
     dispatch_once(&onceToken, ^
                   {
-                      downloadSession = [[self alloc] init];
+                      downloadSession = [[EDSDownloadSession alloc] init];
                       
                       [[NSNotificationCenter defaultCenter] addObserverForName:UIApplicationDidReceiveMemoryWarningNotification
                                                                         object:nil
@@ -159,16 +160,16 @@ static NSInteger const kEDSCancelled = -999;
 {
     EDSDownloadTaskInfo *task = [[EDSDownloadTaskInfo alloc] initWithDownloadID:downloadId
                                                                         request:request
-                                                                        session:[EDSDownloadSession downloadSession].session
+                                                                        session:[EDSDownloadSession sharedInstance].session
                                                                 stackIdentifier:stackIdentifier
                                                                        progress:progress
                                                                         success:success
                                                                         failure:failure];
     
-    if (![[EDSDownloadSession downloadSession] shouldCoalesceDownloadTask:task
+    if (![[EDSDownloadSession sharedInstance] shouldCoalesceDownloadTask:task
                                                           stackIdentifier:stackIdentifier])
     {
-        [[EDSDownloadSession downloadSession].stackTableDictionary[stackIdentifier] push:task];
+        [[EDSDownloadSession sharedInstance].stackTableDictionary[stackIdentifier] push:task];
     }
     
     [EDSDownloadSession resumeDownloadsInStack:stackIdentifier];
@@ -201,9 +202,9 @@ static NSInteger const kEDSCancelled = -999;
 {
     [EDSDownloadSession pauseDownloadsInStack:stackIdentifier];
     
-    NSNumber *maxDownloads = ((EDSStack *)[EDSDownloadSession downloadSession].stackTableDictionary[stackIdentifier]).maxDownloads;
+    NSNumber *maxDownloads = ((EDSStack *)[EDSDownloadSession sharedInstance].stackTableDictionary[stackIdentifier]).maxDownloads;
     
-    ((EDSStack *)[EDSDownloadSession downloadSession].stackTableDictionary[stackIdentifier]).maxDownloads = @(1);
+    ((EDSStack *)[EDSDownloadSession sharedInstance].stackTableDictionary[stackIdentifier]).maxDownloads = @(1);
     
     [EDSDownloadSession scheduleDownloadWithId:downloadId
                                        request:request
@@ -211,7 +212,7 @@ static NSInteger const kEDSCancelled = -999;
                                       progress:progress
                                        success:^(EDSDownloadTaskInfo *downloadTask, NSData *responseData)
      {
-         ((EDSStack *)[EDSDownloadSession downloadSession].stackTableDictionary[stackIdentifier]).maxDownloads = maxDownloads;
+         ((EDSStack *)[EDSDownloadSession sharedInstance].stackTableDictionary[stackIdentifier]).maxDownloads = maxDownloads;
          
          [EDSDownloadSession resumeDownloadsInStack:downloadTask.stackIdentifier];
          
@@ -222,7 +223,7 @@ static NSInteger const kEDSCancelled = -999;
      }
                                        failure:^(EDSDownloadTaskInfo *downloadTask, NSError *error)
      {
-         ((EDSStack *)[EDSDownloadSession downloadSession].stackTableDictionary[stackIdentifier]).maxDownloads = maxDownloads;
+         ((EDSStack *)[EDSDownloadSession sharedInstance].stackTableDictionary[stackIdentifier]).maxDownloads = maxDownloads;
          
          [EDSDownloadSession resumeDownloadsInStack:downloadTask.stackIdentifier];
          
@@ -300,17 +301,17 @@ totalBytesExpectedToWrite:(int64_t)totalBytesExpectedToWrite
 
 + (void)cancelDownloads
 {
-    @synchronized([EDSDownloadSession downloadSession].inProgressDownloadsDictionary)
+    @synchronized([EDSDownloadSession sharedInstance].inProgressDownloadsDictionary)
     {
-        for (EDSDownloadTaskInfo *task in [EDSDownloadSession downloadSession].inProgressDownloadsDictionary)
+        for (EDSDownloadTaskInfo *task in [EDSDownloadSession sharedInstance].inProgressDownloadsDictionary)
         {
             [task.task cancel];
             
-            [[EDSDownloadSession downloadSession] finalizeTask:task];
+            [[EDSDownloadSession sharedInstance] finalizeTask:task];
         }
     }
     
-    for (EDSStack *stack in [[EDSDownloadSession downloadSession].stackTableDictionary allValues])
+    for (EDSStack *stack in [[EDSDownloadSession sharedInstance].stackTableDictionary allValues])
     {
         [stack clear];
     }
@@ -320,7 +321,7 @@ totalBytesExpectedToWrite:(int64_t)totalBytesExpectedToWrite
 
 + (void)resumeDownloads
 {
-    for (NSString *downloadStackIdentifier in [[EDSDownloadSession downloadSession].stackTableDictionary allKeys])
+    for (NSString *downloadStackIdentifier in [[EDSDownloadSession sharedInstance].stackTableDictionary allKeys])
     {
         [EDSDownloadSession resumeDownloadsInStack:downloadStackIdentifier];
     }
@@ -330,7 +331,7 @@ totalBytesExpectedToWrite:(int64_t)totalBytesExpectedToWrite
 {
     EDSDownloadTaskInfo *downloadTaskInfo = nil;
     
-    EDSStack *downloadStack = [EDSDownloadSession downloadSession].stackTableDictionary[downloadStackIdentifier];
+    EDSStack *downloadStack = [EDSDownloadSession sharedInstance].stackTableDictionary[downloadStackIdentifier];
     
     while ([downloadStack canPopTask])
     {
@@ -343,10 +344,10 @@ totalBytesExpectedToWrite:(int64_t)totalBytesExpectedToWrite
             {
                 [downloadTaskInfo resume];
                 
-                [[EDSDownloadSession downloadSession].delegate didResumeDownload:downloadTaskInfo];
+                [[EDSDownloadSession sharedInstance].delegate didResumeDownload:downloadTaskInfo];
             }
             
-            [[EDSDownloadSession downloadSession].inProgressDownloadsDictionary setObject:downloadTaskInfo
+            [[EDSDownloadSession sharedInstance].inProgressDownloadsDictionary setObject:downloadTaskInfo
                                                                                    forKey:@(downloadTaskInfo.task.taskIdentifier)];
         }
     }
@@ -356,9 +357,9 @@ totalBytesExpectedToWrite:(int64_t)totalBytesExpectedToWrite
 
 + (void)pauseDownloadsInStack:(NSString *)stackIndetifier;
 {
-    if ([EDSDownloadSession downloadSession].inProgressDownloadsDictionary.count > 0)
+    if ([EDSDownloadSession sharedInstance].inProgressDownloadsDictionary.count > 0)
     {
-        for (EDSDownloadTaskInfo *taskInfo in [[EDSDownloadSession downloadSession].inProgressDownloadsDictionary allValues])
+        for (EDSDownloadTaskInfo *taskInfo in [[EDSDownloadSession sharedInstance].inProgressDownloadsDictionary allValues])
         {
             if ([taskInfo.stackIdentifier isEqualToString:stackIndetifier])
             {
@@ -366,9 +367,9 @@ totalBytesExpectedToWrite:(int64_t)totalBytesExpectedToWrite
                 
                 [taskInfo pause];
                 
-                [((EDSStack *)[EDSDownloadSession downloadSession].stackTableDictionary[taskInfo.stackIdentifier]) push:taskInfo];
+                [((EDSStack *)[EDSDownloadSession sharedInstance].stackTableDictionary[taskInfo.stackIdentifier]) push:taskInfo];
                 
-                [[EDSDownloadSession downloadSession] finalizeTask:taskInfo];
+                [[EDSDownloadSession sharedInstance] finalizeTask:taskInfo];
             }
         }
     }
@@ -376,17 +377,17 @@ totalBytesExpectedToWrite:(int64_t)totalBytesExpectedToWrite
 
 + (void)pauseDownloads
 {
-    if ([EDSDownloadSession downloadSession].inProgressDownloadsDictionary.count > 0)
+    if ([EDSDownloadSession sharedInstance].inProgressDownloadsDictionary.count > 0)
     {
-        for (EDSDownloadTaskInfo *taskInfo in [[EDSDownloadSession downloadSession].inProgressDownloadsDictionary allValues])
+        for (EDSDownloadTaskInfo *taskInfo in [[EDSDownloadSession sharedInstance].inProgressDownloadsDictionary allValues])
         {
             EDSDebug(@"Pausing task - %@", taskInfo.downloadId);
             
             [taskInfo pause];
             
-            [((EDSStack *)[EDSDownloadSession downloadSession].stackTableDictionary[taskInfo.stackIdentifier]) push:taskInfo];
+            [((EDSStack *)[EDSDownloadSession sharedInstance].stackTableDictionary[taskInfo.stackIdentifier]) push:taskInfo];
             
-            [[EDSDownloadSession downloadSession] finalizeTask:taskInfo];
+            [[EDSDownloadSession sharedInstance] finalizeTask:taskInfo];
         }
     }
 }
