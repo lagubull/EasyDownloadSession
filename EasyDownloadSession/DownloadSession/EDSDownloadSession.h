@@ -77,7 +77,7 @@
  
  @return Session - instance of self.
  */
-+ (EDSDownloadSession *)downloadSession;
++ (instancetype)sharedInstance;
 
 /**
  Adds a downloading task to the stack.
