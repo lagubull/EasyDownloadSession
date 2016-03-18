@@ -56,7 +56,8 @@
  @param session - Session that will own the task.
  @param progress -  Block to be executed upon progress.
  @param success -  Block to be executed upon success.
- @param failure -  Block to be executed upon faiilure.
+ @param failure -  Block to be executed upon failure.
+ @param completion - Block to be executed upon finishing.
  
  @return Instance of the class.
  */
@@ -66,7 +67,8 @@
                    stackIdentifier:(NSString *)stackIdentifier
                           progress:(void (^)(EDSDownloadTaskInfo *downloadTask))progress
                            success:(void (^)(EDSDownloadTaskInfo *downloadTask, NSData *responseData))success
-                           failure:(void (^)(EDSDownloadTaskInfo *downloadTask,NSError *error))failure;
+                           failure:(void (^)(EDSDownloadTaskInfo *downloadTask, NSError *error))failure
+                        completion:(void (^)(EDSDownloadTaskInfo *downloadTask, NSData *responseData, NSError *error))completion;
 
 /**
  Creates a new DownloadTaskInfo object.
@@ -77,6 +79,7 @@
  @param progress -  Block to be executed upon progress.
  @param success -  Block to be executed upon success.
  @param failure -  Block to be executed upon faiilure.
+ @param completion - Block to be executed upon finishing.
  
  @return Instance of the class.
  */
@@ -86,7 +89,8 @@
                    stackIdentifier:(NSString *)stackIdentifier
                           progress:(void (^)(EDSDownloadTaskInfo *downloadTask))progress
                            success:(void (^)(EDSDownloadTaskInfo *downloadTask, NSData *responseData))success
-                           failure:(void (^)(EDSDownloadTaskInfo *downloadTask,NSError *error))failure;
+                           failure:(void (^)(EDSDownloadTaskInfo *downloadTask,NSError *error))failure
+                        completion:(void (^)(EDSDownloadTaskInfo *downloadTask, NSData *responseData, NSError *error))completion;
 
 /**
  Stops the task and stores the progress.
