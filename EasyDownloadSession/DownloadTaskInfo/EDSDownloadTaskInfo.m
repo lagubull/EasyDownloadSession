@@ -28,6 +28,11 @@
 @property (nonatomic, copy) void (^progress)(EDSDownloadTaskInfo *downloadTask);
 
 /**
+ Block to be executed upon finishing.
+ */
+@property (nonatomic, copy) void (^completion)(EDSDownloadTaskInfo *downloadTask, NSData *responseData, NSError *error);
+
+/**
  Internal callback queue to make sure callbacks execute on same queue task is created on.
  */
 @property (nonatomic, strong) NSOperationQueue *callbackQueue;
@@ -63,6 +68,13 @@
  */
 - (void)coalesceProgressWithTaskInfo:(EDSDownloadTaskInfo *)taskInfo;
 
+/**
+ Merges completion block of new task with self's.
+ 
+ @param taskInfo - new task.
+ */
+- (void)coalesceCompletionWithTaskInfo:(EDSDownloadTaskInfo *)taskInfo;
+
 @end
 
 @implementation EDSDownloadTaskInfo
@@ -75,7 +87,8 @@
                    stackIdentifier:(NSString *)stackIdentifier
                           progress:(void (^)(EDSDownloadTaskInfo *downloadTask))progress
                            success:(void (^)(EDSDownloadTaskInfo *downloadTask, NSData *responseData))success
-                           failure:(void (^)(EDSDownloadTaskInfo *downloadTask,NSError *error))failure
+                           failure:(void (^)(EDSDownloadTaskInfo *downloadTask, NSError *error))failure
+                        completion:(void (^)(EDSDownloadTaskInfo *downloadTask, NSData *responseData, NSError *error))completion
 {
     
     self = [super init];
@@ -93,7 +106,8 @@
         _success = success;
         _progress = progress;
         _failure = failure;
-        self.callbackQueue = [NSOperationQueue currentQueue];
+        _completion = completion;
+        _callbackQueue = [NSOperationQueue currentQueue];
     }
     
     return self;
@@ -105,7 +119,8 @@
                    stackIdentifier:(NSString *)stackIdentifier
                           progress:(void (^)(EDSDownloadTaskInfo *downloadTask))progress
                            success:(void (^)(EDSDownloadTaskInfo *downloadTask, NSData *responseData))success
-                           failure:(void (^)(EDSDownloadTaskInfo *downloadTask,NSError *error))failure
+                           failure:(void (^)(EDSDownloadTaskInfo *downloadTask, NSError *error))failure
+                        completion:(void (^)(EDSDownloadTaskInfo *downloadTask, NSData *responseData, NSError *error))completion
 {
     
     return [self initWithDownloadID:downloadId
@@ -114,7 +129,8 @@
                     stackIdentifier:stackIdentifier
                            progress:progress
                             success:success
-                            failure:failure];
+                            failure:failure
+                         completion:completion];
 }
 
 #pragma mark - Pause
@@ -180,10 +196,10 @@
 
 - (void)didSucceedWithLocation:(NSURL *)location
 {
+    NSData *data = [NSData dataWithContentsOfFile:[location path]];
+    
     if (self.success)
     {
-        NSData *data = [NSData dataWithContentsOfFile:[location path]];
-        
         if (data.length > 0)
         {
             [self.callbackQueue addOperationWithBlock:^
@@ -196,9 +212,16 @@
             [self didFailWithError:nil];
         }
     }
+    else if (self.completion)
+    {
+        [self.callbackQueue addOperationWithBlock:^
+         {
+             self.completion(self, data, nil);
+         }];
+    }
 }
 
-#pragma marl - Failure
+#pragma mark - Failure
 
 - (void)didFailWithError:(NSError *)error
 {
@@ -207,6 +230,13 @@
         [self.callbackQueue addOperationWithBlock:^
          {
              self.failure(self, error);
+         }];
+    }
+    else if (self.completion)
+    {
+        [self.callbackQueue addOperationWithBlock:^
+         {
+             self.completion(self, nil, error);
          }];
     }
 }
@@ -225,6 +255,8 @@
     [self coalesceFailureWithTaskInfo:taskInfo];
     
     [self coalesceProgressWithTaskInfo:taskInfo];
+    
+    [self coalesceCompletionWithTaskInfo:taskInfo];
 }
 
 - (void)coalesceSuccesWithTaskInfo:(EDSDownloadTaskInfo *)taskInfo
@@ -233,21 +265,18 @@
     
     void (^theirSuccess)(EDSDownloadTaskInfo *downloadTask, NSData *responseData) = [taskInfo->_success copy];
     
-    if (mySuccess != theirSuccess)
+    self.success = ^(EDSDownloadTaskInfo *downloadTask, NSData *responseData)
     {
-        self.success = ^(EDSDownloadTaskInfo *downloadTask, NSData *responseData)
+        if (mySuccess)
         {
-            if (mySuccess)
-            {
-                mySuccess(downloadTask, responseData);
-            }
-            
-            if (theirSuccess)
-            {
-                theirSuccess(downloadTask, responseData);
-            }
-        };
-    }
+            mySuccess(downloadTask, responseData);
+        }
+        
+        if (theirSuccess)
+        {
+            theirSuccess(downloadTask, responseData);
+        }
+    };
 }
 
 - (void)coalesceFailureWithTaskInfo:(EDSDownloadTaskInfo *)taskInfo
@@ -256,21 +285,18 @@
     
     void (^theirFailure)(EDSDownloadTaskInfo *downloadTask, NSError *error) = [taskInfo->_failure copy];
     
-    if (myFailure != theirFailure)
+    self.failure = ^(EDSDownloadTaskInfo *downloadTask, NSError *error)
     {
-        self.failure = ^(EDSDownloadTaskInfo *downloadTask, NSError *error)
+        if (myFailure)
         {
-            if (myFailure)
-            {
-                myFailure(downloadTask, error);
-            }
-            
-            if (theirFailure)
-            {
-                theirFailure(downloadTask, error);
-            }
-        };
-    }
+            myFailure(downloadTask, error);
+        }
+        
+        if (theirFailure)
+        {
+            theirFailure(downloadTask, error);
+        }
+    };
 }
 
 - (void)coalesceProgressWithTaskInfo:(EDSDownloadTaskInfo *)taskInfo
@@ -279,21 +305,38 @@
     
     void (^theirProgress)(EDSDownloadTaskInfo *downloadTask) = [taskInfo->_progress copy];
     
-    if (myProgress != theirProgress)
+    self.progress = ^(EDSDownloadTaskInfo *downloadTask)
     {
-        self.progress = ^(EDSDownloadTaskInfo *downloadTask)
+        if (myProgress)
         {
-            if (myProgress)
-            {
-                myProgress(downloadTask);
-            }
-            
-            if (theirProgress)
-            {
-                theirProgress(downloadTask);
-            }
-        };
-    }
+            myProgress(downloadTask);
+        }
+        
+        if (theirProgress)
+        {
+            theirProgress(downloadTask);
+        }
+    };
+}
+
+- (void)coalesceCompletionWithTaskInfo:(EDSDownloadTaskInfo *)taskInfo
+{
+    void (^myCompletion)(EDSDownloadTaskInfo *downloadTask, NSData *responseData, NSError *error) = [_completion copy];
+    
+    void (^theirCompletion)(EDSDownloadTaskInfo *downloadTask, NSData *responseData, NSError *error ) = [taskInfo->_completion copy];
+    
+    self.completion = ^(EDSDownloadTaskInfo *downloadTask, NSData *responseData, NSError *error)
+    {
+        if (myCompletion)
+        {
+            myCompletion(downloadTask, responseData, error);
+        }
+        
+        if (theirCompletion)
+        {
+            theirCompletion(downloadTask, responseData, error);
+        }
+    };
 }
 
 #pragma mark - ReleaseMemory

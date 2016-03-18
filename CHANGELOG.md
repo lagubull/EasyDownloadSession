@@ -12,7 +12,9 @@
 ##1.0.5
 
 - Swift compatible initializer
-- Stacks are inserted as dependency and apps can have as many as needed
+- Stacks are inserted as dependency and apps can have as many as needed.
+- Added signature for using requests instead of URL.
+- Added signature using a unique completion block instead of success/failure.
 
 ## 1.0.4
 
