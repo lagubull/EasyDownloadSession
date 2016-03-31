@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@class EDSDownloadTaskInfo;
+#import "EasyDownloadSession.h"
 
 /**
  Stack to store EDSDownloadTaskInfo objects.

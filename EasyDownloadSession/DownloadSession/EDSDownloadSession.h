@@ -8,8 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@class EDSDownloadTaskInfo;
-@class EDSStack;
+#import "EasyDownloadSession.h"
 
 /**
  Protocol to indicate the status of the downloads.

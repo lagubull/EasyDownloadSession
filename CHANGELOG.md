@@ -9,7 +9,7 @@
 * [0.5.0](#0.5.0)
 * [0.1.0](#0.1.0)
 
-##1.0.5
+## 1.0.5
 
 - Swift compatible initializer
 - Stacks are inserted as dependency and apps can have as many as needed.
