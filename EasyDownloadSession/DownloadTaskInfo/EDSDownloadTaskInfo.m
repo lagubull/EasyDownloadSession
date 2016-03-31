@@ -6,10 +6,6 @@
 //  Copyright © 2016 Javier Laguna. All rights reserved.
 //
 
-#import "EDSDownloadTaskInfo.h"
-
-#import "EDSDownloadSession.h"
-
 @interface EDSDownloadTaskInfo ()
 
 /**

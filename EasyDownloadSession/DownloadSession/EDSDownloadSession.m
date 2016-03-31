@@ -6,12 +6,7 @@
 //  Copyright © 2016 Javier Laguna. All rights reserved.
 //
 
-#import "EDSDownloadSession.h"
-
 #import <UIKit/UIKit.h>
-
-#import "EDSStack.h"
-#import "EDSDownloadTaskInfo.h"
 
 /**
  Constant to indicate cancelled task.

@@ -8,6 +8,8 @@
 
 #import <Foundation/Foundation.h>
 
+#import "EasyDownloadSession.h"
+
 /**
  Represents a download task and its metadata.
  */
