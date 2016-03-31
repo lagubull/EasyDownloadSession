@@ -18,7 +18,6 @@
     #import "EDSStack.h"
     #import "EDSDownloadSession.h"
 
-
 #endif
 
 #ifdef EDSDEBUG
