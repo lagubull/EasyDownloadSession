@@ -72,13 +72,6 @@ static EDSDownloadSession *downloadSession = nil;
 - (void)cancelTask:(EDSDownloadTaskInfo *)task;
 
 /**
- Resumes a task.
- 
- @param task - task to finalize.
- */
-- (void)resumeTask:(EDSDownloadTaskInfo *)task;
-
-/**
  Pauses a task.
  
  @param task - task to finalize.
