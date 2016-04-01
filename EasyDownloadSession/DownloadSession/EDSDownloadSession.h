@@ -48,6 +48,15 @@
 + (void)cancelDownloads;
 
 /**
+ Stop and remove all the pending downloads without executing the completion block.
+ 
+ @param downloadId - identifies the download.
+ @param stackIndetifier - Identifier of the stack for the download.
+ */
++ (void)cancelDownload:(NSString *)downloadId
+       stackIdentifier:(NSString *)stackIdentifier;
+
+/**
  Resume or starts the next pending downloads in every stack if there is capacity in each stack.
  */
 + (void)resumeDownloads;

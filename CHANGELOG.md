@@ -15,6 +15,7 @@
 - Stacks are inserted as dependency and apps can have as many as needed.
 - Added signature for using requests instead of URL.
 - Added signature using a unique completion block instead of success/failure.
+- Added Cancel download by downloadId
 
 ## 1.0.4
 

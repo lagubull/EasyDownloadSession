@@ -86,7 +86,6 @@
                            failure:(void (^)(EDSDownloadTaskInfo *downloadTask, NSError *error))failure
                         completion:(void (^)(EDSDownloadTaskInfo *downloadTask, NSData *responseData, NSError *error))completion
 {
-    
     self = [super init];
     
     if (self)
@@ -118,7 +117,6 @@
                            failure:(void (^)(EDSDownloadTaskInfo *downloadTask, NSError *error))failure
                         completion:(void (^)(EDSDownloadTaskInfo *downloadTask, NSData *responseData, NSError *error))completion
 {
-    
     return [self initWithDownloadID:downloadId
                             request:[NSURLRequest requestWithURL:url]
                             session:session
@@ -333,6 +331,23 @@
             theirCompletion(downloadTask, responseData, error);
         }
     };
+}
+
+#pragma mark - IsEqual
+
+- (BOOL)isEqual:(id)object
+{
+    BOOL equals = NO;
+    
+    if ([object isKindOfClass:self.class])
+    {
+        if ([((EDSDownloadTaskInfo *)object).downloadId isEqualToString:self.downloadId])
+        {
+            equals = YES;
+        }
+    }
+    
+    return equals;
 }
 
 #pragma mark - ReleaseMemory

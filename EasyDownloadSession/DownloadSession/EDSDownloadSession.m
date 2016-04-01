@@ -65,6 +65,27 @@ static EDSDownloadSession *downloadSession = nil;
 - (void)finalizeTask:(EDSDownloadTaskInfo *)task;
 
 /**
+ Cancels a task.
+ 
+ @param task - task to finalize.
+ */
+- (void)cancelTask:(EDSDownloadTaskInfo *)task;
+
+/**
+ Resumes a task.
+ 
+ @param task - task to finalize.
+ */
+- (void)resumeTask:(EDSDownloadTaskInfo *)task;
+
+/**
+ Pauses a task.
+ 
+ @param task - task to finalize.
+ */
+- (void)pauseTask:(EDSDownloadTaskInfo *)task;
+
+/**
  Adds a downloading task to the stack.
  
  @param downloadId - identifies the download.
@@ -405,15 +426,22 @@ totalBytesExpectedToWrite:(int64_t)totalBytesExpectedToWrite
 
 #pragma mark - Cancel
 
++ (void)cancelDownload:(NSString *)downloadId
+       stackIdentifier:(NSString *)stackIdentifier
+{
+    EDSDownloadTaskInfo * task = [[EDSDownloadSession sharedInstance] taskInfoWithIdentfier:downloadId
+                                               stackIdentifier:stackIdentifier];
+ 
+    [[EDSDownloadSession sharedInstance] cancelTask:task];
+}
+
 + (void)cancelDownloads
 {
     @synchronized([EDSDownloadSession sharedInstance].inProgressDownloadsDictionary)
     {
         for (EDSDownloadTaskInfo *task in [EDSDownloadSession sharedInstance].inProgressDownloadsDictionary)
         {
-            [task.task cancel];
-            
-            [[EDSDownloadSession sharedInstance] finalizeTask:task];
+            [[EDSDownloadSession sharedInstance] cancelTask:task];
         }
     }
     
@@ -421,6 +449,13 @@ totalBytesExpectedToWrite:(int64_t)totalBytesExpectedToWrite
     {
         [stack clear];
     }
+}
+
+- (void)cancelTask:(EDSDownloadTaskInfo *)task
+{
+    [task.task cancel];
+    
+    [[EDSDownloadSession sharedInstance] finalizeTask:task];
 }
 
 #pragma mark - Resume
@@ -467,13 +502,7 @@ totalBytesExpectedToWrite:(int64_t)totalBytesExpectedToWrite
     {
         if ([taskInfo.stackIdentifier isEqualToString:stackIndetifier])
         {
-            EDSDebug(@"Pausing task - %@", taskInfo.downloadId);
-            
-            [taskInfo pause];
-            
-            [((EDSStack *)[EDSDownloadSession sharedInstance].stackTableDictionary[taskInfo.stackIdentifier]) push:taskInfo];
-            
-            [[EDSDownloadSession sharedInstance] finalizeTask:taskInfo];
+            [[EDSDownloadSession sharedInstance] pauseTask:taskInfo];
         }
     }
 }
@@ -482,14 +511,19 @@ totalBytesExpectedToWrite:(int64_t)totalBytesExpectedToWrite
 {
     for (EDSDownloadTaskInfo *taskInfo in [[EDSDownloadSession sharedInstance].inProgressDownloadsDictionary allValues])
     {
-        EDSDebug(@"Pausing task - %@", taskInfo.downloadId);
-        
-        [taskInfo pause];
-        
-        [((EDSStack *)[EDSDownloadSession sharedInstance].stackTableDictionary[taskInfo.stackIdentifier]) push:taskInfo];
-        
-        [[EDSDownloadSession sharedInstance] finalizeTask:taskInfo];
+        [[EDSDownloadSession sharedInstance] pauseTask:taskInfo];
     }
+}
+
+- (void)pauseTask:(EDSDownloadTaskInfo *)task
+{
+    EDSDebug(@"Pausing task - %@", task.downloadId);
+    
+    [task pause];
+    
+    [((EDSStack *)[EDSDownloadSession sharedInstance].stackTableDictionary[task.stackIdentifier]) push:task];
+    
+    [[EDSDownloadSession sharedInstance] finalizeTask:task];
 }
 
 #pragma mark - Coalescing
@@ -534,9 +568,42 @@ totalBytesExpectedToWrite:(int64_t)totalBytesExpectedToWrite
 
 - (void)finalizeTask:(EDSDownloadTaskInfo *)task
 {
-    [self.inProgressDownloadsDictionary removeObjectForKey:@(task.task.taskIdentifier)];
+    if ([self.inProgressDownloadsDictionary objectForKey:@(task.task.taskIdentifier)])
+    {
+        [self.inProgressDownloadsDictionary removeObjectForKey:@(task.task.taskIdentifier)];
     
-    ((EDSStack *)self.stackTableDictionary[task.stackIdentifier]).currentDownloads = @(((EDSStack *)self.stackTableDictionary[task.stackIdentifier]).currentDownloads.integerValue - 1);
+        ((EDSStack *)self.stackTableDictionary[task.stackIdentifier]).currentDownloads = @(((EDSStack *)self.stackTableDictionary[task.stackIdentifier]).currentDownloads.integerValue - 1);
+    }
+}
+
+#pragma mark - TaskWithIdentifier
+
+- (EDSDownloadTaskInfo *)taskInfoWithIdentfier:(NSString *)downloadId
+                               stackIdentifier:(NSString *)stackIdentifier
+{
+    EDSDownloadTaskInfo *resultingTask = nil;
+    
+    EDSDownloadTaskInfo *soughtAfterTask = [[EDSDownloadTaskInfo alloc] init];
+    
+    soughtAfterTask.downloadId = downloadId;
+    
+    NSUInteger indexOfTask = [self.inProgressDownloadsDictionary.allValues indexOfObject:soughtAfterTask];
+    
+    if (indexOfTask == NSNotFound)
+    {
+        EDSStack *stack = [EDSDownloadSession sharedInstance].stackTableDictionary[stackIdentifier];
+        
+        indexOfTask = [stack.downloadsArray indexOfObject:soughtAfterTask];
+    }
+    else
+    {
+        if (indexOfTask != NSNotFound)
+        {
+            resultingTask = [self.inProgressDownloadsDictionary.allValues objectAtIndex:indexOfTask];
+        }
+    }
+    
+    return resultingTask;
 }
 
 @end
