@@ -259,18 +259,22 @@
     
     void (^theirSuccess)(EDSDownloadTaskInfo *downloadTask, NSData *responseData) = [taskInfo->_success copy];
     
-    self.success = ^(EDSDownloadTaskInfo *downloadTask, NSData *responseData)
+    if (mySuccess ||
+        theirSuccess)
     {
-        if (mySuccess)
+        self.success = ^(EDSDownloadTaskInfo *downloadTask, NSData *responseData)
         {
-            mySuccess(downloadTask, responseData);
-        }
-        
-        if (theirSuccess)
-        {
-            theirSuccess(downloadTask, responseData);
-        }
-    };
+            if (mySuccess)
+            {
+                mySuccess(downloadTask, responseData);
+            }
+            
+            if (theirSuccess)
+            {
+                theirSuccess(downloadTask, responseData);
+            }
+        };
+    }
 }
 
 - (void)coalesceFailureWithTaskInfo:(EDSDownloadTaskInfo *)taskInfo
@@ -279,18 +283,22 @@
     
     void (^theirFailure)(EDSDownloadTaskInfo *downloadTask, NSError *error) = [taskInfo->_failure copy];
     
-    self.failure = ^(EDSDownloadTaskInfo *downloadTask, NSError *error)
+    if (myFailure ||
+        theirFailure)
     {
-        if (myFailure)
+        self.failure = ^(EDSDownloadTaskInfo *downloadTask, NSError *error)
         {
-            myFailure(downloadTask, error);
-        }
-        
-        if (theirFailure)
-        {
-            theirFailure(downloadTask, error);
-        }
-    };
+            if (myFailure)
+            {
+                myFailure(downloadTask, error);
+            }
+            
+            if (theirFailure)
+            {
+                theirFailure(downloadTask, error);
+            }
+        };
+    }
 }
 
 - (void)coalesceProgressWithTaskInfo:(EDSDownloadTaskInfo *)taskInfo
@@ -299,18 +307,22 @@
     
     void (^theirProgress)(EDSDownloadTaskInfo *downloadTask) = [taskInfo->_progress copy];
     
-    self.progress = ^(EDSDownloadTaskInfo *downloadTask)
+    if (myProgress ||
+        theirProgress)
     {
-        if (myProgress)
+        self.progress = ^(EDSDownloadTaskInfo *downloadTask)
         {
-            myProgress(downloadTask);
-        }
-        
-        if (theirProgress)
-        {
-            theirProgress(downloadTask);
-        }
-    };
+            if (myProgress)
+            {
+                myProgress(downloadTask);
+            }
+            
+            if (theirProgress)
+            {
+                theirProgress(downloadTask);
+            }
+        };
+    }
 }
 
 - (void)coalesceCompletionWithTaskInfo:(EDSDownloadTaskInfo *)taskInfo
@@ -319,18 +331,22 @@
     
     void (^theirCompletion)(EDSDownloadTaskInfo *downloadTask, NSData *responseData, NSError *error ) = [taskInfo->_completion copy];
     
-    self.completion = ^(EDSDownloadTaskInfo *downloadTask, NSData *responseData, NSError *error)
+    if (myCompletion ||
+        theirCompletion)
     {
-        if (myCompletion)
+        self.completion = ^(EDSDownloadTaskInfo *downloadTask, NSData *responseData, NSError *error)
         {
-            myCompletion(downloadTask, responseData, error);
-        }
-        
-        if (theirCompletion)
-        {
-            theirCompletion(downloadTask, responseData, error);
-        }
-    };
+            if (myCompletion)
+            {
+                myCompletion(downloadTask, responseData, error);
+            }
+            
+            if (theirCompletion)
+            {
+                theirCompletion(downloadTask, responseData, error);
+            }
+        };
+    }
 }
 
 #pragma mark - IsEqual
