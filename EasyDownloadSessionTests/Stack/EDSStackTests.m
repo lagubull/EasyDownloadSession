@@ -54,6 +54,7 @@
                                                                failure:nil
                                                             completion:nil];
 }
+
 - (void)tearDown
 {
     [self.stack clear];
@@ -287,16 +288,6 @@
     
     NSUInteger taskCounter = 3;
     
-    FakeDownloadTaskInfo *lastItemInTheStack =  [[FakeDownloadTaskInfo alloc] initWithDownloadID:[NSString stringWithFormat:@"NEW%@",self.insertedTaskId]
-                                                                                          URL:nil
-                                                                                      session:nil
-                                                                              stackIdentifier:nil
-                                                                                     progress:nil
-                                                                                      success:nil
-                                                                                      failure:nil
-                                                                                   completion:nil];
-
-    
     for (NSInteger i = 0; i < taskCounter; i++)
     {
         [self.stack push:[[FakeDownloadTaskInfo alloc] initWithDownloadID:[NSString stringWithFormat:@"%@-%@" ,@(i), self.insertedTaskId]
@@ -318,9 +309,7 @@
         callCounter = callCounter + extractedItem.callCounter;
     }
     
-    XCTAssertEqual(taskCounter, callCounter, @"ReleaseMemory was called: %@ expected: %@", @(taskCounter), @(lastItemInTheStack.callCounter));
+    XCTAssertEqual(taskCounter, callCounter, @"ReleaseMemory was called: %@ expected: %@", @(taskCounter), @(callCounter));
 }
 
 @end
-
-
