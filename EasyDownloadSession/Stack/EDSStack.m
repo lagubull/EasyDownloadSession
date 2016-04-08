@@ -31,8 +31,8 @@
     if(self)
     {
         _downloadsArray = [[NSMutableArray alloc] init];
-        _maxDownloads = @(0);
-        _currentDownloads = @(0);
+        _maxDownloads = 0;
+        _currentDownloads = 0;
         _count = 0;
     }
     
@@ -53,11 +53,14 @@
 {
     BOOL canPopTask = NO;
     
-    if (self.maxDownloads.integerValue == 0 ||
-        (self.currentDownloads.integerValue < self.maxDownloads.integerValue &&
-         self.count > 0))
+    if (self.count > 0)
     {
-        canPopTask = YES;
+        if ((self.count > 0) &&
+            (self.maxDownloads == 0 ||
+             self.currentDownloads < self.maxDownloads))
+        {
+            canPopTask = YES;
+        }
     }
     
     return canPopTask;
@@ -73,7 +76,7 @@
         
         [self.downloadsArray removeLastObject];
         self.count = self.downloadsArray.count;
-        self.currentDownloads = @(self.currentDownloads.integerValue + 1);
+        self.currentDownloads = self.currentDownloads + 1;
     }
     
     return taskInfo;
@@ -91,8 +94,11 @@
 
 - (void)removeTaskInfo:(EDSDownloadTaskInfo *)taskInfo
 {
-    [self.downloadsArray removeObject:taskInfo];
-    self.count = self.count - 1;
+    if ([self.downloadsArray containsObject:taskInfo])
+    {
+        [self.downloadsArray removeObject:taskInfo];
+        self.count = self.count - 1;
+    }
 }
 
 #pragma mark - ReleaseMemory

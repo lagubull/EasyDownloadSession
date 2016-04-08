@@ -277,9 +277,9 @@ static EDSDownloadSession *downloadSession = nil;
 {
     [EDSDownloadSession pauseDownloadsInStack:stackIdentifier];
     
-    NSNumber *maxDownloads = ((EDSStack *)[EDSDownloadSession sharedInstance].stackTableDictionary[stackIdentifier]).maxDownloads;
+    NSInteger maxDownloads = ((EDSStack *)[EDSDownloadSession sharedInstance].stackTableDictionary[stackIdentifier]).maxDownloads;
     
-    ((EDSStack *)[EDSDownloadSession sharedInstance].stackTableDictionary[stackIdentifier]).maxDownloads = @(1);
+    ((EDSStack *)[EDSDownloadSession sharedInstance].stackTableDictionary[stackIdentifier]).maxDownloads = 1;
     
     [EDSDownloadSession scheduleDownloadWithId:downloadId
                                        request:request
@@ -307,9 +307,9 @@ static EDSDownloadSession *downloadSession = nil;
 {
     [EDSDownloadSession pauseDownloadsInStack:stackIdentifier];
     
-    NSNumber *maxDownloads = ((EDSStack *)[EDSDownloadSession sharedInstance].stackTableDictionary[stackIdentifier]).maxDownloads;
+    NSInteger maxDownloads = ((EDSStack *)[EDSDownloadSession sharedInstance].stackTableDictionary[stackIdentifier]).maxDownloads;
     
-    ((EDSStack *)[EDSDownloadSession sharedInstance].stackTableDictionary[stackIdentifier]).maxDownloads = @(1);
+    ((EDSStack *)[EDSDownloadSession sharedInstance].stackTableDictionary[stackIdentifier]).maxDownloads = 1;
     
     [EDSDownloadSession scheduleDownloadWithId:downloadId
                                        request:request
@@ -573,7 +573,7 @@ totalBytesExpectedToWrite:(int64_t)totalBytesExpectedToWrite
     {
         [self.inProgressDownloadsDictionary removeObjectForKey:@(task.task.taskIdentifier)];
         
-        ((EDSStack *)self.stackTableDictionary[task.stackIdentifier]).currentDownloads = @(((EDSStack *)self.stackTableDictionary[task.stackIdentifier]).currentDownloads.integerValue - 1);
+        ((EDSStack *)self.stackTableDictionary[task.stackIdentifier]).currentDownloads = (((EDSStack *)self.stackTableDictionary[task.stackIdentifier]).currentDownloads - 1);
     }
 }
 

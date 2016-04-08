@@ -30,12 +30,12 @@
  
  1 by default.
  */
-@property (nonatomic, strong) NSNumber *maxDownloads;
+@property (nonatomic, assign) NSUInteger maxDownloads;
 
 /**
  Number of downloads that were started off this stack and have not finished yet.
  */
-@property (nonatomic, strong) NSNumber *currentDownloads;
+@property (nonatomic, assign) NSUInteger currentDownloads;
 
 /**
  Inserts in the stack.
