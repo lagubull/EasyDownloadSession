@@ -9,23 +9,7 @@
 #import <XCTest/XCTest.h>
 
 #import "EasyDownloadSession.h"
-
-@interface FakeDownloadTaskInfo : EDSDownloadTaskInfo
-
-@property (nonatomic, assign) NSUInteger callCounter;
-
-- (void)releaseMemory;
-
-@end
-
-@implementation FakeDownloadTaskInfo
-
-- (void)releaseMemory
-{
-    self.callCounter++;
-}
-
-@end
+#import "EDSFakeDownloadTaskInfo.h"
 
 @interface EDSStackTests : XCTestCase
 
@@ -37,13 +21,15 @@
 
 @implementation EDSStackTests
 
-#pragma mark - TestLyfeCycle
+#pragma mark - TestLifeCycle
 
 - (void)setUp
 {
     [super setUp];
     
     self.stack = [[EDSStack alloc] init];
+    
+    self.insertedTaskId = @"TASKID";
     
     self.insertedTask = [[EDSDownloadTaskInfo alloc] initWithDownloadID:self.insertedTaskId
                                                                    URL:nil
@@ -60,6 +46,10 @@
     [self.stack clear];
     
     self.stack = nil;
+    
+    self.insertedTask = nil;
+    
+    self.insertedTaskId = nil;
     
     [super tearDown];
 }
@@ -290,7 +280,7 @@
     
     for (NSInteger i = 0; i < taskCounter; i++)
     {
-        [self.stack push:[[FakeDownloadTaskInfo alloc] initWithDownloadID:[NSString stringWithFormat:@"%@-%@" ,@(i), self.insertedTaskId]
+        [self.stack push:[[EDSFakeDownloadTaskInfo alloc] initWithDownloadID:[NSString stringWithFormat:@"%@-%@" ,@(i), self.insertedTaskId]
                                                                       URL:nil
                                                                   session:nil
                                                           stackIdentifier:nil
@@ -304,7 +294,7 @@
     
     for (NSInteger i = 0; i < self.stack.downloadsArray.count; i++)
     {
-        FakeDownloadTaskInfo *extractedItem = (FakeDownloadTaskInfo *)self.stack.downloadsArray[i];
+        EDSFakeDownloadTaskInfo *extractedItem = (EDSFakeDownloadTaskInfo *)self.stack.downloadsArray[i];
         
         callCounter = callCounter + extractedItem.callCounter;
     }
