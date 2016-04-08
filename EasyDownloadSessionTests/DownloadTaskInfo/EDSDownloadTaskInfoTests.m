@@ -171,7 +171,7 @@
 
 - (void)test_didUpdateProgress_progessIsUpdated
 {
-    CGFloat newProgress = 5;
+    CGFloat newProgress = 5.0f;
     
     [self.insertedTask didUpdateProgress:newProgress];
     
@@ -180,7 +180,7 @@
 
 - (void)test_didUpdateProgress_progessShouldBeInvoked
 {
-    CGFloat newProgress = 5;
+    CGFloat newProgress = 5.0f;
     
     __weak typeof(self) weakSelf = self;
     
@@ -881,11 +881,11 @@
 
 - (void)test_releaseMemory_downloadProgressShouldUpdate
 {
-    self.insertedTask.downloadProgress = 9.0;
+    self.insertedTask.downloadProgress = 9.0f;
     
     [self.insertedTask releaseMemory];
     
-    XCTAssertEqual(self.insertedTask.downloadProgress, 0.0, @"DownloadProgress should be 0.0");
+    XCTAssertEqual(self.insertedTask.downloadProgress, 0.0f, @"DownloadProgress should be 0.0");
 }
 
 - (void)test_releaseMemory_taskResumeDataShouldBeNil

@@ -95,7 +95,7 @@
         _downloadId = downloadId;
         _request = request;
         _stackIdentifier = stackIdentifier;
-        _downloadProgress = 0.0;
+        _downloadProgress = 0.0f;
         _isDownloading = NO;
         _downloadComplete = NO;
         _success = success;
@@ -370,7 +370,7 @@
 
 - (void)releaseMemory
 {
-    self.downloadProgress = 0.0;
+    self.downloadProgress = 0.0f;
     self.taskResumeData = nil;
 }
 
