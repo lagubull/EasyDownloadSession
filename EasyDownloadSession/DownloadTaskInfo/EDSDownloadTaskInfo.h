@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
 
 #import "EasyDownloadSession.h"
 
@@ -28,7 +29,7 @@
 /**
  Progress of the download.
  */
-@property (nonatomic, assign) NSNumber *downloadProgress;
+@property (nonatomic, assign) CGFloat downloadProgress;
 
 /**
  Indicates whethere the task is executing.
@@ -109,7 +110,7 @@
  
  @param newProgress - completion status.
  */
-- (void)didUpdateProgress:(NSNumber *)newProgress;
+- (void)didUpdateProgress:(CGFloat)newProgress;
 
 /**
  Notifies the task wwhen has finish succesfully.

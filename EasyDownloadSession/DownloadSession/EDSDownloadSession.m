@@ -395,7 +395,7 @@ totalBytesExpectedToWrite:(int64_t)totalBytesExpectedToWrite
     
     if (taskInProgress)
     {
-        [taskInProgress didUpdateProgress:[NSNumber numberWithDouble:(double)totalBytesWritten / (double)totalBytesExpectedToWrite]];
+        [taskInProgress didUpdateProgress:(double)totalBytesWritten / (double)totalBytesExpectedToWrite];
     }
 }
 

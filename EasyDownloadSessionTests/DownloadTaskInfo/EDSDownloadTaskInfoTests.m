@@ -77,18 +77,6 @@
     self.insertedTask.task = self.task;
 }
 
-//self.insertedTask = [[EDSDownloadTaskInfo alloc] initWithDownloadID:self.insertedTaskId
-//                                                                URL:nil
-//                                                            session:self.session
-//                                                    stackIdentifier:nil
-//                                                           progress:nil
-//                                                            success:nil
-//                                                            failure:nil
-//                                                         completion:^(EDSDownloadTaskInfo *downloadTask, NSData *responseData, NSError *error)
-//                     {
-//                         weakSelf.completionExpectation = [weakSelf expectationWithDescription:@"Progress expectation"];
-//                     }];
-
 - (void)tearDown
 {
     self.insertedTaskId = nil;
@@ -183,16 +171,16 @@
 
 - (void)test_didUpdateProgress_progessIsUpdated
 {
-    NSNumber *newProgress = @(5);
+    CGFloat newProgress = 5;
     
     [self.insertedTask didUpdateProgress:newProgress];
     
-    XCTAssertEqual(self.insertedTask.downloadProgress, newProgress, @"Progress was not updated, currentProgress: %@, expected: %@", self.insertedTask.downloadProgress, newProgress);
+    XCTAssertEqual(self.insertedTask.downloadProgress, newProgress, @"Progress was not updated, currentProgress: %@, expected: %@", @(self.insertedTask.downloadProgress), @(newProgress));
 }
 
 - (void)test_didUpdateProgress_progessShouldBeInvoked
 {
-    NSNumber *newProgress = @(5);
+    CGFloat newProgress = 5;
     
     __weak typeof(self) weakSelf = self;
     
@@ -844,6 +832,69 @@
      {
          XCTAssertTrue([result isEqualToString:expectedResult], @"Completion should be new completion then original, Obtained: %@ expected: %@", result, expectedResult);
      }];
+}
+
+
+#pragma mark - IsEqual
+
+- (void)test_isEqual_ShouldReturnNO_nilObject
+{
+    XCTAssertFalse([self.insertedTask isEqual:nil], @"Is Equal should return NO if the object is nil");
+}
+
+- (void)test_isEqual_ShouldReturnNO_otherClass
+{
+    NSString *otherObject= @"";
+    
+    XCTAssertFalse([self.insertedTask isEqual:otherObject], @"Is Equal should return NO if the object is not of the EDSDownloadTaskInfo class");
+}
+
+- (void)test_isEqual_ShouldReturnNO
+{
+    EDSDownloadTaskInfo *otherTask = [[EDSDownloadTaskInfo alloc] initWithDownloadID:[NSString stringWithFormat:@"NEW%@",self.insertedTaskId]
+                                                                                 URL:nil
+                                                                             session:self.session
+                                                                     stackIdentifier:nil
+                                                                            progress:nil
+                                                                             success:nil
+                                                                             failure:nil
+                                                                          completion:nil];
+    
+    XCTAssertFalse([self.insertedTask isEqual:otherTask], @"Is Equal should return NO if the object if objects have different DownloadIds");
+}
+
+- (void)test_isEqual_ShouldReturnYES
+{
+    EDSDownloadTaskInfo *otherTask = [[EDSDownloadTaskInfo alloc] initWithDownloadID:self.insertedTaskId
+                                                                                 URL:nil
+                                                                             session:self.session
+                                                                     stackIdentifier:nil
+                                                                            progress:nil
+                                                                             success:nil
+                                                                             failure:nil
+                                                                          completion:nil];
+    
+    XCTAssertTrue([self.insertedTask isEqual:otherTask], @"Is Equal should return YES if the object if objects have same DownloadIds");
+}
+
+#pragma mark - ReleaseMemory
+
+- (void)test_releaseMemory_downloadProgressShouldUpdate
+{
+    self.insertedTask.downloadProgress = 9.0;
+    
+    [self.insertedTask releaseMemory];
+    
+    XCTAssertEqual(self.insertedTask.downloadProgress, 0.0, @"DownloadProgress should be 0.0");
+}
+
+- (void)test_releaseMemory_taskResumeDataShouldBeNil
+{
+    self.insertedTask.taskResumeData = [@"this is a text" dataUsingEncoding:kCFStringEncodingUTF8];
+    
+    [self.insertedTask releaseMemory];
+    
+    XCTAssertNil(self.insertedTask.taskResumeData, @"TaskResumeData should be nil");
 }
 
 @end
