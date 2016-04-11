@@ -1,5 +1,7 @@
 language: objective-c
 
-osx_image: xcode7.3
+xcode_project: EasyDownloadSession.xcodeproj
+xcode_scheme: EasyDownloadSession
+xcode_sdk: iphonesimulator
 
-xctool -project EasyDownloadSession.xcodeproj -scheme EasyDownloadSession build test -sdk iphonesimulator
+osx_image: xcode7.2

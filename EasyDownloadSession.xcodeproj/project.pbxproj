@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3B34E2A21CB7BDC800E620AF /* EDSFakeSession.m in Sources */ = {isa = PBXBuildFile; fileRef = 3B34E2A11CB7BDC800E620AF /* EDSFakeSession.m */; };
+		3B34E2A61CB7F04900E620AF /* NSData+DataWithContentsOfFile.m in Sources */ = {isa = PBXBuildFile; fileRef = 3B34E2A51CB7F04900E620AF /* NSData+DataWithContentsOfFile.m */; };
 		3B51599F1C7E26A100B074E0 /* EasyDownloadSession.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3B5159941C7E26A100B074E0 /* EasyDownloadSession.framework */; };
 		3B5159B31C7E274300B074E0 /* EDSDownloadSession.h in Headers */ = {isa = PBXBuildFile; fileRef = 3B5159B11C7E274300B074E0 /* EDSDownloadSession.h */; };
 		3B5159B41C7E274300B074E0 /* EDSDownloadSession.m in Sources */ = {isa = PBXBuildFile; fileRef = 3B5159B21C7E274300B074E0 /* EDSDownloadSession.m */; };
@@ -14,6 +16,9 @@
 		3B5159B81C7E275500B074E0 /* EDSDownloadTaskInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 3B5159B61C7E275500B074E0 /* EDSDownloadTaskInfo.m */; };
 		3B5159BB1C7E276300B074E0 /* EDSStack.h in Headers */ = {isa = PBXBuildFile; fileRef = 3B5159B91C7E276300B074E0 /* EDSStack.h */; };
 		3B5159BC1C7E276300B074E0 /* EDSStack.m in Sources */ = {isa = PBXBuildFile; fileRef = 3B5159BA1C7E276300B074E0 /* EDSStack.m */; };
+		3B53C9001CB7BB0600AED4FA /* EDSFakeDownloadTaskInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 3B53C8FF1CB7BB0600AED4FA /* EDSFakeDownloadTaskInfo.m */; };
+		3B53C9031CB7BB6000AED4FA /* EDSFakeNSURLSessionTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 3B53C9021CB7BB6000AED4FA /* EDSFakeNSURLSessionTask.m */; };
+		3B58A2571CB69D0E0052834F /* EDSDownloadTaskInfoTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 3B58A2561CB69D0E0052834F /* EDSDownloadTaskInfoTests.m */; };
 		3BA93D181CB57541004BC115 /* EDSStackTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 3BA93D171CB57541004BC115 /* EDSStackTests.m */; };
 		3BF174C11C821C550050405F /* EasyDownloadSession.h in Headers */ = {isa = PBXBuildFile; fileRef = 3BF174C01C821B440050405F /* EasyDownloadSession.h */; };
 /* End PBXBuildFile section */
@@ -29,6 +34,10 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		3B34E2A01CB7BDC800E620AF /* EDSFakeSession.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EDSFakeSession.h; sourceTree = "<group>"; };
+		3B34E2A11CB7BDC800E620AF /* EDSFakeSession.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EDSFakeSession.m; sourceTree = "<group>"; };
+		3B34E2A41CB7F04900E620AF /* NSData+DataWithContentsOfFile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+DataWithContentsOfFile.h"; sourceTree = "<group>"; };
+		3B34E2A51CB7F04900E620AF /* NSData+DataWithContentsOfFile.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+DataWithContentsOfFile.m"; sourceTree = "<group>"; };
 		3B5159941C7E26A100B074E0 /* EasyDownloadSession.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = EasyDownloadSession.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		3B5159991C7E26A100B074E0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		3B51599E1C7E26A100B074E0 /* EasyDownloadSessionTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = EasyDownloadSessionTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -39,6 +48,11 @@
 		3B5159B61C7E275500B074E0 /* EDSDownloadTaskInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EDSDownloadTaskInfo.m; sourceTree = "<group>"; };
 		3B5159B91C7E276300B074E0 /* EDSStack.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EDSStack.h; sourceTree = "<group>"; };
 		3B5159BA1C7E276300B074E0 /* EDSStack.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EDSStack.m; sourceTree = "<group>"; };
+		3B53C8FE1CB7BB0600AED4FA /* EDSFakeDownloadTaskInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EDSFakeDownloadTaskInfo.h; sourceTree = "<group>"; };
+		3B53C8FF1CB7BB0600AED4FA /* EDSFakeDownloadTaskInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EDSFakeDownloadTaskInfo.m; sourceTree = "<group>"; };
+		3B53C9011CB7BB6000AED4FA /* EDSFakeNSURLSessionTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EDSFakeNSURLSessionTask.h; sourceTree = "<group>"; };
+		3B53C9021CB7BB6000AED4FA /* EDSFakeNSURLSessionTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EDSFakeNSURLSessionTask.m; sourceTree = "<group>"; };
+		3B58A2561CB69D0E0052834F /* EDSDownloadTaskInfoTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EDSDownloadTaskInfoTests.m; sourceTree = "<group>"; };
 		3BA93D171CB57541004BC115 /* EDSStackTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EDSStackTests.m; sourceTree = "<group>"; };
 		3BF174C01C821B440050405F /* EasyDownloadSession.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EasyDownloadSession.h; sourceTree = "<group>"; };
 		3BF1ACFD1C81A4BB00203161 /* EasyDownloadSession-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "EasyDownloadSession-Prefix.pch"; sourceTree = SOURCE_ROOT; };
@@ -63,6 +77,24 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		3B2240741CB7BCFA006A7372 /* Session */ = {
+			isa = PBXGroup;
+			children = (
+				3B34E2A01CB7BDC800E620AF /* EDSFakeSession.h */,
+				3B34E2A11CB7BDC800E620AF /* EDSFakeSession.m */,
+			);
+			path = Session;
+			sourceTree = "<group>";
+		};
+		3B34E2A31CB7EFB800E620AF /* Data */ = {
+			isa = PBXGroup;
+			children = (
+				3B34E2A41CB7F04900E620AF /* NSData+DataWithContentsOfFile.h */,
+				3B34E2A51CB7F04900E620AF /* NSData+DataWithContentsOfFile.m */,
+			);
+			path = Data;
+			sourceTree = "<group>";
+		};
 		3B51598A1C7E26A100B074E0 = {
 			isa = PBXGroup;
 			children = (
@@ -97,6 +129,8 @@
 		3B5159A21C7E26A100B074E0 /* EasyDownloadSessionTests */ = {
 			isa = PBXGroup;
 			children = (
+				3B53C8F81CB7B92200AED4FA /* FakeClasses */,
+				3B58A2551CB69CDA0052834F /* DownloadTaskInfo */,
 				3BA93D161CB57517004BC115 /* Stack */,
 				3B5159A51C7E26A100B074E0 /* Info.plist */,
 			);
@@ -128,6 +162,43 @@
 				3B5159BA1C7E276300B074E0 /* EDSStack.m */,
 			);
 			path = Stack;
+			sourceTree = "<group>";
+		};
+		3B53C8F81CB7B92200AED4FA /* FakeClasses */ = {
+			isa = PBXGroup;
+			children = (
+				3B34E2A31CB7EFB800E620AF /* Data */,
+				3B53C8FD1CB7BAA100AED4FA /* DownloadTaskInfo */,
+				3B2240741CB7BCFA006A7372 /* Session */,
+				3B53C8FC1CB7BA8900AED4FA /* SessionTask */,
+			);
+			path = FakeClasses;
+			sourceTree = "<group>";
+		};
+		3B53C8FC1CB7BA8900AED4FA /* SessionTask */ = {
+			isa = PBXGroup;
+			children = (
+				3B53C9011CB7BB6000AED4FA /* EDSFakeNSURLSessionTask.h */,
+				3B53C9021CB7BB6000AED4FA /* EDSFakeNSURLSessionTask.m */,
+			);
+			path = SessionTask;
+			sourceTree = "<group>";
+		};
+		3B53C8FD1CB7BAA100AED4FA /* DownloadTaskInfo */ = {
+			isa = PBXGroup;
+			children = (
+				3B53C8FE1CB7BB0600AED4FA /* EDSFakeDownloadTaskInfo.h */,
+				3B53C8FF1CB7BB0600AED4FA /* EDSFakeDownloadTaskInfo.m */,
+			);
+			path = DownloadTaskInfo;
+			sourceTree = "<group>";
+		};
+		3B58A2551CB69CDA0052834F /* DownloadTaskInfo */ = {
+			isa = PBXGroup;
+			children = (
+				3B58A2561CB69D0E0052834F /* EDSDownloadTaskInfoTests.m */,
+			);
+			path = DownloadTaskInfo;
 			sourceTree = "<group>";
 		};
 		3BA93D161CB57517004BC115 /* Stack */ = {
@@ -260,6 +331,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				3BA93D181CB57541004BC115 /* EDSStackTests.m in Sources */,
+				3B34E2A21CB7BDC800E620AF /* EDSFakeSession.m in Sources */,
+				3B34E2A61CB7F04900E620AF /* NSData+DataWithContentsOfFile.m in Sources */,
+				3B58A2571CB69D0E0052834F /* EDSDownloadTaskInfoTests.m in Sources */,
+				3B53C9031CB7BB6000AED4FA /* EDSFakeNSURLSessionTask.m in Sources */,
+				3B53C9001CB7BB0600AED4FA /* EDSFakeDownloadTaskInfo.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
