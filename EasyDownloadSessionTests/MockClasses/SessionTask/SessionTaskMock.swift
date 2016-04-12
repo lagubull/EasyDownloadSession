@@ -77,4 +77,6 @@ class SessionTaskMock: NSURLSessionDownloadTask {
         
         completionHandler(pausedSavedData)
     }
+    
+    
 }

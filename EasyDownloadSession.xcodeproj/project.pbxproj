@@ -13,6 +13,7 @@
 		3B6DCC021CBD331A004A7BF8 /* DownloadTaskInfoTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B6DCC011CBD331A004A7BF8 /* DownloadTaskInfoTest.swift */; };
 		3B6DCC041CBD3644004A7BF8 /* SessionMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B6DCC031CBD3644004A7BF8 /* SessionMock.swift */; };
 		3B6DCC061CBD3761004A7BF8 /* SessionTaskMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B6DCC051CBD3761004A7BF8 /* SessionTaskMock.swift */; };
+		3B6DCC081CBD5FBF004A7BF8 /* DownloadTaskInfoMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B6DCC071CBD5FBF004A7BF8 /* DownloadTaskInfoMock.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -35,6 +36,7 @@
 		3B6DCC011CBD331A004A7BF8 /* DownloadTaskInfoTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DownloadTaskInfoTest.swift; sourceTree = "<group>"; };
 		3B6DCC031CBD3644004A7BF8 /* SessionMock.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SessionMock.swift; sourceTree = "<group>"; };
 		3B6DCC051CBD3761004A7BF8 /* SessionTaskMock.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SessionTaskMock.swift; sourceTree = "<group>"; };
+		3B6DCC071CBD5FBF004A7BF8 /* DownloadTaskInfoMock.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DownloadTaskInfoMock.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -155,6 +157,7 @@
 		3B6DCBEF1CBD2BA6004A7BF8 /* DownloadTaskInfo */ = {
 			isa = PBXGroup;
 			children = (
+				3B6DCC071CBD5FBF004A7BF8 /* DownloadTaskInfoMock.swift */,
 			);
 			path = DownloadTaskInfo;
 			sourceTree = "<group>";
@@ -293,6 +296,7 @@
 			files = (
 				3B6DCC021CBD331A004A7BF8 /* DownloadTaskInfoTest.swift in Sources */,
 				3B6DCC061CBD3761004A7BF8 /* SessionTaskMock.swift in Sources */,
+				3B6DCC081CBD5FBF004A7BF8 /* DownloadTaskInfoMock.swift in Sources */,
 				3B6DCC041CBD3644004A7BF8 /* SessionMock.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

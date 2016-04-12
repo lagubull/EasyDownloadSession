@@ -262,7 +262,7 @@ class DownloadTaskInfo: NSObject
             isDataNil = true
         }
         
-        if isDataNil {
+        if !isDataNil {
             
             didFailWithError(nil)
         } else {
