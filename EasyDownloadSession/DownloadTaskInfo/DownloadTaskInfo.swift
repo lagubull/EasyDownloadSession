@@ -159,7 +159,7 @@ class DownloadTaskInfo: NSObject
                      completion:((downloadTask: DownloadTaskInfo, responseData: NSData?, error: NSError?) -> Void)?){
         
         self.init(downloadId: downloadId,
-                  request: NSURLRequest.init(URL: URL),
+                  request: NSURLRequest(URL: URL),
                   session: session,
                   stackIdentifier: stackIdentifier,
                   progress: progress,
@@ -170,6 +170,9 @@ class DownloadTaskInfo: NSObject
     
     //MARK: Pause
     
+    /**
+     Stops the task and stores the progress.
+     */
     func pause() {
         
         isDownloading = false
@@ -182,12 +185,15 @@ class DownloadTaskInfo: NSObject
             
             guard let resumeData = resumeData else { return }
             
-            self.taskResumeData = NSData.init(data: resumeData)
+            self.taskResumeData = NSData(data: resumeData)
         })
     }
     
     //MARK: Resume
     
+    /**
+     Starts the task.
+     */
     func resume() {
         
         var didResumeWithData = false
@@ -228,6 +234,11 @@ class DownloadTaskInfo: NSObject
     
     //MARK: Progress
     
+    /**
+     Notifies the task of its progress.
+     
+     - Parameter newProgress: completion status.
+     */
     func didUpdateProgress(newProgress: CGFloat) {
         
         downloadProgress = newProgress
@@ -255,9 +266,9 @@ class DownloadTaskInfo: NSObject
         guard let callbackQueue = callbackQueue,
             let path = location.path else { return }
         
-        let data: NSData? = NSData.init(contentsOfFile: path)
+        let data: NSData? = NSData(contentsOfFile: path)
         
-        if let unwrappedData = data where unwrappedData.length == 0 {
+        if let _ = data where data!.length > 0 {
             
             isDataNil = true
         }
@@ -310,7 +321,7 @@ class DownloadTaskInfo: NSObject
                 
                 completion(downloadTask:self, responseData: nil, error: error)
             })
-
+            
         }
     }
     
@@ -342,7 +353,12 @@ class DownloadTaskInfo: NSObject
         self.coalesceCompletionWithTaskInfo(taskInfo)
     }
     
-    func coalesceSuccesWithTaskInfo(taskInfo: DownloadTaskInfo) {
+    /**
+     Merges success block of new task with self's.
+     
+     @param taskInfo - new task.
+     */
+    private func coalesceSuccesWithTaskInfo(taskInfo: DownloadTaskInfo) {
         
         var isMySuccessNil = false
         var isTheirSuccessNil = false
@@ -388,7 +404,7 @@ class DownloadTaskInfo: NSObject
      
      - Parameter taskInfo: new task.
      */
-    func coalesceFailureWithTaskInfo(taskInfo: DownloadTaskInfo) {
+    private func coalesceFailureWithTaskInfo(taskInfo: DownloadTaskInfo) {
         
         var isMyFailureNil = false
         var isTheirFailureNil = false
@@ -434,7 +450,7 @@ class DownloadTaskInfo: NSObject
      
      - Parameter taskInfo: new task.
      */
-    func coalesceProgressWithTaskInfo(taskInfo: DownloadTaskInfo) {
+    private func coalesceProgressWithTaskInfo(taskInfo: DownloadTaskInfo) {
         
         var isMyProgressNil = false
         var isTheirProgressNil = false
@@ -480,7 +496,7 @@ class DownloadTaskInfo: NSObject
      
      - Parameter taskInfo: new task.
      */
-    func coalesceCompletionWithTaskInfo(taskInfo: DownloadTaskInfo) {
+    private func coalesceCompletionWithTaskInfo(taskInfo: DownloadTaskInfo) {
         
         var isMyCompletionNil = false
         var isTheirCompletionNil = false
@@ -544,6 +560,9 @@ class DownloadTaskInfo: NSObject
     
     //MARK: ReleaseMemory
     
+    /**
+     Release the data of paused downloads.
+     */
     func releaseMemory() {
         
         downloadProgress = 0.0
