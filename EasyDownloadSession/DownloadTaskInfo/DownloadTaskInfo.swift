@@ -20,79 +20,79 @@ func EDSDebug(message: String, filename: String = #file, function: String = #fun
  */
 @objc(EDSDownloadTaskInfo)
 
-class DownloadTaskInfo: NSObject
+public class DownloadTaskInfo: NSObject
 {
     //MARK: Getters
     
     /**
      Identifies the object.
      */
-    var downloadId: String
+    public var downloadId: String
     
     /**
      Data already downloaded.
      */
-    var taskResumeData: NSData?
+    public var taskResumeData: NSData?
     
     /**
      Progress of the download.
      */
-    var downloadProgress: CGFloat
+    public var downloadProgress: CGFloat
     
     /**
      Indicates whethere the task is executing.
      */
-    var isDownloading: Bool
+    public var isDownloading: Bool
     
     /**
      Indicates where the download has finished.
      */
-    var downloadComplete: Bool
+    public var downloadComplete: Bool
     
     /**
      The task itself.
      */
-    var task: NSURLSessionDownloadTask?
+    public var task: NSURLSessionDownloadTask?
     
     /**
      Identifies the stack.
      */
-    var stackIdentifier: String
+    public var stackIdentifier: String
     
     /**
      Block to be executed upon success.
      */
-    private var success: ((downloadTask: DownloadTaskInfo, responseData: NSData?) -> Void)?
+    internal var success: ((downloadTask: DownloadTaskInfo, responseData: NSData?) -> Void)?
     
     /**
      Block to be executed upon error.
      */
-    private var failure: ((downloadTask: DownloadTaskInfo, error: NSError?) -> Void)?
+    internal var failure: ((downloadTask: DownloadTaskInfo, error: NSError?) -> Void)?
     
     /**
      Block to be executed upon progress.
      */
-    private var progress: ((downloadTask: DownloadTaskInfo) -> Void)?
+    internal var progress: ((downloadTask: DownloadTaskInfo) -> Void)?
     
     /**
      Block to be executed upon finishing.
      */
-    private var completion: ((downloadTask: DownloadTaskInfo, responseData: NSData?, error: NSError?) -> Void)?
+    internal var completion: ((downloadTask: DownloadTaskInfo, responseData: NSData?, error: NSError?) -> Void)?
     
     /**
      Internal callback queue to make sure callbacks execute on same queue task is created on.
      */
-    private var callbackQueue: NSOperationQueue?
+    internal var callbackQueue: NSOperationQueue?
     
     /**
      Session that will own the task.
      */
-    private var session: NSURLSession
+    internal var session: NSURLSession
     
     /**
      Request for a download.
      */
-    private var request: NSURLRequest
+    internal var request: NSURLRequest
     
     //MARK: Init
     
@@ -109,14 +109,14 @@ class DownloadTaskInfo: NSObject
      
      @return Instance of the class.
      */
-    init(downloadId: String,
-         request: NSURLRequest,
-         session: NSURLSession,
-         stackIdentifier: String,
-         progress: ((downloadTask: DownloadTaskInfo!) -> Void)?,
-         success: ((downloadTask: DownloadTaskInfo!, responseData: NSData?) -> Void)?,
-         failure: ((downloadTask: DownloadTaskInfo!, error: NSError?) -> Void)?,
-         completion:((downloadTask: DownloadTaskInfo, responseData: NSData?, error: NSError?) -> Void)?) {
+    public init(downloadId: String,
+                request: NSURLRequest,
+                session: NSURLSession,
+                stackIdentifier: String,
+                progress: ((downloadTask: DownloadTaskInfo!) -> Void)?,
+                success: ((downloadTask: DownloadTaskInfo!, responseData: NSData?) -> Void)?,
+                failure: ((downloadTask: DownloadTaskInfo!, error: NSError?) -> Void)?,
+                completion:((downloadTask: DownloadTaskInfo, responseData: NSData?, error: NSError?) -> Void)?) {
         
         self.downloadId = downloadId
         self.session = session
@@ -149,14 +149,14 @@ class DownloadTaskInfo: NSObject
      
      @return Instance of the class.
      */
-    convenience init(downloadId: String,
-                     URL: NSURL,
-                     session: NSURLSession,
-                     stackIdentifier: String,
-                     progress: ((downloadTask: DownloadTaskInfo!) -> Void)?,
-                     success: ((downloadTask: DownloadTaskInfo!, responseData: NSData?) -> Void)?,
-                     failure: ((downloadTask: DownloadTaskInfo!, error: NSError?) -> Void)?,
-                     completion:((downloadTask: DownloadTaskInfo, responseData: NSData?, error: NSError?) -> Void)?){
+    public convenience init(downloadId: String,
+                            URL: NSURL,
+                            session: NSURLSession,
+                            stackIdentifier: String,
+                            progress: ((downloadTask: DownloadTaskInfo!) -> Void)?,
+                            success: ((downloadTask: DownloadTaskInfo!, responseData: NSData?) -> Void)?,
+                            failure: ((downloadTask: DownloadTaskInfo!, error: NSError?) -> Void)?,
+                            completion:((downloadTask: DownloadTaskInfo!, responseData: NSData?, error: NSError?) -> Void)?){
         
         self.init(downloadId: downloadId,
                   request: NSURLRequest(URL: URL),
@@ -173,7 +173,7 @@ class DownloadTaskInfo: NSObject
     /**
      Stops the task and stores the progress.
      */
-    func pause() {
+    public func pause() {
         
         isDownloading = false
         
@@ -194,7 +194,7 @@ class DownloadTaskInfo: NSObject
     /**
      Starts the task.
      */
-    func resume() {
+    public func resume() {
         
         var didResumeWithData = false
         
@@ -239,7 +239,7 @@ class DownloadTaskInfo: NSObject
      
      - Parameter newProgress: completion status.
      */
-    func didUpdateProgress(newProgress: CGFloat) {
+    public func didUpdateProgress(newProgress: CGFloat) {
         
         downloadProgress = newProgress
         
@@ -259,7 +259,7 @@ class DownloadTaskInfo: NSObject
      
      - Parameter location: local path to the downloaded data.
      */
-    func didSucceedWithLocation(location: NSURL)
+    public func didSucceedWithLocation(location: NSURL)
     {
         var isDataNil = false
         
@@ -303,7 +303,7 @@ class DownloadTaskInfo: NSObject
      
      - Parameter error: completion status.
      */
-    func didFailWithError(error: NSError?)
+    public func didFailWithError(error: NSError?)
     {
         guard let callbackQueue = callbackQueue else { return }
         
@@ -332,7 +332,7 @@ class DownloadTaskInfo: NSObject
      
      - Parameter taskInfo: new task.
      */
-    func canCoalesceWithTaskInfo(taskInfo: DownloadTaskInfo) -> Bool {
+    public func canCoalesceWithTaskInfo(taskInfo: DownloadTaskInfo) -> Bool {
         
         return self.isEqual(taskInfo)
     }
@@ -342,7 +342,7 @@ class DownloadTaskInfo: NSObject
      
      - Parameter taskInfo: new task.
      */
-    func coalesceWithTaskInfo(taskInfo: DownloadTaskInfo) {
+    public func coalesceWithTaskInfo(taskInfo: DownloadTaskInfo) {
         
         self.coalesceSuccesWithTaskInfo(taskInfo)
         
@@ -356,45 +356,20 @@ class DownloadTaskInfo: NSObject
     /**
      Merges success block of new task with self's.
      
-     @param taskInfo - new task.
+     - Parameter taskInfo: new task.
      */
     private func coalesceSuccesWithTaskInfo(taskInfo: DownloadTaskInfo) {
         
-        var isMySuccessNil = false
-        var isTheirSuccessNil = false
+        let mySuccess = self.success
         
-        if let _ =  self.success {
-            
-        } else {
-            
-            isMySuccessNil = true
-        }
-        
-        if let _ =  taskInfo.success {
-            
-        } else {
-            
-            isTheirSuccessNil = true
-        }
-        
-        if (!isMySuccessNil ||
-            !isTheirSuccessNil)
+        if mySuccess != nil ||
+            taskInfo.success != nil
         {
             self.success = { (downloadTask: DownloadTaskInfo, responseData: NSData?) in
                 
-                if (isMySuccessNil)
-                {
-                    let mySuccess =  self.success!
-                    
-                    mySuccess(downloadTask: downloadTask, responseData: responseData);
-                }
+                mySuccess?(downloadTask: downloadTask, responseData: responseData);
                 
-                if (isTheirSuccessNil)
-                {
-                    let theirSuccess =  taskInfo.success!
-                    
-                    theirSuccess(downloadTask: downloadTask, responseData: responseData);
-                }
+                taskInfo.success?(downloadTask: downloadTask, responseData: responseData);
             }
         }
     }
@@ -406,41 +381,17 @@ class DownloadTaskInfo: NSObject
      */
     private func coalesceFailureWithTaskInfo(taskInfo: DownloadTaskInfo) {
         
-        var isMyFailureNil = false
-        var isTheirFailureNil = false
+        let myFailure = self.failure
         
-        if let _ =  self.failure {
-            
-        } else {
-            
-            isMyFailureNil = true
-        }
-        
-        if let _ =  taskInfo.failure {
-            
-        } else {
-            
-            isTheirFailureNil = true
-        }
-        
-        if (!isMyFailureNil ||
-            !isTheirFailureNil)
+        if myFailure != nil ||
+            taskInfo.failure != nil
         {
             self.failure = { (downloadTask: DownloadTaskInfo, error: NSError?) in
                 
-                if (isMyFailureNil)
-                {
-                    let myFailure =  self.failure!
-                    
-                    myFailure(downloadTask: downloadTask, error: error);
-                }
                 
-                if (isTheirFailureNil)
-                {
-                    let theirFailure =  taskInfo.failure!
-                    
-                    theirFailure(downloadTask: downloadTask, error: error);
-                }
+                myFailure?(downloadTask: downloadTask, error: error);
+                
+                taskInfo.failure?(downloadTask: downloadTask, error: error);
             }
         }
     }
@@ -452,41 +403,16 @@ class DownloadTaskInfo: NSObject
      */
     private func coalesceProgressWithTaskInfo(taskInfo: DownloadTaskInfo) {
         
-        var isMyProgressNil = false
-        var isTheirProgressNil = false
+        let myProgress = self.progress
         
-        if let _ =  self.progress {
-            
-        } else {
-            
-            isMyProgressNil = true
-        }
-        
-        if let _ =  taskInfo.progress {
-            
-        } else {
-            
-            isTheirProgressNil = true
-        }
-        
-        if (!isMyProgressNil ||
-            !isTheirProgressNil)
+        if myProgress != nil ||
+            taskInfo.progress != nil
         {
             self.progress = { (downloadTask: DownloadTaskInfo) in
                 
-                if (isMyProgressNil)
-                {
-                    let myProgress =  self.progress!
-                    
-                    myProgress(downloadTask: downloadTask);
-                }
+                myProgress?(downloadTask: downloadTask);
                 
-                if (isTheirProgressNil)
-                {
-                    let theirProgress = taskInfo.progress!
-                    
-                    theirProgress(downloadTask: downloadTask);
-                }
+                taskInfo.progress?(downloadTask: downloadTask);
             }
         }
     }
@@ -498,48 +424,23 @@ class DownloadTaskInfo: NSObject
      */
     private func coalesceCompletionWithTaskInfo(taskInfo: DownloadTaskInfo) {
         
-        var isMyCompletionNil = false
-        var isTheirCompletionNil = false
+        let myCompletion =  self.completion
         
-        if let _ =  self.completion {
-            
-        } else {
-            
-            isMyCompletionNil = true
-        }
-        
-        if let _ =  taskInfo.completion {
-            
-        } else {
-            
-            isTheirCompletionNil = true
-        }
-        
-        if (!isMyCompletionNil ||
-            !isTheirCompletionNil)
+        if myCompletion != nil ||
+            taskInfo.completion != nil
         {
             self.completion = { (downloadTask: DownloadTaskInfo, responseData: NSData? , error: NSError?) in
                 
-                if (isMyCompletionNil)
-                {
-                    let myCompletion =  self.completion!
-                    
-                    myCompletion(downloadTask: downloadTask, responseData: responseData, error: error);
-                }
+                myCompletion?(downloadTask: downloadTask, responseData: responseData, error: error);
                 
-                if (isTheirCompletionNil)
-                {
-                    let theirCompletion =  taskInfo.completion!
-                    
-                    theirCompletion(downloadTask: downloadTask, responseData: responseData, error: error);
-                }
+                taskInfo.completion?(downloadTask: downloadTask, responseData: responseData, error: error);
             }
         }
     }
     
     //MARK: IsEqual
     
-    override func isEqual(object: AnyObject?) -> Bool {
+    override public func isEqual(object: AnyObject?) -> Bool {
         
         var equals = false
         
@@ -563,7 +464,7 @@ class DownloadTaskInfo: NSObject
     /**
      Release the data of paused downloads.
      */
-    func releaseMemory() {
+    public func releaseMemory() {
         
         downloadProgress = 0.0
         taskResumeData = nil

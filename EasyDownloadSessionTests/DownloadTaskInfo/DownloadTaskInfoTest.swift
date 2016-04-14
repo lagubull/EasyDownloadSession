@@ -13,7 +13,6 @@ import XCTest
 class DownloadTaskInfoTest: XCTestCase {
     
     var insertedTask: DownloadTaskInfo?
-    var insertedTaskId: String?
     var task: SessionTaskMock?
     var session: SessionMock?
     
@@ -22,20 +21,22 @@ class DownloadTaskInfoTest: XCTestCase {
     var failureExpectation: XCTestExpectation?
     var completionExpectation: XCTestExpectation?
     
+    let insertedTaskId = "TASKID"
+    let sessionIdentifier =  "SESSIONIDENTIFIER"
+    let testURL = NSURL(string: "URL")!
+    
     //MARK: TestLifeCycle
     
     override func setUp() {
         
         super.setUp()
         
-        self.insertedTaskId = "TASKID";
-        
         self.session =  SessionMock()
         
-        self.insertedTask = DownloadTaskInfo(downloadId: self.insertedTaskId!,
-                                             URL: NSURL(string: "URL")!,
-                                             session: self.session!,
-                                             stackIdentifier: "SessionIdentifier",
+        self.insertedTask = DownloadTaskInfo(downloadId: insertedTaskId,
+                                             URL: testURL,
+                                             session: session!,
+                                             stackIdentifier: sessionIdentifier,
                                              progress: nil,
                                              success: nil,
                                              failure: nil,
@@ -43,12 +44,10 @@ class DownloadTaskInfoTest: XCTestCase {
         
         self.insertedTask?.isDownloading = true
         self.task = SessionTaskMock()
-        self.insertedTask?.task = self.task;
+        self.insertedTask?.task = self.task
     }
     
     override func tearDown() {
-        
-        self.insertedTaskId = nil
         
         self.task = nil
         
@@ -63,21 +62,21 @@ class DownloadTaskInfoTest: XCTestCase {
         
         insertedTask?.pause()
         
-        XCTAssertFalse((insertedTask?.isDownloading)!, "IsDownloading should be NO");
+        XCTAssertFalse((insertedTask?.isDownloading)!, "IsDownloading should be NO")
     }
     
     func test_pause_taskShouldBeSuspended() {
         
         insertedTask?.pause()
         
-        XCTAssertTrue(task!.didInvokeSuspend!, "Task suspend was not invoked");
+        XCTAssertTrue(task!.didInvokeSuspend!, "Task suspend was not invoked")
     }
     
     func test_pause_taskCancelByProducingResumeDataInvoked() {
         
         insertedTask?.pause()
         
-        XCTAssertTrue(task!.didInvokeCancelByProducingResumeDataInvoked!, "Task CancelByProducingResumeData suspend was not invoked");
+        XCTAssertTrue(task!.didInvokeCancelByProducingResumeDataInvoked!, "Task CancelByProducingResumeData suspend was not invoked")
     }
     
     func test_pause_taskCurrentDataIsSaved() {
@@ -109,7 +108,7 @@ class DownloadTaskInfoTest: XCTestCase {
         
         insertedTask?.resume()
         
-        XCTAssertTrue(self.task!.didInvokeResume!, "Task Resume suspend was not invoked")
+        XCTAssertTrue(task!.didInvokeResume!, "Task Resume suspend was not invoked")
     }
     
     func test_resume_taskDownloadTaskWithResumeDataShouldBeInvoked() {
@@ -120,7 +119,7 @@ class DownloadTaskInfoTest: XCTestCase {
         
         insertedTask?.resume()
         
-        XCTAssertTrue(self.session!.didInvokeDownloadTaskWithResumeData!, "Task DownloadTaskWithResumeData was not invoked")
+        XCTAssertTrue(session!.didInvokeDownloadTaskWithResumeData!, "Task DownloadTaskWithResumeData was not invoked")
     }
     
     func test_resume_taskDownloadTaskWithRequestShouldBeInvoked() {
@@ -132,7 +131,7 @@ class DownloadTaskInfoTest: XCTestCase {
         
         insertedTask?.resume()
         
-        XCTAssertTrue(session!.didInvokeDownloadTaskWithRequest!, "Task DownloadTaskWithRequest was not invoked");
+        XCTAssertTrue(session!.didInvokeDownloadTaskWithRequest!, "Task DownloadTaskWithRequest was not invoked")
     }
     
     //MARK: Progress
@@ -143,17 +142,17 @@ class DownloadTaskInfoTest: XCTestCase {
         
         insertedTask?.didUpdateProgress(newProgress)
         
-        XCTAssertEqual(insertedTask?.downloadProgress, newProgress, "Progress was not updated, currentProgress: \(insertedTask?.downloadProgress), expected: \(newProgress)");
+        XCTAssertEqual(insertedTask?.downloadProgress, newProgress, "Progress was not updated, currentProgress: \(insertedTask?.downloadProgress), expected: \(newProgress)")
     }
     
     func test_didUpdateProgress_progessShouldBeInvoked () {
         
         let newProgress = 5.0 as CGFloat
         
-        insertedTask = DownloadTaskInfo(downloadId: self.insertedTaskId!,
-                                        URL: NSURL(string: "URL")!,
+        insertedTask = DownloadTaskInfo(downloadId: insertedTaskId,
+                                        URL: testURL,
                                         session: self.session!,
-                                        stackIdentifier: "SessionIdentifier",
+                                        stackIdentifier: sessionIdentifier,
                                         progress: { [unowned self] (downloadTask: DownloadTaskInfo!) in
                                             
                                             self.progressExpectation?.fulfill()
@@ -185,10 +184,10 @@ class DownloadTaskInfoTest: XCTestCase {
         
         method_exchangeImplementations(originalMethod, swizzledMethod);
         
-        insertedTask = DownloadTaskInfo(downloadId: self.insertedTaskId!,
-                                        URL: NSURL(string: "URL")!,
+        insertedTask = DownloadTaskInfo(downloadId: insertedTaskId,
+                                        URL: testURL,
                                         session: self.session!,
-                                        stackIdentifier: "SessionIdentifier",
+                                        stackIdentifier: sessionIdentifier,
                                         progress: nil,
                                         success: { [unowned self] (downloadTask: DownloadTaskInfo!, responseData: NSData?) in
                                             
@@ -218,19 +217,19 @@ class DownloadTaskInfoTest: XCTestCase {
     
     func test_didSucceedWithLocation_didFailWithErrorIsInvoked() {
         
-        let task =  DownloadTaskInfoMock(downloadId: self.insertedTaskId!,
-                                         URL: NSURL(string: "URL")!,
+        let task =  DownloadTaskInfoMock(downloadId: insertedTaskId,
+                                         URL: testURL,
                                          session: self.session!,
-                                         stackIdentifier: "SessionIdentifier",
+                                         stackIdentifier: sessionIdentifier,
                                          progress: nil,
                                          success: nil,
                                          failure: nil,
                                          completion: nil)
         
         
-        task.didSucceedWithLocation(NSURL(string: "URL")!)
+        task.didSucceedWithLocation(testURL)
         
-        XCTAssertTrue(task.didInvokeDidFailWithError, "DidFailWithError was not invoked");
+        XCTAssertTrue(task.didInvokeDidFailWithError, "DidFailWithError was not invoked")
     }
     
     func test_didSucceedWithLocation_completionLocationIsUsed() {
@@ -245,14 +244,14 @@ class DownloadTaskInfoTest: XCTestCase {
         
         method_exchangeImplementations(originalMethod, swizzledMethod);
         
-        insertedTask = DownloadTaskInfo(downloadId: self.insertedTaskId!,
-                                        URL: NSURL(string: "URL")!,
+        insertedTask = DownloadTaskInfo(downloadId: insertedTaskId,
+                                        URL: testURL,
                                         session: self.session!,
-                                        stackIdentifier: "SessionIdentifier",
+                                        stackIdentifier: sessionIdentifier,
                                         progress: nil,
                                         success:nil,
                                         failure:nil,
-                                        completion: { [unowned self] (downloadTask: DownloadTaskInfo, responseData: NSData?, error: NSError?) in
+                                        completion: { [unowned self] (downloadTask: DownloadTaskInfo!, responseData: NSData?, error: NSError?) in
                                             
                                             guard let responseData = responseData else { return }
                                             
@@ -284,10 +283,10 @@ class DownloadTaskInfoTest: XCTestCase {
                                 code: 0,
                                 userInfo: nil)
         
-        insertedTask = DownloadTaskInfo(downloadId: self.insertedTaskId!,
-                                        URL: NSURL(string: "URL")!,
+        insertedTask = DownloadTaskInfo(downloadId: insertedTaskId,
+                                        URL: testURL,
                                         session: self.session!,
-                                        stackIdentifier: "SessionIdentifier",
+                                        stackIdentifier: sessionIdentifier,
                                         progress: nil,
                                         success:nil,
                                         failure: { [unowned self] (downloadTask: DownloadTaskInfo!, error: NSError?) in
@@ -315,10 +314,10 @@ class DownloadTaskInfoTest: XCTestCase {
                                 code: 0,
                                 userInfo: nil)
         
-        insertedTask = DownloadTaskInfo(downloadId: self.insertedTaskId!,
-                                        URL: NSURL(string: "URL")!,
+        insertedTask = DownloadTaskInfo(downloadId: insertedTaskId,
+                                        URL: testURL,
                                         session: self.session!,
-                                        stackIdentifier: "SessionIdentifier",
+                                        stackIdentifier: sessionIdentifier,
                                         progress: nil,
                                         success:nil,
                                         failure:nil,
@@ -339,248 +338,268 @@ class DownloadTaskInfoTest: XCTestCase {
         waitForExpectationsWithTimeout(0.1,
                                        handler: nil)
     }
-    //
-    //    //MARK: Coalescing
-    //
-    //    func test_canCoalesceWithTaskInfo_ShouldReturnYES
-    //    {
-    //    EDSDownloadTaskInfo *newTask = [[EDSDownloadTaskInfo alloc] initWithDownloadID:self.insertedTaskId
-    //    URL:nil
-    //    session:self.session
-    //    stackIdentifier:nil
-    //    progress:nil
-    //    success:nil
-    //    failure:nil
-    //    completion:nil
-    //
-    //    BOOL canCoalesce = [self.insertedTask canCoalesceWithTaskInfo:newTask
-    //
-    //    XCTAssertTrue(canCoalesce, "CanColaseceWithTaskInfo should return YES");
-    //    }
-    //
-    //    func test_canCoalesceWithTaskInfo_ShouldReturnNO
-    //    {
-    //    EDSDownloadTaskInfo *newTask = [[EDSDownloadTaskInfo alloc] initWithDownloadID:[NSString stringWithFormat:@"NEW%@",self.insertedTaskId]
-    //    URL:nil
-    //    session:self.session
-    //    stackIdentifier:nil
-    //    progress:nil
-    //    success:nil
-    //    failure:nil
-    //    completion:nil
-    //
-    //    BOOL canCoalesce = [self.insertedTask canCoalesceWithTaskInfo:newTask
-    //
-    //    XCTAssertFalse(canCoalesce, "CanColaseceWithTaskInfo should return NO");
-    //    }
-    //
-    //    //MARK: Success
-    //
-    //    func test_coalesceSuccesWithTaskInfo_SuccessShouldBeNil
-    //    {
-    //    EDSDownloadTaskInfo *newTask = [[EDSDownloadTaskInfo alloc] initWithDownloadID:self.insertedTaskId
-    //    URL:nil
-    //    session:self.session
-    //    stackIdentifier:nil
-    //    progress:nil
-    //    success:nil
-    //    failure:nil
-    //    completion:nil
-    //
-    //    [self.insertedTask coalesceWithTaskInfo:newTask
-    //
-    //    XCTAssertNil(self.insertedTask.success, "Success should be nil");
-    //    }
-    //
-    //    func test_coalesceSuccesWithTaskInfo_SuccessShouldBeOriginalSuccess
-    //    {
-    //    __weak typeof(self) weakSelf = self;
-    //
-    //    NSString *locationString = @"LocationString";
-    //
-    //    self.successExpectation = [self expectationWithDescription:@"Success should be Original task's"
-    //
-    //    EDSDownloadTaskInfo *originalTask = [[EDSDownloadTaskInfo alloc] initWithDownloadID:self.insertedTaskId
-    //    URL:nil
-    //    session:self.session
-    //    stackIdentifier:nil
-    //    progress:nil
-    //    success:^(EDSDownloadTaskInfo *downloadTask, NSData *responseData)
-    //    {
-    //    [weakSelf.successExpectation fulfill
-    //    }
-    //    failure:nil
-    //    completion:nil
-    //
-    //
-    //    EDSDownloadTaskInfo *newTask = [[EDSDownloadTaskInfo alloc] initWithDownloadID:self.insertedTaskId
-    //    URL:nil
-    //    session:self.session
-    //    stackIdentifier:nil
-    //    progress:nil
-    //    success:nil
-    //    failure:nil
-    //    completion:nil
-    //
-    //    [originalTask coalesceWithTaskInfo:newTask
-    //
-    //    [originalTask didSucceedWithLocation:[NSURL URLWithString:locationString]
-    //
-    //    [self waitForExpectationsWithTimeout:0.1
-    //    handler:nil
-    //    }
-    //
-    //    func test_coalesceSuccesWithTaskInfo_SuccessShouldBeNewSuccess
-    //    {
-    //    __weak typeof(self) weakSelf = self;
-    //
-    //    NSString *locationString = @"LocationString";
-    //
-    //    self.successExpectation = [self expectationWithDescription:@"Success should be New task's"
-    //
-    //    EDSDownloadTaskInfo *newTask = [[EDSDownloadTaskInfo alloc] initWithDownloadID:self.insertedTaskId
-    //    URL:nil
-    //    session:self.session
-    //    stackIdentifier:nil
-    //    progress:nil
-    //    success:^(EDSDownloadTaskInfo *downloadTask, NSData *responseData)
-    //    {
-    //    [weakSelf.successExpectation fulfill
-    //    }
-    //    failure:nil
-    //    completion:nil
-    //
-    //
-    //    EDSDownloadTaskInfo *originalTask = [[EDSDownloadTaskInfo alloc] initWithDownloadID:self.insertedTaskId
-    //    URL:nil
-    //    session:self.session
-    //    stackIdentifier:nil
-    //    progress:nil
-    //    success:nil
-    //    failure:nil
-    //    completion:nil
-    //
-    //    [originalTask coalesceWithTaskInfo:newTask
-    //
-    //    [originalTask didSucceedWithLocation:[NSURL URLWithString:locationString]
-    //
-    //    [self waitForExpectationsWithTimeout:0.1
-    //    handler:nil
-    //    }
-    //
-    //    func test_coalesceSuccesWithTaskInfo_SuccessShouldBeNewOrginalThenNew
-    //    {
-    //    __weak typeof(self) weakSelf = self;
-    //
-    //    NSString *locationString = @"LocationString";
-    //
-    //    __block NSString *result = @"";
-    //
-    //    __block NSString *originalSucess = @"1";
-    //
-    //    __block NSString *newSucess = @"2";
-    //
-    //    __block NSString *expectedResult = @"12";
-    //
-    //    __block XCTestExpectation *originalSuccessExpectation = [self expectationWithDescription:@"Original task's expectation was not met"
-    //
-    //    self.successExpectation = [self expectationWithDescription:@"New task's expectation was not met"
-    //
-    //    EDSDownloadTaskInfo *newTask = [[EDSDownloadTaskInfo alloc] initWithDownloadID:self.insertedTaskId
-    //    URL:nil
-    //    session:self.session
-    //    stackIdentifier:nil
-    //    progress:nil
-    //    success:^(EDSDownloadTaskInfo *downloadTask, NSData *responseData)
-    //    {
-    //    result = [NSString stringWithFormat:@"%@%@", result, newSucess
-    //
-    //    [weakSelf.successExpectation fulfill
-    //    }
-    //    failure:nil
-    //    completion:nil
-    //
-    //
-    //    EDSDownloadTaskInfo *originalTask = [[EDSDownloadTaskInfo alloc] initWithDownloadID:self.insertedTaskId
-    //    URL:nil
-    //    session:self.session
-    //    stackIdentifier:nil
-    //    progress:nil
-    //    success:^(EDSDownloadTaskInfo *downloadTask, NSData *responseData)
-    //    {
-    //    result = [NSString stringWithFormat:@"%@%@", result, originalSucess
-    //
-    //    [originalSuccessExpectation fulfill
-    //    }
-    //    failure:nil
-    //    completion:nil
-    //
-    //    [originalTask coalesceWithTaskInfo:newTask
-    //
-    //
-    //    [originalTask didSucceedWithLocation:[NSURL URLWithString:locationString]
-    //
-    //    [self waitForExpectationsWithTimeout:0.1
-    //    handler:^(NSError * _Nullable error)
-    //    {
-    //    XCTAssertTrue([result isEqualToString:expectedResult], @"Success should be new success then original, Obtained: %@ expected: %@", result, expectedResult);
-    //    }
-    //    }
-    //
+    
+    //MARK: Coalescing
+    
+    func test_canCoalesceWithTaskInfo_ShouldReturnYES() {
+        
+        let newTask = DownloadTaskInfo(downloadId: insertedTaskId,
+                                       URL: testURL,
+                                       session: self.session!,
+                                       stackIdentifier: sessionIdentifier,
+                                       progress: nil,
+                                       success: nil,
+                                       failure: nil,
+                                       completion: nil)
+        
+        let canCoalesce = insertedTask!.canCoalesceWithTaskInfo(newTask)
+        
+        XCTAssertTrue(canCoalesce, "CanColaseceWithTaskInfo should return YES")
+    }
+    
+    func test_canCoalesceWithTaskInfo_ShouldReturnNO() {
+        
+        let newTask = DownloadTaskInfo(downloadId: "NEW\(insertedTaskId)",
+                                       URL: testURL,
+                                       session: self.session!,
+                                       stackIdentifier: sessionIdentifier,
+                                       progress: nil,
+                                       success: nil,
+                                       failure: nil,
+                                       completion: nil)
+        
+        let canCoalesce = insertedTask!.canCoalesceWithTaskInfo(newTask)
+        
+        XCTAssertFalse(canCoalesce, "CanColaseceWithTaskInfo should return NO")
+    }
+    
+    //MARK: Success
+    
+    func test_coalesceSuccesWithTaskInfo_SuccessShouldBeNil() {
+        
+        let newTask = DownloadTaskInfo(downloadId: insertedTaskId,
+                                       URL: testURL,
+                                       session: self.session!,
+                                       stackIdentifier: sessionIdentifier,
+                                       progress: nil,
+                                       success: nil,
+                                       failure: nil,
+                                       completion: nil)
+        
+        insertedTask?.coalesceWithTaskInfo(newTask)
+        
+        XCTAssertNil(insertedTask?.success, "Success should be nil")
+    }
+    
+    func test_coalesceSuccesWithTaskInfo_SuccessShouldBeOriginalSuccess() {
+        
+        let locationString = "LocationString";
+        
+        let originalSelector = #selector(NSData.init(contentsOfFile:))
+        let swizzledSelector =  #selector(NSData.new_dataWithContentsOfFile(_:))
+        
+        let originalMethod = class_getInstanceMethod(NSData.self, originalSelector)
+        let swizzledMethod = class_getClassMethod(NSData.self, swizzledSelector)
+        
+        method_exchangeImplementations(originalMethod, swizzledMethod)
+        
+        successExpectation = expectationWithDescription("Success should be Original task's")
+        
+        let originalTask = DownloadTaskInfo(downloadId: insertedTaskId,
+                                            URL: testURL,
+                                            session: self.session!,
+                                            stackIdentifier: sessionIdentifier,
+                                            progress: nil,
+                                            success: { [unowned self] (downloadTask: DownloadTaskInfo!, responseData: NSData?) in
+                                                
+                                                self.successExpectation?.fulfill()
+            },
+                                            failure: nil,
+                                            completion: nil)
+        
+        let newTask = DownloadTaskInfo(downloadId: insertedTaskId,
+                                       URL: testURL,
+                                       session: self.session!,
+                                       stackIdentifier: sessionIdentifier,
+                                       progress: nil,
+                                       success: nil,
+                                       failure: nil,
+                                       completion: nil)
+        
+        originalTask.coalesceWithTaskInfo(newTask)
+        
+        originalTask.didSucceedWithLocation(NSURL(string: locationString)!)
+        
+        waitForExpectationsWithTimeout(0.1,
+                                       handler: nil)
+        
+        method_exchangeImplementations(swizzledMethod, originalMethod)
+    }
+    
+    func test_coalesceSuccesWithTaskInfo_SuccessShouldBeNewSuccess() {
+        
+        let locationString = "LocationString";
+        
+        let originalSelector = #selector(NSData.init(contentsOfFile:))
+        let swizzledSelector =  #selector(NSData.new_dataWithContentsOfFile(_:))
+        
+        let originalMethod = class_getInstanceMethod(NSData.self, originalSelector)
+        let swizzledMethod = class_getClassMethod(NSData.self, swizzledSelector)
+        
+        method_exchangeImplementations(originalMethod, swizzledMethod)
+        
+        successExpectation = expectationWithDescription("Success should be New task's")
+        
+        let newTask = DownloadTaskInfo(downloadId: insertedTaskId,
+                                       URL: testURL,
+                                       session: self.session!,
+                                       stackIdentifier: sessionIdentifier,
+                                       progress: nil,
+                                       success: { [unowned self] (downloadTask: DownloadTaskInfo!, responseData: NSData?) in
+                                        
+                                        self.successExpectation?.fulfill()
+            },
+                                       failure: nil,
+                                       completion: nil)
+        
+        
+        let originalTask = DownloadTaskInfo(downloadId: insertedTaskId,
+                                            URL: testURL,
+                                            session: self.session!,
+                                            stackIdentifier: sessionIdentifier,
+                                            progress: nil,
+                                            success: nil,
+                                            failure: nil,
+                                            completion: nil)
+        
+        originalTask.coalesceWithTaskInfo(newTask)
+        
+        originalTask.didSucceedWithLocation(NSURL(string: locationString)!)
+        
+        waitForExpectationsWithTimeout(0.1,
+                                       handler: nil)
+        
+        method_exchangeImplementations(swizzledMethod, originalMethod)
+    }
+    
+    func test_coalesceSuccesWithTaskInfo_SuccessShouldBeNewOrginalThenNew () {
+        
+        let locationString = "LocationString";
+        
+        let originalSelector = #selector(NSData.init(contentsOfFile:))
+        let swizzledSelector =  #selector(NSData.new_dataWithContentsOfFile(_:))
+        
+        let originalMethod = class_getInstanceMethod(NSData.self, originalSelector)
+        let swizzledMethod = class_getClassMethod(NSData.self, swizzledSelector)
+        
+        method_exchangeImplementations(originalMethod, swizzledMethod)
+        
+        let originalSuccessExpectation = expectationWithDescription("Original task's expectation was not met")
+        
+        var result = ""
+        
+        let originalSucess = "1"
+        
+        let newSucess = "2"
+        
+        let expectedResult = "12"
+        
+        successExpectation = expectationWithDescription("New task's expectation was not met")
+        
+        let newTask = DownloadTaskInfo(downloadId: insertedTaskId,
+                                       URL: testURL,
+                                       session: self.session!,
+                                       stackIdentifier: sessionIdentifier,
+                                       progress: nil,
+                                       success: { [unowned self] (downloadTask: DownloadTaskInfo!, responseData: NSData?) in
+                                        
+                                        result = "\(result)\(newSucess)"
+                                        
+                                        self.successExpectation?.fulfill()
+            },
+                                       failure: nil,
+                                       completion: nil)
+        
+        let originalTask = DownloadTaskInfo(downloadId: insertedTaskId,
+                                            URL: testURL,
+                                            session: self.session!,
+                                            stackIdentifier: sessionIdentifier,
+                                            progress: nil,
+                                            success: { (downloadTask: DownloadTaskInfo!, responseData: NSData?) in
+                                                
+                                                result = "\(result)\(originalSucess)"
+                                                
+                                                originalSuccessExpectation.fulfill()
+            },
+                                            failure: nil,
+                                            completion: nil)
+        
+        originalTask.coalesceWithTaskInfo(newTask)
+        
+        
+        originalTask.didSucceedWithLocation(NSURL(string: locationString)!)
+        
+        waitForExpectationsWithTimeout(0.1,
+                                       handler: { (error: NSError?) in
+                                        
+                                        XCTAssertTrue(result.isEqual(expectedResult), "Success should be new success then original, Obtained: \(result) expected: \(expectedResult)")
+        })
+        
+        method_exchangeImplementations(swizzledMethod, originalMethod)
+    }
+    
     //MARK: Failure
     
-    //    func test_coalesceFailureWithTaskInfo_FailureShouldBeNil
-    //    {
-    //    EDSDownloadTaskInfo *newTask = [[EDSDownloadTaskInfo alloc] initWithDownloadID:self.insertedTaskId
-    //    URL:nil
-    //    session:self.session
-    //    stackIdentifier:nil
-    //    progress:nil
-    //    success:nil
-    //    failure:nil
-    //    completion:nil
-    //
-    //    [self.insertedTask coalesceWithTaskInfo:newTask
-    //
-    //    XCTAssertNil(self.insertedTask.failure, "Failure should be nil");
-    //    }
-    //
-    //    func test_coalesceFailureWithTaskInfo_FailureShouldBeOriginalSuccess
-    //    {
-    //    __weak typeof(self) weakSelf = self;
-    //
-    //    self.failureExpectation = [self expectationWithDescription:@"Failure should be Original task's"
-    //
-    //    EDSDownloadTaskInfo *originalTask = [[EDSDownloadTaskInfo alloc] initWithDownloadID:self.insertedTaskId
-    //    URL:nil
-    //    session:self.session
-    //    stackIdentifier:nil
-    //    progress:nil
-    //    success:nil
-    //    failure:^(EDSDownloadTaskInfo *downloadTask, NSError *error)
-    //    {
-    //    [weakSelf.failureExpectation fulfill
-    //    }
-    //    completion:nil
-    //
-    //
-    //    EDSDownloadTaskInfo *newTask = [[EDSDownloadTaskInfo alloc] initWithDownloadID:self.insertedTaskId
-    //    URL:nil
-    //    session:self.session
-    //    stackIdentifier:nil
-    //    progress:nil
-    //    success:nil
-    //    failure:nil
-    //    completion:nil
-    //
-    //    [originalTask coalesceWithTaskInfo:newTask
-    //
-    //    [originalTask didFailWithError:nil
-    //
-    //    [self waitForExpectationsWithTimeout:0.1
-    //    handler:nil
-    //    }
-    //
+    func test_coalesceFailureWithTaskInfo_FailureShouldBeNil() {
+        
+        let newTask = DownloadTaskInfo(downloadId: insertedTaskId,
+                                       URL: testURL,
+                                       session: self.session!,
+                                       stackIdentifier: sessionIdentifier,
+                                       progress: nil,
+                                       success: nil,
+                                       failure: nil,
+                                       completion: nil)
+        
+        insertedTask?.coalesceWithTaskInfo(newTask)
+        
+        XCTAssertNil(insertedTask!.failure, "Failure should be nil")
+    }
+    
+    func test_coalesceFailureWithTaskInfo_FailureShouldBeOriginalSuccess () {
+        
+        failureExpectation = expectationWithDescription("Failure should be Original task's")
+        
+        let originalTask = DownloadTaskInfo(downloadId: insertedTaskId,
+                                            URL: testURL,
+                                            session: self.session!,
+                                            stackIdentifier: sessionIdentifier,
+                                            progress: nil,
+                                            success: nil,
+                                            failure: { [unowned self] (downloadTask: DownloadTaskInfo!, error: NSError?) in
+                                                
+                                                self.failureExpectation?.fulfill()
+            },
+                                            completion:nil)
+        
+        
+        let newTask =  DownloadTaskInfo(downloadId: insertedTaskId,
+                                        URL: testURL,
+                                        session: self.session!,
+                                        stackIdentifier: sessionIdentifier,
+                                        progress: nil,
+                                        success: nil,
+                                        failure: nil,
+                                        completion:nil)
+        
+        originalTask.coalesceWithTaskInfo(newTask)
+        
+        originalTask.didFailWithError(nil)
+        
+        waitForExpectationsWithTimeout(0.1,
+                                       handler: nil)
+    }
+    
     //    func test_coalesceFailureWithTaskInfo_FailureShouldBeNewFailure
     //    {
     //    __weak typeof(self) weakSelf = self;
@@ -688,7 +707,7 @@ class DownloadTaskInfoTest: XCTestCase {
     //
     //    [self.insertedTask coalesceWithTaskInfo:newTask
     //
-    //    XCTAssertNil(self.insertedTask.completion, "Completion should be nil");
+    //    XCTAssertNil(self.insertedTask.completion, "Completion should be nil")
     //    }
     //
     //    func test_coalesceCompletionWithTaskInfo_CompletionShouldBeOriginalCompletion
@@ -831,14 +850,14 @@ class DownloadTaskInfoTest: XCTestCase {
     //
     //    func test_isEqual_ShouldReturnNO_nilObject
     //    {
-    //    XCTAssertFalse([self.insertedTask isEqual:nil], @"Is Equal should return NO if the object is nil");
+    //    XCTAssertFalse([self.insertedTask isEqual:nil], @"Is Equal should return NO if the object is nil")
     //    }
     //
     //    func test_isEqual_ShouldReturnNO_otherClass
     //    {
     //    NSString *otherObject= @"";
     //
-    //    XCTAssertFalse([self.insertedTask isEqual:otherObject], @"Is Equal should return NO if the object is not of the EDSDownloadTaskInfo class");
+    //    XCTAssertFalse([self.insertedTask isEqual:otherObject], @"Is Equal should return NO if the object is not of the EDSDownloadTaskInfo class")
     //    }
     //
     //    func test_isEqual_ShouldReturnNO
@@ -852,7 +871,7 @@ class DownloadTaskInfoTest: XCTestCase {
     //    failure:nil
     //    completion:nil
     //
-    //    XCTAssertFalse([self.insertedTask isEqual:otherTask], @"Is Equal should return NO if the object if objects have different DownloadIds");
+    //    XCTAssertFalse([self.insertedTask isEqual:otherTask], @"Is Equal should return NO if the object if objects have different DownloadIds")
     //    }
     //
     //    func test_isEqual_ShouldReturnYES
@@ -866,7 +885,7 @@ class DownloadTaskInfoTest: XCTestCase {
     //    failure:nil
     //    completion:nil
     //
-    //    XCTAssertTrue([self.insertedTask isEqual:otherTask], @"Is Equal should return YES if the object if objects have same DownloadIds");
+    //    XCTAssertTrue([self.insertedTask isEqual:otherTask], @"Is Equal should return YES if the object if objects have same DownloadIds")
     //    }
     //
     //    #pragma mark - ReleaseMemory
@@ -877,7 +896,7 @@ class DownloadTaskInfoTest: XCTestCase {
     //
     //    [self.insertedTask releaseMemory
     //
-    //    XCTAssertEqual(self.insertedTask.downloadProgress, 0.0f, @"DownloadProgress should be 0.0");
+    //    XCTAssertEqual(self.insertedTask.downloadProgress, 0.0f, @"DownloadProgress should be 0.0")
     //    }
     //
     //    func test_releaseMemory_taskResumeDataShouldBeNil
@@ -886,6 +905,6 @@ class DownloadTaskInfoTest: XCTestCase {
     //
     //    [self.insertedTask releaseMemory
     //
-    //    XCTAssertNil(self.insertedTask.taskResumeData, @"TaskResumeData should be nil");
+    //    XCTAssertNil(self.insertedTask.taskResumeData, @"TaskResumeData should be nil")
     //    }
 }
