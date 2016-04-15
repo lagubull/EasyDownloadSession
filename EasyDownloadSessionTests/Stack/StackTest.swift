@@ -272,37 +272,36 @@ class StackTest: XCTestCase {
         
         XCTAssertEqual(stack!.count, 1, "RemoveTaskInfo did not decrease the current downloads counter, found: \(self.stack!.count) expected: 1")
     }
+    
+    //MARK: ReleaseMemory
+    
+    func test_releaseMemory_shouldCallReleaseMemory() {
+        
+        var callCounter = 0
+        
+        let taskCounter = 3
+        
+        for index in 0...taskCounter - 1 {
+            
+            stack?.push(DownloadTaskInfoMock(downloadId: "\(index), \(insertedTaskId)",
+                URL: testURL,
+                session: session!,
+                stackIdentifier: sessionIdentifier,
+                progress: nil,
+                success: nil,
+                failure: nil,
+                completion: nil))
+        }
+        
+        stack?.releaseMemory()
+        
+        for index in 0...stack!.downloadsArray.count - 1 {
+            
+            let extractedItem = stack!.downloadsArray[index] as! DownloadTaskInfoMock
+            
+            callCounter = callCounter + extractedItem.callCounter
+        }
+        
+        XCTAssertEqual(taskCounter, callCounter, "ReleaseMemory was called: \(taskCounter) expected: \(callCounter)");
+    }
 }
-
-//
-////MARK: ReleaseMemory
-//
-//func test_releaseMemory_shouldCallReleaseMemory
-//{
-//    NSUInteger callCounter = 0;
-//
-//    NSUInteger taskCounter = 3;
-//
-//    for (NSInteger i = 0; i < taskCounter; i++)
-//    {
-//        [self.stack push:[[EDSFakeDownloadTaskInfo alloc] initWithDownloadID:[NSString stringWithFormat:@"%@-%@" ,@(i), self.insertedTaskId]
-//            URL:nil
-//            session:nil
-//            stackIdentifier:nil
-//            progress:nil
-//            success:nil
-//            failure:nil
-//            completion:nil]];
-//    }
-//
-//    [self.stack releaseMemory];
-//
-//    for (NSInteger i = 0; i < self.stack.downloadsArray.count; i++)
-//    {
-//        EDSFakeDownloadTaskInfo *extractedItem = (EDSFakeDownloadTaskInfo *)self.stack.downloadsArray[i];
-//
-//        callCounter = callCounter + extractedItem.callCounter;
-//    }
-//
-//    XCTAssertEqual(taskCounter, callCounter, @"ReleaseMemory was called: %@ expected: %@", @(taskCounter), @(callCounter));
-//}
