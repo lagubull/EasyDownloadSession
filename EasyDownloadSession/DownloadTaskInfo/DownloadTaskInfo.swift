@@ -62,22 +62,22 @@ public class DownloadTaskInfo: NSObject
     /**
      Block to be executed upon success.
      */
-    internal var success: ((downloadTask: DownloadTaskInfo, responseData: NSData?) -> Void)?
+    private var success: ((downloadTask: DownloadTaskInfo, responseData: NSData?) -> Void)?
     
     /**
      Block to be executed upon error.
      */
-    internal var failure: ((downloadTask: DownloadTaskInfo, error: NSError?) -> Void)?
+    private var failure: ((downloadTask: DownloadTaskInfo, error: NSError?) -> Void)?
     
     /**
      Block to be executed upon progress.
      */
-    internal var progress: ((downloadTask: DownloadTaskInfo) -> Void)?
+    private var progress: ((downloadTask: DownloadTaskInfo) -> Void)?
     
     /**
      Block to be executed upon finishing.
      */
-    internal var completion: ((downloadTask: DownloadTaskInfo, responseData: NSData?, error: NSError?) -> Void)?
+    private var completion: ((downloadTask: DownloadTaskInfo, responseData: NSData?, error: NSError?) -> Void)?
     
     /**
      Internal callback queue to make sure callbacks execute on same queue task is created on.
@@ -221,7 +221,8 @@ public class DownloadTaskInfo: NSObject
                 
                 //we cancelled this operation before it actually started
                 self.task = session.downloadTaskWithRequest(request)
-            } else {
+            }
+            else {
                 
                 EDSDebug("Starting task - \(downloadId)")
             }
@@ -284,7 +285,8 @@ public class DownloadTaskInfo: NSObject
                     
                     success(downloadTask: self, responseData: data)
                 })
-            } else {
+            }
+            else {
                 
                 guard let completion = completion else { return }
                 
@@ -313,7 +315,8 @@ public class DownloadTaskInfo: NSObject
                 
                 failure(downloadTask:self, error: error)
             })
-        } else {
+        }
+        else {
             
             guard let completion = completion else { return }
             
