@@ -82,17 +82,17 @@ public class DownloadTaskInfo: NSObject
     /**
      Internal callback queue to make sure callbacks execute on same queue task is created on.
      */
-    internal var callbackQueue: NSOperationQueue?
+    private var callbackQueue: NSOperationQueue?
     
     /**
      Session that will own the task.
      */
-    internal var session: NSURLSession
+    private var session: NSURLSession
     
     /**
      Request for a download.
      */
-    internal var request: NSURLRequest
+    private var request: NSURLRequest
     
     //MARK: Init
     
