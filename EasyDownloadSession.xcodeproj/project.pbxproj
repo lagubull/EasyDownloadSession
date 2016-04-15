@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		3B5234141CBE74CF00ECDCFB /* NSData+DataWithContentsOfFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B52340D1CBE4C2E00ECDCFB /* NSData+DataWithContentsOfFile.swift */; };
+		3B5B51151CC114350044778E /* Stack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B5B51141CC114350044778E /* Stack.swift */; };
+		3B5B51171CC12AB00044778E /* StackTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B5B51161CC12AB00044778E /* StackTest.swift */; };
 		3B6DCBD01CBBCD2A004A7BF8 /* EasyDownloadSession.h in Headers */ = {isa = PBXBuildFile; fileRef = 3B6DCBCF1CBBCD2A004A7BF8 /* EasyDownloadSession.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		3B6DCBEA1CBBCE68004A7BF8 /* DownloadTaskInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B6DCBE91CBBCE68004A7BF8 /* DownloadTaskInfo.swift */; };
 		3B6DCBFB1CBD2C73004A7BF8 /* EasyDownloadSession.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3B6DCBCC1CBBCD2A004A7BF8 /* EasyDownloadSession.framework */; };
@@ -30,6 +32,8 @@
 /* Begin PBXFileReference section */
 		3B3E17071CBFA78A00D9011A /* EasyDownloadTests_Bridging_Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EasyDownloadTests_Bridging_Header.h; sourceTree = "<group>"; };
 		3B52340D1CBE4C2E00ECDCFB /* NSData+DataWithContentsOfFile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSData+DataWithContentsOfFile.swift"; sourceTree = "<group>"; };
+		3B5B51141CC114350044778E /* Stack.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Stack.swift; sourceTree = "<group>"; };
+		3B5B51161CC12AB00044778E /* StackTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StackTest.swift; sourceTree = "<group>"; };
 		3B6DCBCC1CBBCD2A004A7BF8 /* EasyDownloadSession.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = EasyDownloadSession.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		3B6DCBCF1CBBCD2A004A7BF8 /* EasyDownloadSession.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EasyDownloadSession.h; sourceTree = "<group>"; };
 		3B6DCBD11CBBCD2A004A7BF8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -106,6 +110,7 @@
 		3B6DCBE61CBBCE29004A7BF8 /* Stack */ = {
 			isa = PBXGroup;
 			children = (
+				3B5B51141CC114350044778E /* Stack.swift */,
 			);
 			path = Stack;
 			sourceTree = "<group>";
@@ -136,6 +141,7 @@
 		3B6DCBEC1CBD2BA6004A7BF8 /* Stack */ = {
 			isa = PBXGroup;
 			children = (
+				3B5B51161CC12AB00044778E /* StackTest.swift */,
 			);
 			path = Stack;
 			sourceTree = "<group>";
@@ -299,6 +305,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3B5B51151CC114350044778E /* Stack.swift in Sources */,
 				3B6DCBEA1CBBCE68004A7BF8 /* DownloadTaskInfo.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -309,6 +316,7 @@
 			files = (
 				3B6DCC021CBD331A004A7BF8 /* DownloadTaskInfoTest.swift in Sources */,
 				3B6DCC061CBD3761004A7BF8 /* SessionTaskMock.swift in Sources */,
+				3B5B51171CC12AB00044778E /* StackTest.swift in Sources */,
 				3B6DCC081CBD5FBF004A7BF8 /* DownloadTaskInfoMock.swift in Sources */,
 				3B5234141CBE74CF00ECDCFB /* NSData+DataWithContentsOfFile.swift in Sources */,
 				3B6DCC041CBD3644004A7BF8 /* SessionMock.swift in Sources */,
