@@ -209,72 +209,71 @@ class StackTest: XCTestCase {
         XCTAssertEqual(self.stack!.count, 0, "Item count \(self.stack!.count) does not match the expected: 0");
     }
     
+    //MARK: RemoveTaskInfo
+    
+    func test_removeTaskInfo_shouldRemoveTask() {
+        
+        let lastItemInTheStack = DownloadTaskInfo(downloadId: "NEW\(insertedTaskId)",
+                                                  URL: testURL,
+                                                  session: session!,
+                                                  stackIdentifier: sessionIdentifier,
+                                                  progress: nil,
+                                                  success: nil,
+                                                  failure: nil,
+                                                  completion: nil)
+        
+        stack?.push(self.insertedTask)
+        stack?.push(lastItemInTheStack)
+        
+        stack?.removeTaskInfo(insertedTask!)
+        
+        var taskContainsItem = false
+        
+        for index in 0...stack!.downloadsArray.count - 1 {
+            
+            let extractedItem = stack!.downloadsArray[index]
+            
+            taskContainsItem = taskContainsItem || extractedItem.isEqual(insertedTask!)
+        }
+        
+        XCTAssertFalse(taskContainsItem, "Task was not removed from stack")
+    }
+    
+    func test_removeTaskInfo_shouldNotCrash_EmptyStack() {
+        
+        stack!.removeTaskInfo(insertedTask!)
+        
+        XCTAssertTrue(true);
+    }
+    
+    func test_removeTaskInfo_shouldDecreaseCount() {
+        
+        stack?.push(insertedTask!)
+        
+        stack?.removeTaskInfo(insertedTask!)
+        
+        XCTAssertEqual(self.stack!.count, 0, "RemoveTaskInfo did not decrease the current downloads counter, found: \(self.stack!.count) expected: 0")
+    }
+    
+    func test_removeTaskInfo_shouldNotDecreaseCount() {
+        
+        let lastItemInTheStack = DownloadTaskInfo(downloadId: "NEW\(insertedTaskId)",
+                                                  URL: testURL,
+                                                  session: session!,
+                                                  stackIdentifier: sessionIdentifier,
+                                                  progress: nil,
+                                                  success: nil,
+                                                  failure: nil,
+                                                  completion: nil)
+        
+        stack?.push(lastItemInTheStack)
+        
+        stack?.removeTaskInfo(self.insertedTask!)
+        
+        XCTAssertEqual(stack!.count, 1, "RemoveTaskInfo did not decrease the current downloads counter, found: \(self.stack!.count) expected: 1")
+    }
 }
 
-
-////MARK: RemoveTaskInfo
-//
-//func test_removeTaskInfo_shouldRemoveTask
-//{
-//    EDSDownloadTaskInfo *lastItemInTheStack =  [[EDSDownloadTaskInfo alloc] initWithDownloadID:[NSString stringWithFormat:@"NEW%@",self.insertedTaskId]
-//        URL:nil
-//        session:nil
-//        stackIdentifier:nil
-//        progress:nil
-//        success:nil
-//        failure:nil
-//        completion:nil];
-//
-//    [self.stack push:self.insertedTask];
-//    [self.stack push:lastItemInTheStack];
-//
-//    [self.stack removeTaskInfo:self.insertedTask];
-//
-//    BOOL taskContainsItem = NO;
-//
-//    for (NSInteger i = 0; i < self.stack.downloadsArray.count; i++)
-//    {
-//        EDSDownloadTaskInfo *extractedItem = (EDSDownloadTaskInfo *)self.stack.downloadsArray[i];
-//
-//        taskContainsItem = taskContainsItem || [extractedItem isEqual:self.insertedTask];
-//    }
-//
-//    XCTAssertFalse(taskContainsItem, @"Task was not removed from stack");
-//    }
-//
-//    func test_removeTaskInfo_shouldNotCrash_EmptyStack
-//        {
-//            [self.stack removeTaskInfo:self.insertedTask];
-//
-//            XCTAssertTrue(YES);
-//        }
-//
-//        func test_removeTaskInfo_shouldDecreaseCount
-//            {
-//                [self.stack push:self.insertedTask];
-//
-//                [self.stack removeTaskInfo:self.insertedTask];
-//
-//                XCTAssertEqual(self.stack.count, 0, @"RemoveTaskInfo did not decrease the current downloads counter, found: %@ expected:0", @(self.stack.count));
-//            }
-//
-//            func test_removeTaskInfo_shouldNotDecreaseCount
-//                {
-//                    EDSDownloadTaskInfo *lastItemInTheStack =  [[EDSDownloadTaskInfo alloc] initWithDownloadID:[NSString stringWithFormat:@"NEW%@",self.insertedTaskId]
-//                        URL:nil
-//                        session:nil
-//                        stackIdentifier:nil
-//                        progress:nil
-//                        success:nil
-//                        failure:nil
-//                        completion:nil];
-//
-//                    [self.stack push:lastItemInTheStack];
-//
-//                    [self.stack removeTaskInfo:self.insertedTask];
-//
-//                    XCTAssertEqual(self.stack.count, 1, @"RemoveTaskInfo did not decrease the current downloads counter, found: %@ expected: 1", @(self.stack.count));
-//}
 //
 ////MARK: ReleaseMemory
 //
