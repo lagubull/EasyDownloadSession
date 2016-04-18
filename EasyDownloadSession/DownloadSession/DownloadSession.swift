@@ -83,8 +83,10 @@ public class DownloadSession: NSObject, NSURLSessionDownloadDelegate {
         let configuration = NSURLSessionConfiguration.defaultSessionConfiguration()
         
         backgrounfConfiguration.HTTPMaximumConnectionsPerHost = 100
+        backgrounfConfiguration.requestCachePolicy = .ReloadIgnoringLocalCacheData
         
         configuration.HTTPMaximumConnectionsPerHost = 100
+        configuration.requestCachePolicy = .ReloadIgnoringLocalCacheData
         
         self.defaultSession = NSURLSession.init(configuration: configuration,
                                                 delegate: self,

@@ -10,8 +10,6 @@ import XCTest
 
 @testable import EasyDownloadSession
 
-//configuration.requestCachePolicy = NSURLRequestReloadIgnoringLocalCacheData;
-
 class StackTest: XCTestCase {
     
     //MARK: Getters
