@@ -96,6 +96,17 @@ public class DownloadTaskInfo: NSObject
     
     //MARK: Init
     
+    public override init() {
+        
+        self.downloadId = ""
+        self.session = NSURLSession()
+        self.request = NSURLRequest()
+        self.stackIdentifier = ""
+        self.downloadProgress = 0.0
+        self.isDownloading = false
+        self.downloadComplete = false
+    }
+    
     /**
      Creates a new DownloadTaskInfo object.
      
