@@ -37,6 +37,9 @@ public class Stack: NSObject {
      */
     public var currentDownloads: Int = 0
     
+    /**
+     Used to ensure synchronized access to the downloadsArray.
+     */
     private let lock = NSLock()
     
     //MARK: PUSH
@@ -55,7 +58,7 @@ public class Stack: NSObject {
     /**
      Checks wethere a task can be started from the stack.
      
-     @return YES - A task can be started, NO - there are no tasks to start or the maximum running tasks operations has been reached.
+     - Returns: YES - A task can be started, NO - there are no tasks to start or the maximum running tasks operations has been reached.
      */
     public func canPopTask() -> Bool {
         

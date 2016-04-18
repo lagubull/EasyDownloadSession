@@ -86,11 +86,11 @@
 		3B6DCBCE1CBBCD2A004A7BF8 /* EasyDownloadSession */ = {
 			isa = PBXGroup;
 			children = (
-				3B6DCBE61CBBCE29004A7BF8 /* Stack */,
-				3B6DCBE71CBBCE29004A7BF8 /* DownloadTaskInfo */,
 				3B6DCBE81CBBCE29004A7BF8 /* DownloadSession */,
+				3B6DCBE71CBBCE29004A7BF8 /* DownloadTaskInfo */,
 				3B6DCBCF1CBBCD2A004A7BF8 /* EasyDownloadSession.h */,
 				3B6DCBD11CBBCD2A004A7BF8 /* Info.plist */,
+				3B6DCBE61CBBCE29004A7BF8 /* Stack */,
 			);
 			path = EasyDownloadSession;
 			sourceTree = "<group>";
@@ -99,10 +99,10 @@
 			isa = PBXGroup;
 			children = (
 				3B6DCBEB1CBD2BA6004A7BF8 /* DownloadTaskInfo */,
-				3B6DCBEC1CBD2BA6004A7BF8 /* Stack */,
-				3B6DCBED1CBD2BA6004A7BF8 /* MockClasses */,
-				3B6DCBDD1CBBCD2A004A7BF8 /* Info.plist */,
 				3B3E17071CBFA78A00D9011A /* EasyDownloadTests_Bridging_Header.h */,
+				3B6DCBDD1CBBCD2A004A7BF8 /* Info.plist */,
+				3B6DCBED1CBD2BA6004A7BF8 /* MockClasses */,
+				3B6DCBEC1CBD2BA6004A7BF8 /* Stack */,
 			);
 			path = EasyDownloadSessionTests;
 			sourceTree = "<group>";

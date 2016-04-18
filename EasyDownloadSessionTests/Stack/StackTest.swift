@@ -123,7 +123,6 @@ class StackTest: XCTestCase {
         XCTAssertFalse(canPopTask, "canPopTask should return NO)")
     }
     
-    //
     //MARK: Pop
     
     func test_pop_shouldReturnItem() {
