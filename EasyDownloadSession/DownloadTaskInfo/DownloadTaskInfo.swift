@@ -62,22 +62,22 @@ public class DownloadTaskInfo: NSObject
     /**
      Block to be executed upon success.
      */
-    private var success: ((downloadTask: DownloadTaskInfo!, responseData: NSData?) -> Void)?
+    internal var success: ((downloadTask: DownloadTaskInfo!, responseData: NSData?) -> Void)?
     
     /**
      Block to be executed upon error.
      */
-    private var failure: ((downloadTask: DownloadTaskInfo!, error: NSError?) -> Void)?
+    internal var failure: ((downloadTask: DownloadTaskInfo!, error: NSError?) -> Void)?
     
     /**
      Block to be executed upon progress.
      */
-    private var progress: ((downloadTask: DownloadTaskInfo!) -> Void)?
+    internal var progress: ((downloadTask: DownloadTaskInfo!) -> Void)?
     
     /**
      Block to be executed upon finishing.
      */
-    private var completion: ((downloadTask: DownloadTaskInfo!, responseData: NSData?, error: NSError?) -> Void)?
+    internal var completion: ((downloadTask: DownloadTaskInfo!, responseData: NSData?, error: NSError?) -> Void)?
     
     /**
      Internal callback queue to make sure callbacks execute on same queue task is created on.
@@ -96,7 +96,7 @@ public class DownloadTaskInfo: NSObject
     
     //MARK: Init
     
-    public override init() {
+    internal override init() {
         
         self.downloadId = ""
         self.session = NSURLSession()
@@ -210,11 +210,11 @@ public class DownloadTaskInfo: NSObject
         guard let task = task else { return }
         
         if taskResumeData?.length > 0 {
-                
-                EDSDebug("Resuming task - \(downloadId)")
-                
-                //we cancelled this operation before it actually started
-                self.task = session.downloadTaskWithResumeData(taskResumeData!)
+            
+            EDSDebug("Resuming task - \(downloadId)")
+            
+            //we cancelled this operation before it actually started
+            self.task = session.downloadTaskWithResumeData(taskResumeData!)
         }
         else {
             
@@ -231,9 +231,11 @@ public class DownloadTaskInfo: NSObject
             }
         }
         
+        guard let newTask = self.task else { return }
+        
         isDownloading = true
         
-        task.resume()
+        newTask.resume()
     }
     
     //MARK: Progress

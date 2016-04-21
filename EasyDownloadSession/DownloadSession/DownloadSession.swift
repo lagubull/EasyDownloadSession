@@ -29,7 +29,7 @@ public protocol DownloadSessionDelegate {
      
      - Parameter downloadTaskInfo: - metadata on the resumed download.
      */
-    func didResumeDownload(downloadTaskInfo: DownloadTaskInfo);
+    func didResumeDownload(downloadTaskInfo: DownloadTaskInfo)
 }
 
 /**
@@ -55,7 +55,7 @@ public class DownloadSession: NSObject, NSURLSessionDownloadDelegate {
     /**
      Current downloads.
      */
-    private var inProgressDownloadsDictionary: Dictionary<Int, DownloadTaskInfo> = [:]
+    internal var inProgressDownloadsDictionary: Dictionary<Int, DownloadTaskInfo> = [:]
     
     /**
      Default Session Object.
@@ -115,20 +115,31 @@ public class DownloadSession: NSObject, NSURLSessionDownloadDelegate {
      
      - Parameter stackIdentifier: identifies the stack.
      */
-    public func registerStack(stack: Stack, stackIdentifier: String) {
+    public func registerStack(stack stack: Stack, stackIdentifier: String) {
         
-        stackDictionary[stackIdentifier] = stack;
+        stackDictionary[stackIdentifier] = stack
     }
     
     //MARK: ScheduleDownload
     
-    public class func scheduleDownloadWithId(downloadId: String,
-                                             request: NSURLRequest,
-                                             stackIdentifier: String,
-                                             progress: ((downloadId: DownloadTaskInfo!) -> Void)?,
-                                             success: ((downloadTask: DownloadTaskInfo!, responseData: NSData?) -> Void)?,
-                                             failure: ((downloadTask: DownloadTaskInfo!, error: NSError?) -> Void)?,
-                                             completion: ((downloadTask: DownloadTaskInfo!, responseData: NSData?, error: NSError?) -> Void)?) {
+    /**
+     Adds a downloading task to the stack.
+     
+     - Parameter downloadId: identifies the download.
+     - Parameter request: request for a download.
+     - Parameter stackIdentifier: identifies the stack in which this download will be placed into.
+     - Parameter progress: to be executed when as the task progresses.
+     - Parameter success: to be executed when the task finishes succesfully.
+     - Parameter failure: to be executed when the task finishes with an error.
+     - Parameter completion: to be executed when the task finishes either with an error or a success.
+     */
+    private class func scheduleDownloadWithId(downloadId: String,
+                                              request: NSURLRequest,
+                                              stackIdentifier: String,
+                                              progress: ((downloadId: DownloadTaskInfo!) -> Void)?,
+                                              success: ((downloadTask: DownloadTaskInfo!, responseData: NSData?) -> Void)?,
+                                              failure: ((downloadTask: DownloadTaskInfo!, error: NSError?) -> Void)?,
+                                              completion: ((downloadTask: DownloadTaskInfo!, responseData: NSData?, error: NSError?) -> Void)?) {
         
         let task = DownloadTaskInfo.init(downloadId: downloadId,
                                          request: request,
@@ -282,7 +293,7 @@ public class DownloadSession: NSObject, NSURLSessionDownloadDelegate {
                                                 
                                                 if let completion = completion {
                                                     
-                                                    completion(downloadTask: downloadTask, responseData: responseData, error: error);
+                                                    completion(downloadTask: downloadTask, responseData: responseData, error: error)
                                                 }
         })
     }
@@ -334,7 +345,6 @@ public class DownloadSession: NSObject, NSURLSessionDownloadDelegate {
                                             failure: failure)
     }
     
-    
     /**
      Stops the current download and adds it to the stack, the it begins executing this new download.
      
@@ -382,7 +392,7 @@ public class DownloadSession: NSObject, NSURLSessionDownloadDelegate {
                                                 
                                                 if let failure = failure {
                                                     
-                                                    failure(downloadTask: downloadTask, error: error);
+                                                    failure(downloadTask: downloadTask, error: error)
                                                 }
         })
     }
@@ -398,7 +408,6 @@ public class DownloadSession: NSObject, NSURLSessionDownloadDelegate {
         finalizeTask(taskInProgress)
         
         DownloadSession.resumeDownloadsInStack(taskInProgress.stackIdentifier)
-        
     }
     
     public func URLSession(session: NSURLSession, downloadTask: NSURLSessionDownloadTask, didWriteData bytesWritten: Int64, totalBytesWritten: Int64, totalBytesExpectedToWrite: Int64) {
@@ -410,18 +419,22 @@ public class DownloadSession: NSObject, NSURLSessionDownloadDelegate {
     
     public func URLSession(session: NSURLSession, task: NSURLSessionTask, didCompleteWithError error: NSError?) {
         
-        guard let error = error where error.code != kEDSCancelled else { return }
-        
-        let taskInProgress = inProgressDownloadsDictionary[task.taskIdentifier] as DownloadTaskInfo!
-        
-        taskInProgress.didFailWithError(error)
-        
-        //  Handle error
-        NSLog("task: \(taskInProgress.downloadId) Error: \(error)")
-        
-        finalizeTask(taskInProgress)
-        
-        DownloadSession.resumeDownloadsInStack(taskInProgress!.stackIdentifier)
+        if let unwrappedError = error {
+            
+            if unwrappedError.code != kEDSCancelled {
+                
+                guard let taskInProgress = inProgressDownloadsDictionary[task.taskIdentifier] as DownloadTaskInfo! else { return }
+                
+                taskInProgress.didFailWithError(unwrappedError)
+                
+                //  Handle error
+                NSLog("task: \(taskInProgress.downloadId) Error: \(unwrappedError)")
+                
+                finalizeTask(taskInProgress)
+                
+                DownloadSession.resumeDownloadsInStack(taskInProgress.stackIdentifier)
+            }
+        }
     }
     
     //MARK: Cancel
@@ -457,7 +470,6 @@ public class DownloadSession: NSObject, NSURLSessionDownloadDelegate {
         let task = DownloadSession.sharedInstance.taskInfoWithIdentfier(downloadId, stackIdentifier: stackIdentifier)
         
         DownloadSession.sharedInstance.cancelTask(task)
-        
     }
     
     /**
@@ -496,7 +508,7 @@ public class DownloadSession: NSObject, NSURLSessionDownloadDelegate {
         
         DownloadSession.sharedInstance.lock.lock()
         
-        while ((downloadStack?.canPopTask()) != nil) {
+        while (downloadStack!.canPopTask()) {
             
             if let downloadTaskInfo = downloadStack?.pop() {
                 
@@ -574,7 +586,7 @@ public class DownloadSession: NSObject, NSURLSessionDownloadDelegate {
      
      - Returns: YES If the taskInfo is coalescing, NO otherwise.
      */
-    private func shouldCoalesceDownloadTask(newTaskInfo: DownloadTaskInfo, stackIdentifier: String) -> Bool {
+    internal func shouldCoalesceDownloadTask(newTaskInfo: DownloadTaskInfo, stackIdentifier: String) -> Bool {
         
         var didCoalesce = false
         
@@ -601,17 +613,19 @@ public class DownloadSession: NSObject, NSURLSessionDownloadDelegate {
                     
                     stackDictionary[stackIdentifier]?.removeTaskInfo(taskInfo)
                     
-                    break;
+                    //If we coalesce we don't need to return FALSE as the task is already in the stack
+                    
+                    break
                 }
             }
         }
         
-        return didCoalesce;
+        return didCoalesce
     }
     
     //MARK: Finalize
     
-    private func finalizeTask(task: DownloadTaskInfo) {
+    internal func finalizeTask(task: DownloadTaskInfo) {
         
         if inProgressDownloadsDictionary.removeValueForKey(task.task!.taskIdentifier) != nil {
             
@@ -629,7 +643,7 @@ public class DownloadSession: NSObject, NSURLSessionDownloadDelegate {
      
      - Returns: DownloadTaskInfo
      */
-    private func taskInfoWithIdentfier(downloadId: String, stackIdentifier: String) -> DownloadTaskInfo {
+    internal func taskInfoWithIdentfier(downloadId: String, stackIdentifier: String) -> DownloadTaskInfo {
         
         var resultingTask: DownloadTaskInfo?
         
@@ -637,9 +651,9 @@ public class DownloadSession: NSObject, NSURLSessionDownloadDelegate {
         
         soughtAfterTask.downloadId = downloadId
         
-        var resultingTaskArray = (inProgressDownloadsDictionary as NSDictionary).allKeysForObject(soughtAfterTask)
+        let resultingTaskKeyArray = (inProgressDownloadsDictionary as NSDictionary).allKeysForObject(soughtAfterTask)
         
-        if resultingTaskArray.count == 0 {
+        if resultingTaskKeyArray.count == 0 {
             
             let stack = DownloadSession.sharedInstance.stackDictionary[stackIdentifier]
             
@@ -653,7 +667,9 @@ public class DownloadSession: NSObject, NSURLSessionDownloadDelegate {
         }
         else {
             
-            resultingTask = resultingTaskArray[0] as? DownloadTaskInfo
+            let taskKey = resultingTaskKeyArray[0] as! Int
+            
+            resultingTask = inProgressDownloadsDictionary[taskKey]
         }
         
         return resultingTask!
