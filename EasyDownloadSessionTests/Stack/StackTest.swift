@@ -10,8 +10,6 @@ import XCTest
 
 @testable import EasyDownloadSession
 
-//configuration.requestCachePolicy = NSURLRequestReloadIgnoringLocalCacheData;
-
 class StackTest: XCTestCase {
     
     //MARK: Getters
@@ -49,9 +47,9 @@ class StackTest: XCTestCase {
         
         self.stack?.clear()
         
-        self.stack = nil;
+        self.stack = nil
         
-        self.insertedTask = nil;
+        self.insertedTask = nil
         
         super.tearDown()
     }
@@ -62,7 +60,7 @@ class StackTest: XCTestCase {
         
         stack?.push(insertedTask!)
         
-        XCTAssertEqual(stack!.downloadsArray[0], insertedTask, "Item was not inserted in stack");
+        XCTAssertEqual(stack!.downloadsArray[0], insertedTask, "Item was not inserted in stack")
     }
     
     func test_push_countShouldMatchItemNumbers () {
@@ -98,9 +96,9 @@ class StackTest: XCTestCase {
     
     func test_canPopTask_ShouldReturnNO_LimitReached_EmptyStack() {
         
-        stack?.maxDownloads = 1;
+        stack?.maxDownloads = 1
         
-        stack?.currentDownloads = 1;
+        stack?.currentDownloads = 1
         
         let canPopTask = stack!.canPopTask()
         
@@ -109,9 +107,9 @@ class StackTest: XCTestCase {
     
     func test_canPopTask_ShouldReturnNO_LimitReached() {
         
-        stack?.maxDownloads = 1;
+        stack?.maxDownloads = 1
         
-        stack?.currentDownloads = 1;
+        stack?.currentDownloads = 1
         
         for _ in 0...2 {
             
@@ -131,14 +129,14 @@ class StackTest: XCTestCase {
         
         let extractedTask = stack!.pop()
         
-        XCTAssertEqual(extractedTask, insertedTask, "Item was not extracted from the stack");
+        XCTAssertEqual(extractedTask, insertedTask, "Item was not extracted from the stack")
     }
     
     func test_pop_shouldReturnNil() {
         
         let extractedTask = stack!.pop()
         
-        XCTAssertNil(extractedTask, "Unexpected Item was extracted from the stack");
+        XCTAssertNil(extractedTask, "Unexpected Item was extracted from the stack")
     }
     
     func test_pop_shouldReturnLastItem() {
@@ -157,7 +155,7 @@ class StackTest: XCTestCase {
         
         let extractedTask = self.stack!.pop()
         
-        XCTAssertEqual(extractedTask, lastItemInTheStack, "Item was not extracted from the stack");
+        XCTAssertEqual(extractedTask, lastItemInTheStack, "Item was not extracted from the stack")
     }
     
     func test_pop_shouldIncreaseCurrentDownloads() {
@@ -193,7 +191,7 @@ class StackTest: XCTestCase {
         
         stack?.clear()
         
-        XCTAssertEqual(self.stack!.currentDownloads, 0, "Item count \(self.stack!.currentDownloads) does not match the expected: 0");
+        XCTAssertEqual(self.stack!.currentDownloads, 0, "Item count \(self.stack!.currentDownloads) does not match the expected: 0")
     }
     
     func test_clear_countShouldMatchItemNumbers() {
@@ -205,7 +203,7 @@ class StackTest: XCTestCase {
         
         stack?.clear()
         
-        XCTAssertEqual(self.stack!.count, 0, "Item count \(self.stack!.count) does not match the expected: 0");
+        XCTAssertEqual(self.stack!.count, 0, "Item count \(self.stack!.count) does not match the expected: 0")
     }
     
     //MARK: RemoveTaskInfo
@@ -242,7 +240,7 @@ class StackTest: XCTestCase {
         
         stack!.removeTaskInfo(insertedTask!)
         
-        XCTAssertTrue(true);
+        XCTAssertTrue(true)
     }
     
     func test_removeTaskInfo_shouldDecreaseCount() {
@@ -301,6 +299,6 @@ class StackTest: XCTestCase {
             callCounter = callCounter + extractedItem.callCounter
         }
         
-        XCTAssertEqual(taskCounter, callCounter, "ReleaseMemory was called: \(taskCounter) expected: \(callCounter)");
+        XCTAssertEqual(taskCounter, callCounter, "ReleaseMemory was called: \(taskCounter) expected: \(callCounter)")
     }
 }

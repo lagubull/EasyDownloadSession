@@ -14,10 +14,8 @@ s.platform     = :ios, "8.0"
 
 s.source       = { :git => "https://github.com/lagubull/EasyDownloadSession.git", :branch => "devSwift", :tag => s.version }
 
-s.source_files  = "EasyDownloadSession/**/*.{h,m}"
-s.public_header_files = "EasyDownloadSession/**/*.{h}"
+s.source_files  = "EasyDownloadSession/**/*.swift"
 
-s.prefix_header_contents = '#import "EasyDownloadSession.h"'
 s.frameworks = 'UIKit'
 
 s.requires_arc = true

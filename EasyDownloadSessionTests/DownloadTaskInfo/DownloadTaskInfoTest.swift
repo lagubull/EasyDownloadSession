@@ -22,7 +22,7 @@ class DownloadTaskInfoTest: XCTestCase {
     var completionExpectation: XCTestExpectation?
     
     let insertedTaskId = "TASKID"
-    let sessionIdentifier =  "SESSIONIDENTIFIER"
+    let stackIdentifier =  "STACKIDENTIFIER"
     let testURL = NSURL(string: "URL")!
     let locationString = "locationString"
     
@@ -37,7 +37,7 @@ class DownloadTaskInfoTest: XCTestCase {
         self.insertedTask = DownloadTaskInfo(downloadId: insertedTaskId,
                                              URL: testURL,
                                              session: session!,
-                                             stackIdentifier: sessionIdentifier,
+                                             stackIdentifier: stackIdentifier,
                                              progress: nil,
                                              success: nil,
                                              failure: nil,
@@ -84,9 +84,9 @@ class DownloadTaskInfoTest: XCTestCase {
         
         let expectation = expectationWithDescription("Data should be saved") as XCTestExpectation
         
-        task!.pausedSavedDataExpectation = expectation;
+        task!.pausedSavedDataExpectation = expectation
         
-        insertedTask?.task = task;
+        insertedTask?.task = task
         
         insertedTask?.pause()
         
@@ -107,7 +107,7 @@ class DownloadTaskInfoTest: XCTestCase {
     
     func test_resume_taskResumeShouldBeInvoked() {
         
-        insertedTask?.resume()
+        task?.resume()
         
         XCTAssertTrue(task!.didInvokeResume!, "Task Resume suspend was not invoked")
     }
@@ -153,7 +153,7 @@ class DownloadTaskInfoTest: XCTestCase {
         insertedTask = DownloadTaskInfo(downloadId: insertedTaskId,
                                         URL: testURL,
                                         session: self.session!,
-                                        stackIdentifier: sessionIdentifier,
+                                        stackIdentifier: stackIdentifier,
                                         progress: { [unowned self] (downloadTask: DownloadTaskInfo!) in
                                             
                                             self.progressExpectation?.fulfill()
@@ -180,7 +180,7 @@ class DownloadTaskInfoTest: XCTestCase {
         insertedTask = DownloadTaskInfo(downloadId: insertedTaskId,
                                         URL: testURL,
                                         session: self.session!,
-                                        stackIdentifier: sessionIdentifier,
+                                        stackIdentifier: stackIdentifier,
                                         progress: nil,
                                         success: { [unowned self] (downloadTask: DownloadTaskInfo!, responseData: NSData?) in
                                             
@@ -213,7 +213,7 @@ class DownloadTaskInfoTest: XCTestCase {
         let task =  DownloadTaskInfoMock(downloadId: insertedTaskId,
                                          URL: testURL,
                                          session: self.session!,
-                                         stackIdentifier: sessionIdentifier,
+                                         stackIdentifier: stackIdentifier,
                                          progress: nil,
                                          success: nil,
                                          failure: nil,
@@ -232,7 +232,7 @@ class DownloadTaskInfoTest: XCTestCase {
         insertedTask = DownloadTaskInfo(downloadId: insertedTaskId,
                                         URL: testURL,
                                         session: self.session!,
-                                        stackIdentifier: sessionIdentifier,
+                                        stackIdentifier: stackIdentifier,
                                         progress: nil,
                                         success:nil,
                                         failure:nil,
@@ -271,7 +271,7 @@ class DownloadTaskInfoTest: XCTestCase {
         insertedTask = DownloadTaskInfo(downloadId: insertedTaskId,
                                         URL: testURL,
                                         session: self.session!,
-                                        stackIdentifier: sessionIdentifier,
+                                        stackIdentifier: stackIdentifier,
                                         progress: nil,
                                         success:nil,
                                         failure: { [unowned self] (downloadTask: DownloadTaskInfo!, error: NSError?) in
@@ -302,7 +302,7 @@ class DownloadTaskInfoTest: XCTestCase {
         insertedTask = DownloadTaskInfo(downloadId: insertedTaskId,
                                         URL: testURL,
                                         session: self.session!,
-                                        stackIdentifier: sessionIdentifier,
+                                        stackIdentifier: stackIdentifier,
                                         progress: nil,
                                         success:nil,
                                         failure:nil,
@@ -331,7 +331,7 @@ class DownloadTaskInfoTest: XCTestCase {
         let newTask = DownloadTaskInfo(downloadId: insertedTaskId,
                                        URL: testURL,
                                        session: self.session!,
-                                       stackIdentifier: sessionIdentifier,
+                                       stackIdentifier: stackIdentifier,
                                        progress: nil,
                                        success: nil,
                                        failure: nil,
@@ -347,7 +347,7 @@ class DownloadTaskInfoTest: XCTestCase {
         let newTask = DownloadTaskInfo(downloadId: "NEW\(insertedTaskId)",
                                        URL: testURL,
                                        session: self.session!,
-                                       stackIdentifier: sessionIdentifier,
+                                       stackIdentifier: stackIdentifier,
                                        progress: nil,
                                        success: nil,
                                        failure: nil,
@@ -367,7 +367,7 @@ class DownloadTaskInfoTest: XCTestCase {
         let newTask = DownloadTaskInfo(downloadId: insertedTaskId,
                                        URL: testURL,
                                        session: self.session!,
-                                       stackIdentifier: sessionIdentifier,
+                                       stackIdentifier: stackIdentifier,
                                        progress: nil,
                                        success: nil,
                                        failure: nil,
@@ -397,7 +397,7 @@ class DownloadTaskInfoTest: XCTestCase {
         let originalTask = DownloadTaskInfo(downloadId: insertedTaskId,
                                             URL: testURL,
                                             session: self.session!,
-                                            stackIdentifier: sessionIdentifier,
+                                            stackIdentifier: stackIdentifier,
                                             progress: nil,
                                             success: { [unowned self] (downloadTask: DownloadTaskInfo!, responseData: NSData?) in
                                                 
@@ -409,7 +409,7 @@ class DownloadTaskInfoTest: XCTestCase {
         let newTask = DownloadTaskInfo(downloadId: insertedTaskId,
                                        URL: testURL,
                                        session: self.session!,
-                                       stackIdentifier: sessionIdentifier,
+                                       stackIdentifier: stackIdentifier,
                                        progress: nil,
                                        success: nil,
                                        failure: nil,
@@ -434,7 +434,7 @@ class DownloadTaskInfoTest: XCTestCase {
         let newTask = DownloadTaskInfo(downloadId: insertedTaskId,
                                        URL: testURL,
                                        session: self.session!,
-                                       stackIdentifier: sessionIdentifier,
+                                       stackIdentifier: stackIdentifier,
                                        progress: nil,
                                        success: { [unowned self] (downloadTask: DownloadTaskInfo!, responseData: NSData?) in
                                         
@@ -447,7 +447,7 @@ class DownloadTaskInfoTest: XCTestCase {
         let originalTask = DownloadTaskInfo(downloadId: insertedTaskId,
                                             URL: testURL,
                                             session: self.session!,
-                                            stackIdentifier: sessionIdentifier,
+                                            stackIdentifier: stackIdentifier,
                                             progress: nil,
                                             success: nil,
                                             failure: nil,
@@ -482,7 +482,7 @@ class DownloadTaskInfoTest: XCTestCase {
         let newTask = DownloadTaskInfo(downloadId: insertedTaskId,
                                        URL: testURL,
                                        session: self.session!,
-                                       stackIdentifier: sessionIdentifier,
+                                       stackIdentifier: stackIdentifier,
                                        progress: nil,
                                        success: { [unowned self] (downloadTask: DownloadTaskInfo!, responseData: NSData?) in
                                         
@@ -496,7 +496,7 @@ class DownloadTaskInfoTest: XCTestCase {
         let originalTask = DownloadTaskInfo(downloadId: insertedTaskId,
                                             URL: testURL,
                                             session: self.session!,
-                                            stackIdentifier: sessionIdentifier,
+                                            stackIdentifier: stackIdentifier,
                                             progress: nil,
                                             success: { (downloadTask: DownloadTaskInfo!, responseData: NSData?) in
                                                 
@@ -528,7 +528,7 @@ class DownloadTaskInfoTest: XCTestCase {
         let newTask = DownloadTaskInfo(downloadId: insertedTaskId,
                                        URL: testURL,
                                        session: self.session!,
-                                       stackIdentifier: sessionIdentifier,
+                                       stackIdentifier: stackIdentifier,
                                        progress: nil,
                                        success: nil,
                                        failure: nil,
@@ -554,7 +554,7 @@ class DownloadTaskInfoTest: XCTestCase {
         let originalTask = DownloadTaskInfo(downloadId: insertedTaskId,
                                             URL: testURL,
                                             session: self.session!,
-                                            stackIdentifier: sessionIdentifier,
+                                            stackIdentifier: stackIdentifier,
                                             progress: nil,
                                             success: nil,
                                             failure: { [unowned self] (downloadTask: DownloadTaskInfo!, error: NSError?) in
@@ -567,7 +567,7 @@ class DownloadTaskInfoTest: XCTestCase {
         let newTask =  DownloadTaskInfo(downloadId: insertedTaskId,
                                         URL: testURL,
                                         session: self.session!,
-                                        stackIdentifier: sessionIdentifier,
+                                        stackIdentifier: stackIdentifier,
                                         progress: nil,
                                         success: nil,
                                         failure: nil,
@@ -588,7 +588,7 @@ class DownloadTaskInfoTest: XCTestCase {
         let newTask = DownloadTaskInfo(downloadId: insertedTaskId,
                                        URL: testURL,
                                        session: self.session!,
-                                       stackIdentifier: sessionIdentifier,
+                                       stackIdentifier: stackIdentifier,
                                        progress: nil,
                                        success: nil,
                                        failure: { [unowned self] (downloadTask: DownloadTaskInfo!, error: NSError?) in
@@ -600,7 +600,7 @@ class DownloadTaskInfoTest: XCTestCase {
         let originalTask =  DownloadTaskInfo(downloadId: insertedTaskId,
                                              URL: testURL,
                                              session: self.session!,
-                                             stackIdentifier: sessionIdentifier,
+                                             stackIdentifier: stackIdentifier,
                                              progress: nil,
                                              success: nil,
                                              failure: nil,
@@ -631,7 +631,7 @@ class DownloadTaskInfoTest: XCTestCase {
         let newTask = DownloadTaskInfo(downloadId: insertedTaskId,
                                        URL: testURL,
                                        session: self.session!,
-                                       stackIdentifier: sessionIdentifier,
+                                       stackIdentifier: stackIdentifier,
                                        progress: nil,
                                        success: nil,
                                        failure: { [unowned self] (downloadTask: DownloadTaskInfo!, error: NSError?) in
@@ -645,7 +645,7 @@ class DownloadTaskInfoTest: XCTestCase {
         let originalTask = DownloadTaskInfo(downloadId: insertedTaskId,
                                             URL: testURL,
                                             session: self.session!,
-                                            stackIdentifier: sessionIdentifier,
+                                            stackIdentifier: stackIdentifier,
                                             progress: nil,
                                             success: nil,
                                             failure: { (downloadTask: DownloadTaskInfo!, error: NSError?) in
@@ -674,7 +674,7 @@ class DownloadTaskInfoTest: XCTestCase {
         let newTask = DownloadTaskInfo(downloadId: insertedTaskId,
                                        URL: testURL,
                                        session: self.session!,
-                                       stackIdentifier: sessionIdentifier,
+                                       stackIdentifier: stackIdentifier,
                                        progress: nil,
                                        success: nil,
                                        failure: nil,
@@ -696,7 +696,7 @@ class DownloadTaskInfoTest: XCTestCase {
         let originalTask = DownloadTaskInfo(downloadId: insertedTaskId,
                                             URL: testURL,
                                             session: self.session!,
-                                            stackIdentifier: sessionIdentifier,
+                                            stackIdentifier: stackIdentifier,
                                             progress: nil,
                                             success: nil,
                                             failure: nil,
@@ -708,7 +708,7 @@ class DownloadTaskInfoTest: XCTestCase {
         let newTask = DownloadTaskInfo(downloadId: insertedTaskId,
                                        URL: testURL,
                                        session: self.session!,
-                                       stackIdentifier: sessionIdentifier,
+                                       stackIdentifier: stackIdentifier,
                                        progress: nil,
                                        success: nil,
                                        failure: nil,
@@ -731,7 +731,7 @@ class DownloadTaskInfoTest: XCTestCase {
         let newTask = DownloadTaskInfo(downloadId: insertedTaskId,
                                        URL: testURL,
                                        session: self.session!,
-                                       stackIdentifier: sessionIdentifier,
+                                       stackIdentifier: stackIdentifier,
                                        progress: nil,
                                        success: nil,
                                        failure: nil,
@@ -743,7 +743,7 @@ class DownloadTaskInfoTest: XCTestCase {
         let originalTask = DownloadTaskInfo(downloadId: insertedTaskId,
                                             URL: testURL,
                                             session: self.session!,
-                                            stackIdentifier: sessionIdentifier,
+                                            stackIdentifier: stackIdentifier,
                                             progress: nil,
                                             success: nil,
                                             failure: nil,
@@ -774,7 +774,7 @@ class DownloadTaskInfoTest: XCTestCase {
         let newTask = DownloadTaskInfo(downloadId: insertedTaskId,
                                        URL: testURL,
                                        session: self.session!,
-                                       stackIdentifier: sessionIdentifier,
+                                       stackIdentifier: stackIdentifier,
                                        progress: nil,
                                        success: nil,
                                        failure: nil,
@@ -788,7 +788,7 @@ class DownloadTaskInfoTest: XCTestCase {
         let originalTask = DownloadTaskInfo(downloadId: insertedTaskId,
                                             URL: testURL,
                                             session: self.session!,
-                                            stackIdentifier: sessionIdentifier,
+                                            stackIdentifier: stackIdentifier,
                                             progress: nil,
                                             success: nil,
                                             failure: nil,
@@ -807,6 +807,145 @@ class DownloadTaskInfoTest: XCTestCase {
                                        handler: { (error: NSError?) in
                                         
                                         XCTAssertTrue(result.isEqual(expectedResult), "Completion should be new completion then original, Obtained: \(result) expected: \(expectedResult)")
+        })
+    }
+    
+    //MARK: Progress
+    
+    func test_coalesceProgressWithTaskInfo_ProgressShouldBeNil() {
+        
+        let newTask = DownloadTaskInfo(downloadId: insertedTaskId,
+                                       URL: testURL,
+                                       session: self.session!,
+                                       stackIdentifier: stackIdentifier,
+                                       progress: nil,
+                                       success: nil,
+                                       failure: nil,
+                                       completion: nil)
+        
+        insertedTask?.coalesceWithTaskInfo(newTask)
+        
+        insertedTask?.didUpdateProgress(5.0)
+        
+        XCTAssertNil(insertedTask!.progress, "Progress should be nil")
+    }
+    
+    func test_coalesceProgressWithTaskInfo_ProgressShouldBeOriginalCompletion() {
+        
+        progressExpectation = expectationWithDescription("Progress should be Original task's")
+        
+        let originalTask = DownloadTaskInfo(downloadId: insertedTaskId,
+                                            URL: testURL,
+                                            session: self.session!,
+                                            stackIdentifier: stackIdentifier,
+                                            progress: { [unowned self] (downloadTask: DownloadTaskInfo!) in
+                                                
+                                                self.progressExpectation?.fulfill()
+            },
+                                            success: nil,
+                                            failure: nil,
+                                            completion: nil)
+        
+        let newTask = DownloadTaskInfo(downloadId: insertedTaskId,
+                                       URL: testURL,
+                                       session: self.session!,
+                                       stackIdentifier: stackIdentifier,
+                                       progress: nil,
+                                       success: nil,
+                                       failure: nil,
+                                       completion: nil)
+        
+        originalTask.coalesceWithTaskInfo(newTask)
+        
+        originalTask.didUpdateProgress(5.0)
+        
+        waitForExpectationsWithTimeout(0.1,
+                                       handler:nil)
+    }
+    
+    func test_coalesceProgressWithTaskInfo_ProgressShouldBeNewCompletion() {
+        
+        progressExpectation = expectationWithDescription("Progress should be New task's")
+        
+        let newTask = DownloadTaskInfo(downloadId: insertedTaskId,
+                                       URL: testURL,
+                                       session: self.session!,
+                                       stackIdentifier: stackIdentifier,
+                                       progress: { [unowned self] (downloadTask: DownloadTaskInfo!) in
+                                        
+                                        self.progressExpectation?.fulfill()
+            },
+                                       success: nil,
+                                       failure: nil,
+                                       completion: nil)
+        
+        let originalTask = DownloadTaskInfo(downloadId: insertedTaskId,
+                                            URL: testURL,
+                                            session: self.session!,
+                                            stackIdentifier: stackIdentifier,
+                                            progress: nil,
+                                            success: nil,
+                                            failure: nil,
+                                            completion: nil)
+        
+        originalTask.coalesceWithTaskInfo(newTask)
+        
+        originalTask.didUpdateProgress(5.0)
+        
+        waitForExpectationsWithTimeout(0.1,
+                                       handler:nil)
+    }
+    
+    func test_coalesceProgressWithTaskInfo_ProgressShouldBeNewOrginalThenNew() {
+        
+        let originalCompletionExpectation = expectationWithDescription("Original task's expectation was not met")
+        
+        var result = ""
+        
+        let originalProgress = "1"
+        
+        let newProgress = "2"
+        
+        let expectedResult = "12"
+        
+        self.completionExpectation = expectationWithDescription("New task's expectation was not met")
+        
+        let newTask = DownloadTaskInfo(downloadId: insertedTaskId,
+                                       URL: testURL,
+                                       session: self.session!,
+                                       stackIdentifier: stackIdentifier,
+                                       progress:  { (downloadTask: DownloadTaskInfo!) in
+                                        
+                                        result = "\(result)\(newProgress)"
+                                        
+                                        self.completionExpectation?.fulfill()
+            },
+                                       success: nil,
+                                       failure: nil,
+                                       completion:nil)
+        
+        let originalTask = DownloadTaskInfo(downloadId: insertedTaskId,
+                                            URL: testURL,
+                                            session: self.session!,
+                                            stackIdentifier: stackIdentifier,
+                                            progress: { (downloadTask: DownloadTaskInfo!) in
+                                                
+                                                result = "\(result)\(originalProgress)"
+                                                
+                                                originalCompletionExpectation.fulfill()
+            },
+                                            success: nil,
+                                            failure: nil,
+                                            completion: nil)
+        
+        originalTask.coalesceWithTaskInfo(newTask)
+        
+        originalTask.didUpdateProgress(5.0)
+        
+        waitForExpectationsWithTimeout(0.1,
+                                       handler: { (error: NSError?) in
+                                        
+                                        XCTAssertTrue(result.isEqual(expectedResult), "Progress should be new progress then original, Obtained: \(result) expected: \(expectedResult)")
         })
     }
     
@@ -829,7 +968,7 @@ class DownloadTaskInfoTest: XCTestCase {
         let otherTask = DownloadTaskInfo(downloadId: "NEW\(insertedTaskId)",
                                          URL: testURL,
                                          session: self.session!,
-                                         stackIdentifier: sessionIdentifier,
+                                         stackIdentifier: stackIdentifier,
                                          progress: nil,
                                          success: nil,
                                          failure: nil,
@@ -843,7 +982,7 @@ class DownloadTaskInfoTest: XCTestCase {
         let otherTask = DownloadTaskInfo(downloadId: insertedTaskId,
                                          URL: testURL,
                                          session: self.session!,
-                                         stackIdentifier: sessionIdentifier,
+                                         stackIdentifier: stackIdentifier,
                                          progress: nil,
                                          success: nil,
                                          failure: nil,

@@ -25,6 +25,25 @@ class SessionTaskMock: NSURLSessionDownloadTask {
     
     //MARK: Identifier
     
+    override var taskIdentifier: Int {
+        
+        get {
+            
+            return _taskIdentifer
+        }
+        set {
+            
+            willChangeValueForKey("taskIdentifier")
+            self._taskIdentifer = newValue
+            didChangeValueForKey("taskIdentifier")
+        }
+    }
+    
+    private lazy var _taskIdentifer: Int = {
+        
+        return -3
+    }()
+    
     override var state: NSURLSessionTaskState {
         
         get {
@@ -78,5 +97,8 @@ class SessionTaskMock: NSURLSessionDownloadTask {
         completionHandler(pausedSavedData)
     }
     
-    
+    override func cancel() {
+        
+        NSLog("Do Nothing")
+    }
 }
