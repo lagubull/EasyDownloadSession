@@ -35,6 +35,7 @@ public protocol DownloadSessionDelegate {
 /**
  Defines a session with custom methods to download.
  */
+@objc(EDSDownloadSession)
 public class DownloadSession: NSObject, NSURLSessionDownloadDelegate {
     
     //MARK: Getters
