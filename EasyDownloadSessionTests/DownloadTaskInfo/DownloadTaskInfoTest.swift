@@ -26,7 +26,7 @@ class DownloadTaskInfoTest: XCTestCase {
     let testURL = NSURL(string: "URL")!
     let locationString = "locationString"
     
-    //MARK: TestLifeCycle
+    //MARK: - TestLifeCycle
     
     override func setUp() {
         
@@ -57,7 +57,7 @@ class DownloadTaskInfoTest: XCTestCase {
         super.tearDown()
     }
     
-    //MARK: Pause
+    //MARK: - Pause
     
     func test_pause_isDownloadingShouldBeNO() {
         
@@ -135,7 +135,7 @@ class DownloadTaskInfoTest: XCTestCase {
         XCTAssertTrue(session!.didInvokeDownloadTaskWithRequest!, "Task DownloadTaskWithRequest was not invoked")
     }
     
-    //MARK: Progress
+    //MARK: - Progress
     
     func test_didUpdateProgress_progessIsUpdated() {
         
@@ -171,7 +171,7 @@ class DownloadTaskInfoTest: XCTestCase {
     }
     
     
-    //MARK: Success
+    //MARK: - Success
     
     func test_didSucceedWithLocation_successLocationIsUsed() {
         
@@ -260,7 +260,7 @@ class DownloadTaskInfoTest: XCTestCase {
         swizzleNSDataWithContentsOfFile(on: false)
     }
     
-    //MARK: Failure
+    //MARK: - Failure
     
     func test_didFailWithError_failureErrorIsUsed() {
         
@@ -324,7 +324,7 @@ class DownloadTaskInfoTest: XCTestCase {
                                        handler: nil)
     }
     
-    //MARK: Coalescing
+    //MARK: - Coalescing
     
     func test_canCoalesceWithTaskInfo_ShouldReturnYES() {
         
@@ -358,7 +358,7 @@ class DownloadTaskInfoTest: XCTestCase {
         XCTAssertFalse(canCoalesce, "CanColaseceWithTaskInfo should return NO")
     }
     
-    //MARK: Success
+    //MARK: - Success
     
     func test_coalesceSuccesWithTaskInfo_SuccessShouldBeNil() {
         
@@ -521,7 +521,7 @@ class DownloadTaskInfoTest: XCTestCase {
         swizzleNSDataWithContentsOfFile(on: false)
     }
     
-    //MARK: Failure
+    //MARK: - Failure
     
     func test_coalesceFailureWithTaskInfo_FailureShouldBeNil() {
         
@@ -667,7 +667,7 @@ class DownloadTaskInfoTest: XCTestCase {
         })
     }
     
-    //MARK: Completion
+    //MARK: - Completion
     
     func test_coalesceCompletionWithTaskInfo_CompletionShouldBeNil() {
         
@@ -810,7 +810,7 @@ class DownloadTaskInfoTest: XCTestCase {
         })
     }
     
-    //MARK: Progress
+    //MARK: - Progress
     
     func test_coalesceProgressWithTaskInfo_ProgressShouldBeNil() {
         
@@ -949,7 +949,7 @@ class DownloadTaskInfoTest: XCTestCase {
         })
     }
     
-    //MARK: IsEqual
+    //MARK: - IsEqual
     
     func test_isEqual_ShouldReturnNO_nilObject() {
         
@@ -991,7 +991,7 @@ class DownloadTaskInfoTest: XCTestCase {
         XCTAssertTrue(insertedTask!.isEqual(otherTask), "Is Equal should return YES if the object if objects have same DownloadIds")
     }
     
-    //MARK: ReleaseMemory
+    //MARK: - ReleaseMemory
     
     func test_releaseMemory_downloadProgressShouldUpdate() {
         
@@ -1011,7 +1011,7 @@ class DownloadTaskInfoTest: XCTestCase {
         XCTAssertNil(insertedTask!.taskResumeData, "TaskResumeData should be nil")
     }
     
-    //MARK: Swizzle
+    //MARK: - Swizzle
     
     /**
      Swaps the implementation of NSData.init(contentsOfFile:) with our mocked one.

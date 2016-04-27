@@ -38,7 +38,7 @@ public protocol DownloadSessionDelegate {
 @objc(EDSDownloadSession)
 public class DownloadSession: NSObject, NSURLSessionDownloadDelegate {
     
-    //MARK: Getters
+    //MARK: - Getters
     
     /**
      Delegate for the DownloadSessionDelegate class.
@@ -73,7 +73,7 @@ public class DownloadSession: NSObject, NSURLSessionDownloadDelegate {
      */
     private let lock = NSLock()
     
-    //MARK: Init
+    //MARK: - Init
     
     override init(){
         
@@ -109,19 +109,20 @@ public class DownloadSession: NSObject, NSURLSessionDownloadDelegate {
         })
     }
     
-    //MARK: Register
+    //MARK: - Register
     
     /**
      Registers the stack in the session.
      
      - Parameter stackIdentifier: identifies the stack.
      */
+    @objc(registerStack:stackIdentifier:)
     public func registerStack(stack stack: Stack, stackIdentifier: String) {
         
         stackDictionary[stackIdentifier] = stack
     }
     
-    //MARK: ScheduleDownload
+    //MARK: - ScheduleDownload
     
     /**
      Adds a downloading task to the stack.
@@ -259,7 +260,7 @@ public class DownloadSession: NSObject, NSURLSessionDownloadDelegate {
                                                completion: nil)
     }
     
-    //MARK: ForceDownload
+    //MARK: - ForceDownload
     
     /**
      Stops the current download and adds it to the stack, the it begins executing this new download.
@@ -398,7 +399,7 @@ public class DownloadSession: NSObject, NSURLSessionDownloadDelegate {
         })
     }
     
-    //MARK: NSURLSessionDownloadDelegate
+    //MARK: - NSURLSessionDownloadDelegate
     
     public func URLSession(session: NSURLSession, downloadTask: NSURLSessionDownloadTask, didFinishDownloadingToURL location: NSURL) {
         
@@ -438,7 +439,7 @@ public class DownloadSession: NSObject, NSURLSessionDownloadDelegate {
         }
     }
     
-    //MARK: Cancel
+    //MARK: - Cancel
     
     /**
      Stop and remove all the pending downloads without executing the completion block.
@@ -485,7 +486,7 @@ public class DownloadSession: NSObject, NSURLSessionDownloadDelegate {
         DownloadSession.sharedInstance.finalizeTask(task)
     }
     
-    //MARK: Resume
+    //MARK: - Resume
     
     /**
      Resume or starts the next pending downloads in every stack if there is capacity in each stack.
@@ -527,7 +528,7 @@ public class DownloadSession: NSObject, NSURLSessionDownloadDelegate {
         DownloadSession.sharedInstance.lock.unlock()
     }
     
-    //MARK: Pause
+    //MARK: - Pause
     
     /**
      Stop the current downloads in every stack and save them back in the queue.
@@ -578,7 +579,7 @@ public class DownloadSession: NSObject, NSURLSessionDownloadDelegate {
         lock.unlock()
     }
     
-    //MARK: Coalescing
+    //MARK: - Coalescing
     
     /**
      Tries to coales the operation.
@@ -624,7 +625,7 @@ public class DownloadSession: NSObject, NSURLSessionDownloadDelegate {
         return didCoalesce
     }
     
-    //MARK: Finalize
+    //MARK: - Finalize
     
     internal func finalizeTask(task: DownloadTaskInfo) {
         
@@ -634,7 +635,7 @@ public class DownloadSession: NSObject, NSURLSessionDownloadDelegate {
         }
     }
     
-    //MARK: TaskWithIdentifier
+    //MARK: - TaskWithIdentifier
     
     /**
      Obtains the task from the currently executed or the scheduled one.
