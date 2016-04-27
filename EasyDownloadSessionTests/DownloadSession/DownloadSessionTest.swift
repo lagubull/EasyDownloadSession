@@ -41,7 +41,7 @@ class DownloadSessionTest: XCTestCase {
         super.tearDown()
     }
     
-    //MARK: scheduleDownloadWithId
+    //MARK: - scheduleDownloadWithId
     
     func test_scheduleDownloadWithId_fromURL_completion_shouldAddTask() {
         
@@ -99,7 +99,7 @@ class DownloadSessionTest: XCTestCase {
         XCTAssert(resultingTaskArray.count == 1, "ScheduleDownloadWithId should add a task to the stack")
     }
     
-    //MARK: ForceDownload
+    //MARK: - ForceDownload
     
     func test_forceDownloadWithId_fromURL_completion_shouldAddTask() {
         
@@ -198,7 +198,7 @@ class DownloadSessionTest: XCTestCase {
                                        handler:nil)
     }
     
-    //MARK: CancelDownloads
+    //MARK: - CancelDownloads
     
     func test_cancelDownloads_shouldStopCurrentDownloads() {
         
@@ -235,7 +235,7 @@ class DownloadSessionTest: XCTestCase {
         XCTAssert(stack!.count == 0, "CancelDownloads should stop all pending downloads")
     }
     
-    //MARK: CancelDownload
+    //MARK: - CancelDownload
     
     func test_cancelDownload() {
         
@@ -253,7 +253,7 @@ class DownloadSessionTest: XCTestCase {
         XCTAssert(stack!.count == 0, "CancelDownload should stop the specified download")
     }
     
-    //MARK: Resume
+    //MARK: - Resume
     
     func test_resumeDownloads_shouldStarThePendingDownloads_force() {
         
@@ -333,7 +333,7 @@ class DownloadSessionTest: XCTestCase {
                                        handler:nil)
     }
     
-    //MARK: Pause
+    //MARK: - Pause
     
     func test_pauseDownloads_allDownloadsBackInStack() {
         
@@ -399,7 +399,7 @@ class DownloadSessionTest: XCTestCase {
         XCTAssert(areAllDownloadsSuspended, "PauseDownloads: should have all downloads suspended")
     }
     
-    //MARK: ShouldCoalesceDownloadTask
+    //MARK: - ShouldCoalesceDownloadTask
     
     func test_shouldCoalesceDownloadTask_scheduleDownloadWithId_inProgressTask_coalescing() {
         
@@ -691,7 +691,7 @@ class DownloadSessionTest: XCTestCase {
         })
     }
     
-    //MARK: Finalize
+    //MARK: - Finalize
     
     func test_finalizeTask_shoudlRemoveFromInProgressDictionary() {
         
@@ -737,7 +737,7 @@ class DownloadSessionTest: XCTestCase {
         XCTAssert(stack!.currentDownloads == 0, failMessage)
     }
     
-    //MARK: TaskWithIdentifier
+    //MARK: - TaskWithIdentifier
     
     func test_taskInfoWithIdentfier_suspendedTask() {
         
@@ -769,7 +769,7 @@ class DownloadSessionTest: XCTestCase {
         XCTAssert(task.downloadId.isEqual(downloadId), "taskInfoWithIdentfier Should Return the task from the current tasks pool")
     }
     
-    //MARK: Swizzle
+    //MARK: - Swizzle
     
     /**
      Swaps the implementation of NSData.init(contentsOfFile:) with our mocked one.
@@ -794,7 +794,7 @@ class DownloadSessionTest: XCTestCase {
         }
     }
     
-    //MARK: NSURLSessionDownloadDelegate
+    //MARK: - NSURLSessionDownloadDelegate
     
     func test_didFinishDownloadingToURL() {
         

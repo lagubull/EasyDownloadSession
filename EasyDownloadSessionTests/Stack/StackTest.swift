@@ -12,7 +12,7 @@ import XCTest
 
 class StackTest: XCTestCase {
     
-    //MARK: Getters
+    //MARK: - Getters
     
     var stack: Stack?
     var session: SessionMock?
@@ -23,7 +23,7 @@ class StackTest: XCTestCase {
     let testURL = NSURL(string: "URL")!
     let locationString = "locationString"
     
-    //MARK: TestLifeCycle
+    //MARK: - TestLifeCycle
     
     override func setUp() {
         
@@ -54,7 +54,7 @@ class StackTest: XCTestCase {
         super.tearDown()
     }
     
-    //MARK: Push
+    //MARK: - Push
     
     func test_push_shouldAddItem() {
         
@@ -73,7 +73,7 @@ class StackTest: XCTestCase {
         XCTAssertEqual(self.stack!.downloadsArray.count, self.stack!.count, "Item count\(self.stack!.downloadsArray.count) does not match \(self.stack!.count)items in the stack")
     }
     
-    //MARK: CanPop
+    //MARK: - CanPop
     
     func test_canPopTask_ShouldReturnYes() {
         
@@ -121,7 +121,7 @@ class StackTest: XCTestCase {
         XCTAssertFalse(canPopTask, "canPopTask should return NO)")
     }
     
-    //MARK: Pop
+    //MARK: - Pop
     
     func test_pop_shouldReturnItem() {
         
@@ -180,7 +180,7 @@ class StackTest: XCTestCase {
         XCTAssertEqual(self.stack!.currentDownloads, currentDowloads, "Pop increased the current downloads counter, found:\(self.stack!.currentDownloads) expected: \(currentDowloads)")
     }
     
-    //MARK: Clear
+    //MARK: - Clear
     
     func test_clear_shouldRemoveAllObjects() {
         
@@ -206,7 +206,7 @@ class StackTest: XCTestCase {
         XCTAssertEqual(self.stack!.count, 0, "Item count \(self.stack!.count) does not match the expected: 0")
     }
     
-    //MARK: RemoveTaskInfo
+    //MARK: - RemoveTaskInfo
     
     func test_removeTaskInfo_shouldRemoveTask() {
         
@@ -270,7 +270,7 @@ class StackTest: XCTestCase {
         XCTAssertEqual(stack!.count, 1, "RemoveTaskInfo did not decrease the current downloads counter, found: \(self.stack!.count) expected: 1")
     }
     
-    //MARK: ReleaseMemory
+    //MARK: - ReleaseMemory
     
     func test_releaseMemory_shouldCallReleaseMemory() {
         

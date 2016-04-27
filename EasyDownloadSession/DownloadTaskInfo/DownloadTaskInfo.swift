@@ -22,7 +22,7 @@ func EDSDebug(message: String, filename: String = #file, function: String = #fun
 
 public class DownloadTaskInfo: NSObject
 {
-    //MARK: Getters
+    //MARK: - Getters
     
     /**
      Identifies the object.
@@ -94,7 +94,7 @@ public class DownloadTaskInfo: NSObject
      */
     private var request: NSURLRequest
     
-    //MARK: Init
+    //MARK: - Init
     
     internal override init() {
         
@@ -179,7 +179,7 @@ public class DownloadTaskInfo: NSObject
                   completion: completion)
     }
     
-    //MARK: Pause
+    //MARK: - Pause
     
     /**
      Stops the task and stores the progress.
@@ -200,7 +200,7 @@ public class DownloadTaskInfo: NSObject
         })
     }
     
-    //MARK: Resume
+    //MARK: - Resume
     
     /**
      Starts the task.
@@ -238,7 +238,7 @@ public class DownloadTaskInfo: NSObject
         newTask.resume()
     }
     
-    //MARK: Progress
+    //MARK: - Progress
     
     /**
      Notifies the task of its progress.
@@ -258,7 +258,7 @@ public class DownloadTaskInfo: NSObject
         })
     }
     
-    //MARK: Success
+    //MARK: - Success
     
     /**
      Notifies the task wwhen has finish succesfully.
@@ -297,7 +297,7 @@ public class DownloadTaskInfo: NSObject
         }
     }
     
-    //Mark: Failure
+    //MARK: - - Failure
     
     /**
      Notifies the task when it is finished with error.
@@ -327,7 +327,7 @@ public class DownloadTaskInfo: NSObject
         }
     }
     
-    //MARK: Coalescing
+    //MARK: - Coalescing
     
     /**
      Checks weather the taskInfo provided equals self.
@@ -439,7 +439,7 @@ public class DownloadTaskInfo: NSObject
         }
     }
     
-    //MARK: IsEqual
+    //MARK: - IsEqual
     
     override public func isEqual(object: AnyObject?) -> Bool {
         
@@ -460,7 +460,7 @@ public class DownloadTaskInfo: NSObject
         return equals
     }
     
-    //MARK: ReleaseMemory
+    //MARK: - ReleaseMemory
     
     /**
      Release the data of paused downloads.

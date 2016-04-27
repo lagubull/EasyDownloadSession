@@ -23,7 +23,7 @@ class SessionTaskMock: NSURLSessionDownloadTask {
     
     var pausedSavedDataExpectation: XCTestExpectation?
     
-    //MARK: Identifier
+    //MARK: - Identifier
     
     override var taskIdentifier: Int {
         

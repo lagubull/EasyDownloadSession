@@ -15,7 +15,7 @@ import UIKit
  */
 public class Stack: NSObject {
     
-    //MARK: Getters
+    //MARK: - Getters
     
     /**
      Number of items in the stack.
@@ -42,7 +42,7 @@ public class Stack: NSObject {
      */
     private let lock = NSLock()
     
-    //MARK: PUSH
+    //MARK: - PUSH
     
     /**
      Inserts in the stack.
@@ -97,7 +97,7 @@ public class Stack: NSObject {
         return taskInfo
     }
     
-    //MARK: Clear
+    //MARK: - Clear
     
     /**
      Empties the stack.
@@ -108,7 +108,7 @@ public class Stack: NSObject {
         count = 0
     }
     
-    //MARK: RemoveTaskInfo
+    //MARK: - RemoveTaskInfo
     
     /**
      Removes the task from the stack.
@@ -124,7 +124,7 @@ public class Stack: NSObject {
         }
     }
     
-    //MARK: ReleaseMemory
+    //MARK: - ReleaseMemory
     
     /**
      Releases the data of paused downloads.
@@ -141,7 +141,7 @@ public class Stack: NSObject {
         lock.unlock()
     }
     
-    //MARK: DeInit
+    //MARK: - DeInit
     
     deinit {
         
