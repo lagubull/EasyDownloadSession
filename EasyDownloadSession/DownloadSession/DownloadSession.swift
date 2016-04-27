@@ -116,7 +116,7 @@ public class DownloadSession: NSObject, NSURLSessionDownloadDelegate {
      
      - Parameter stackIdentifier: identifies the stack.
      */
-    @objc(registerStack_:stackIdentifier:)
+    @objc(registerStack:stackIdentifier:)
     public func registerStack(stack stack: Stack, stackIdentifier: String) {
         
         stackDictionary[stackIdentifier] = stack
