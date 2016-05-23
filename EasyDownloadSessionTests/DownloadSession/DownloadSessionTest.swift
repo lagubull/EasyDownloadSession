@@ -396,12 +396,10 @@ class DownloadSessionTest: XCTestCase {
         
         DownloadSession.pauseDownloads()
         
-        sleep(delay)
-        
         for task in stack!.downloadsArray {
             
             if areAllDownloadsSuspended &&
-                task.task!.state != .Suspended {
+                task.task!.state == .Running {
                 
                 areAllDownloadsSuspended = false
             }
