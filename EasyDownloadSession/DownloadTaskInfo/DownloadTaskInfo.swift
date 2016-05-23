@@ -139,7 +139,6 @@ public class DownloadTaskInfo: NSObject
         
         super.init()
         
-        self.task = session.downloadTaskWithRequest(request)
         self.success = success
         self.progress = progress
         self.failure = failure
@@ -207,8 +206,6 @@ public class DownloadTaskInfo: NSObject
      */
     public func resume() {
         
-        guard let task = task else { return }
-        
         if taskResumeData?.length > 0 {
             
             EDSDebug("Resuming task - \(downloadId)")
@@ -218,7 +215,8 @@ public class DownloadTaskInfo: NSObject
         }
         else {
             
-            if task.state == .Completed {
+            if  task == nil ||
+                task?.state != .Running {
                 
                 EDSDebug("Resuming task - \(downloadId)")
                 
@@ -228,6 +226,7 @@ public class DownloadTaskInfo: NSObject
             else {
                 
                 EDSDebug("Starting task - \(downloadId)")
+                
             }
         }
         

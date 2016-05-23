@@ -16,10 +16,10 @@ class DownloadTaskInfoTest: XCTestCase {
     var task: SessionTaskMock?
     var session: SessionMock?
     
-    var progressExpectation: XCTestExpectation?
-    var successExpectation: XCTestExpectation?
-    var failureExpectation: XCTestExpectation?
-    var completionExpectation: XCTestExpectation?
+    weak var progressExpectation: XCTestExpectation?
+    weak var successExpectation: XCTestExpectation?
+    weak var failureExpectation: XCTestExpectation?
+    weak var completionExpectation: XCTestExpectation?
     
     let insertedTaskId = "TASKID"
     let stackIdentifier =  "STACKIDENTIFIER"

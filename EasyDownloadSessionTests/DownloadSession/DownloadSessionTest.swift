@@ -19,6 +19,8 @@ class DownloadSessionTest: XCTestCase {
     let testURL = NSURL(string: "URL")!
     var soughtAfterTask: DownloadTaskInfo? = DownloadTaskInfo()
     
+    let delay: UInt32 = 1
+    
     override func setUp() {
         
         super.setUp()
@@ -158,7 +160,7 @@ class DownloadSessionTest: XCTestCase {
     
     func test_forceDownloadWithId_request_success_shouldExecuteSuccess() {
         
-        let expectation = expectationWithDescription("Success expectation")
+        weak var expectation = expectationWithDescription("Success expectation")
         
         swizzleNSDataWithContentsOfFile(on: true)
         
@@ -168,7 +170,7 @@ class DownloadSessionTest: XCTestCase {
                                             progress: nil,
                                             success: { (downloadTask: DownloadTaskInfo, resposeData: NSData?) in
                                                 
-                                                expectation.fulfill()
+                                                expectation?.fulfill()
             },
                                             failure: nil)
         
@@ -182,7 +184,7 @@ class DownloadSessionTest: XCTestCase {
     
     func test_forceDownloadWithId_request_success_shouldExecuteFailure() {
         
-        let expectation = expectationWithDescription("Failure expectation")
+        weak var expectation = expectationWithDescription("Failure expectation")
         
         DownloadSession.forceDownloadWithId(downloadId,
                                             request: NSURLRequest(URL: testURL),
@@ -191,7 +193,7 @@ class DownloadSessionTest: XCTestCase {
                                             success: nil,
                                             failure: { (downloadTask: DownloadTaskInfo, error: NSError?) in
                                                 
-                                                expectation.fulfill()
+                                                expectation?.fulfill()
         })
 
         waitForExpectationsWithTimeout(0.1,
@@ -275,9 +277,11 @@ class DownloadSessionTest: XCTestCase {
         
         DownloadSession.pauseDownloads()
         
+        sleep(delay)
+        
         DownloadSession.resumeDownloads()
         
-        waitForExpectationsWithTimeout(0.5,
+        waitForExpectationsWithTimeout(0.1,
                                        handler:nil)
     }
     
@@ -300,6 +304,8 @@ class DownloadSessionTest: XCTestCase {
         }
         
         DownloadSession.pauseDownloads()
+        
+        sleep(delay)
         
         DownloadSession.resumeDownloads()
         
@@ -327,9 +333,12 @@ class DownloadSessionTest: XCTestCase {
         
         DownloadSession.pauseDownloads()
         
+        sleep(delay)
+        
         DownloadSession.resumeDownloadsInStack(stackIdentifier)
         
-        waitForExpectationsWithTimeout(0.5,
+        
+        waitForExpectationsWithTimeout(0.1,
                                        handler:nil)
     }
     
@@ -390,7 +399,7 @@ class DownloadSessionTest: XCTestCase {
         for task in stack!.downloadsArray {
             
             if areAllDownloadsSuspended &&
-                task.task!.state != .Suspended {
+                task.task!.state == .Running {
                 
                 areAllDownloadsSuspended = false
             }
@@ -406,8 +415,8 @@ class DownloadSessionTest: XCTestCase {
         var runningTaskIdentifier1: Int = -1
         var runningTaskIdentifier2: Int = -2
         
-        let runningTask1Expectation = expectationWithDescription("Task 1 expectation")
-        let runningTask2Expectation = expectationWithDescription("Task 2 expectation")
+        weak var runningTask1Expectation = expectationWithDescription("Task 1 expectation")
+        weak var runningTask2Expectation = expectationWithDescription("Task 2 expectation")
         
         DownloadSession.scheduleDownloadWithId(downloadId,
                                                fromURL: testURL,
@@ -416,7 +425,7 @@ class DownloadSessionTest: XCTestCase {
                                                completion: { (downloadTask: DownloadTaskInfo!, responseData: NSData?, error: NSError?) in
                                                 
                                                 runningTaskIdentifier1 = downloadTask.task!.taskIdentifier
-                                                runningTask1Expectation.fulfill()
+                                                runningTask1Expectation?.fulfill()
         })
         
         DownloadSession.scheduleDownloadWithId(downloadId,
@@ -426,7 +435,7 @@ class DownloadSessionTest: XCTestCase {
                                                completion: { (downloadTask: DownloadTaskInfo!, responseData: NSData?, error: NSError?) in
                                                 
                                                 runningTaskIdentifier2 = downloadTask.task!.taskIdentifier
-                                                runningTask2Expectation.fulfill()
+                                                runningTask2Expectation?.fulfill()
         })
         
         waitForExpectationsWithTimeout(0.1,
@@ -441,8 +450,8 @@ class DownloadSessionTest: XCTestCase {
         var runningTaskIdentifier1: Int = -1
         var runningTaskIdentifier2: Int = -1
         
-        let runningTask1Expectation = expectationWithDescription("Task 1 expectation")
-        let runningTask2Expectation = expectationWithDescription("Task 2 expectation")
+        weak var runningTask1Expectation = expectationWithDescription("Task 1 expectation")
+        weak var runningTask2Expectation = expectationWithDescription("Task 2 expectation")
         
         DownloadSession.scheduleDownloadWithId(downloadId,
                                                fromURL: testURL,
@@ -451,7 +460,7 @@ class DownloadSessionTest: XCTestCase {
                                                completion: { (downloadTask: DownloadTaskInfo!, responseData: NSData?, error: NSError?) in
                                                 
                                                 runningTaskIdentifier1 = downloadTask.task!.taskIdentifier
-                                                runningTask1Expectation.fulfill()
+                                                runningTask1Expectation?.fulfill()
         })
         
         DownloadSession.scheduleDownloadWithId("NEW\(downloadId)",
@@ -461,7 +470,7 @@ class DownloadSessionTest: XCTestCase {
                                                completion: { (downloadTask: DownloadTaskInfo!, responseData: NSData?, error: NSError?) in
                                                 
                                                 runningTaskIdentifier2 = downloadTask.task!.taskIdentifier
-                                                runningTask2Expectation.fulfill()
+                                                runningTask2Expectation?.fulfill()
         })
         
         waitForExpectationsWithTimeout(0.1,
@@ -476,8 +485,8 @@ class DownloadSessionTest: XCTestCase {
         var runningTaskIdentifier1: Int = -1
         var runningTaskIdentifier2: Int = -2
         
-        let runningTask1Expectation = expectationWithDescription("Task 1 expectation")
-        let runningTask2Expectation = expectationWithDescription("Task 2 expectation")
+        weak var runningTask1Expectation = expectationWithDescription("Task 1 expectation")
+        weak var runningTask2Expectation = expectationWithDescription("Task 2 expectation")
         
         DownloadSession.scheduleDownloadWithId(downloadId,
                                                fromURL: testURL,
@@ -486,7 +495,7 @@ class DownloadSessionTest: XCTestCase {
                                                completion: { (downloadTask: DownloadTaskInfo!, responseData: NSData?, error: NSError?) in
                                                 
                                                 runningTaskIdentifier1 = downloadTask.task!.taskIdentifier
-                                                runningTask1Expectation.fulfill()
+                                                runningTask1Expectation?.fulfill()
         })
         
         DownloadSession.pauseDownloads()
@@ -498,7 +507,7 @@ class DownloadSessionTest: XCTestCase {
                                                completion: { (downloadTask: DownloadTaskInfo!, responseData: NSData?, error: NSError?) in
                                                 
                                                 runningTaskIdentifier2 = downloadTask.task!.taskIdentifier
-                                                runningTask2Expectation.fulfill()
+                                                runningTask2Expectation?.fulfill()
         })
         
         
@@ -515,8 +524,8 @@ class DownloadSessionTest: XCTestCase {
         var runningTaskIdentifier1: Int = -1
         var runningTaskIdentifier2: Int = -1
         
-        let runningTask1Expectation = expectationWithDescription("Task 1 expectation")
-        let runningTask2Expectation = expectationWithDescription("Task 2 expectation")
+        weak var runningTask1Expectation = expectationWithDescription("Task 1 expectation")
+        weak var runningTask2Expectation = expectationWithDescription("Task 2 expectation")
         
         DownloadSession.scheduleDownloadWithId(downloadId,
                                                fromURL: testURL,
@@ -525,7 +534,7 @@ class DownloadSessionTest: XCTestCase {
                                                completion: { (downloadTask: DownloadTaskInfo!, responseData: NSData?, error: NSError?) in
                                                 
                                                 runningTaskIdentifier1 = downloadTask.task!.taskIdentifier
-                                                runningTask1Expectation.fulfill()
+                                                runningTask1Expectation?.fulfill()
         })
         
         DownloadSession.pauseDownloads()
@@ -537,10 +546,10 @@ class DownloadSessionTest: XCTestCase {
                                                completion: { (downloadTask: DownloadTaskInfo!, responseData: NSData?, error: NSError?) in
                                                 
                                                 runningTaskIdentifier2 = downloadTask.task!.taskIdentifier
-                                                runningTask2Expectation.fulfill()
+                                                runningTask2Expectation?.fulfill()
         })
         
-        waitForExpectationsWithTimeout(0.2,
+        waitForExpectationsWithTimeout(0.1,
                                        handler: { (error: NSError?) in
                                         
                                         XCTAssert(runningTaskIdentifier1 != runningTaskIdentifier2, "Task did not coalesce: found task1: \(runningTaskIdentifier1) and task2: \(runningTaskIdentifier2)")
@@ -552,8 +561,8 @@ class DownloadSessionTest: XCTestCase {
         var runningTaskIdentifier1: Int = -1
         var runningTaskIdentifier2: Int = -2
         
-        let runningTask1Expectation = expectationWithDescription("Task 1 expectation")
-        let runningTask2Expectation = expectationWithDescription("Task 2 expectation")
+        weak var runningTask1Expectation = expectationWithDescription("Task 1 expectation")
+        weak var runningTask2Expectation = expectationWithDescription("Task 2 expectation")
         
         DownloadSession.forceDownloadWithId(downloadId,
                                             fromURL: testURL,
@@ -562,7 +571,7 @@ class DownloadSessionTest: XCTestCase {
                                             completion: { (downloadTask: DownloadTaskInfo!, responseData: NSData?, error: NSError?) in
                                                 
                                                 runningTaskIdentifier1 = downloadTask.task!.taskIdentifier
-                                                runningTask1Expectation.fulfill()
+                                                runningTask1Expectation?.fulfill()
         })
         
         DownloadSession.forceDownloadWithId(downloadId,
@@ -572,7 +581,7 @@ class DownloadSessionTest: XCTestCase {
                                             completion: { (downloadTask: DownloadTaskInfo!, responseData: NSData?, error: NSError?) in
                                                 
                                                 runningTaskIdentifier2 = downloadTask.task!.taskIdentifier
-                                                runningTask2Expectation.fulfill()
+                                                runningTask2Expectation?.fulfill()
         })
         
         waitForExpectationsWithTimeout(0.1,
@@ -587,8 +596,8 @@ class DownloadSessionTest: XCTestCase {
         var runningTaskIdentifier1: Int = -1
         var runningTaskIdentifier2: Int = -1
         
-        let runningTask1Expectation = expectationWithDescription("Task 1 expectation")
-        let runningTask2Expectation = expectationWithDescription("Task 2 expectation")
+         weak var runningTask1Expectation = expectationWithDescription("Task 1 expectation")
+         weak var runningTask2Expectation = expectationWithDescription("Task 2 expectation")
         
         DownloadSession.forceDownloadWithId(downloadId,
                                             fromURL: testURL,
@@ -597,7 +606,7 @@ class DownloadSessionTest: XCTestCase {
                                             completion: { (downloadTask: DownloadTaskInfo!, responseData: NSData?, error: NSError?) in
                                                 
                                                 runningTaskIdentifier1 = downloadTask.task!.taskIdentifier
-                                                runningTask1Expectation.fulfill()
+                                                runningTask1Expectation?.fulfill()
         })
         
         DownloadSession.forceDownloadWithId("NEW\(downloadId)",
@@ -607,7 +616,7 @@ class DownloadSessionTest: XCTestCase {
                                             completion: { (downloadTask: DownloadTaskInfo!, responseData: NSData?, error: NSError?) in
                                                 
                                                 runningTaskIdentifier2 = downloadTask.task!.taskIdentifier
-                                                runningTask2Expectation.fulfill()
+                                                runningTask2Expectation?.fulfill()
         })
         
         waitForExpectationsWithTimeout(0.2,
@@ -622,8 +631,8 @@ class DownloadSessionTest: XCTestCase {
         var runningTaskIdentifier1: Int = -1
         var runningTaskIdentifier2: Int = -2
         
-        let runningTask1Expectation = expectationWithDescription("Task 1 expectation")
-        let runningTask2Expectation = expectationWithDescription("Task 2 expectation")
+        weak var runningTask1Expectation = expectationWithDescription("Task 1 expectation")
+        weak var runningTask2Expectation = expectationWithDescription("Task 2 expectation")
         
         DownloadSession.forceDownloadWithId(downloadId,
                                             fromURL: testURL,
@@ -632,7 +641,7 @@ class DownloadSessionTest: XCTestCase {
                                             completion: { (downloadTask: DownloadTaskInfo!, responseData: NSData?, error: NSError?) in
                                                 
                                                 runningTaskIdentifier1 = downloadTask.task!.taskIdentifier
-                                                runningTask1Expectation.fulfill()
+                                                runningTask1Expectation?.fulfill()
         })
         
         DownloadSession.pauseDownloads()
@@ -644,7 +653,7 @@ class DownloadSessionTest: XCTestCase {
                                             completion: { (downloadTask: DownloadTaskInfo!, responseData: NSData?, error: NSError?) in
                                                 
                                                 runningTaskIdentifier2 = downloadTask.task!.taskIdentifier
-                                                runningTask2Expectation.fulfill()
+                                                runningTask2Expectation?.fulfill()
         })
         
         waitForExpectationsWithTimeout(0.1,
@@ -659,8 +668,8 @@ class DownloadSessionTest: XCTestCase {
         var runningTaskIdentifier1: Int = -1
         var runningTaskIdentifier2: Int = -1
         
-        let runningTask1Expectation = expectationWithDescription("Task 1 expectation")
-        let runningTask2Expectation = expectationWithDescription("Task 2 expectation")
+         weak var runningTask1Expectation = expectationWithDescription("Task 1 expectation")
+         weak var runningTask2Expectation = expectationWithDescription("Task 2 expectation")
         
         DownloadSession.forceDownloadWithId(downloadId,
                                             fromURL: testURL,
@@ -669,7 +678,7 @@ class DownloadSessionTest: XCTestCase {
                                             completion: { (downloadTask: DownloadTaskInfo!, responseData: NSData?, error: NSError?) in
                                                 
                                                 runningTaskIdentifier1 = downloadTask.task!.taskIdentifier
-                                                runningTask1Expectation.fulfill()
+                                                runningTask1Expectation?.fulfill()
         })
         
         DownloadSession.pauseDownloads()
@@ -681,7 +690,7 @@ class DownloadSessionTest: XCTestCase {
                                             completion: { (downloadTask: DownloadTaskInfo!, responseData: NSData?, error: NSError?) in
                                                 
                                                 runningTaskIdentifier2 = downloadTask.task!.taskIdentifier
-                                                runningTask2Expectation.fulfill()
+                                                runningTask2Expectation?.fulfill()
         })
         
         waitForExpectationsWithTimeout(0.2,
@@ -750,7 +759,7 @@ class DownloadSessionTest: XCTestCase {
         DownloadSession.pauseDownloads()
         
         let task: DownloadTaskInfo = DownloadSession.sharedInstance.taskInfoWithIdentfier(downloadId,
-                                                                                          stackIdentifier: stackIdentifier)
+                                                                                          stackIdentifier: stackIdentifier)!
         
         XCTAssert(task.downloadId.isEqual(downloadId), "taskInfoWithIdentfier Should Return the task from the suspended tasks pool")
     }
@@ -764,7 +773,7 @@ class DownloadSessionTest: XCTestCase {
                                             completion: nil)
         
         let task: DownloadTaskInfo = DownloadSession.sharedInstance.taskInfoWithIdentfier(downloadId,
-                                                                                          stackIdentifier: stackIdentifier)
+                                                                                          stackIdentifier: stackIdentifier)!
         
         XCTAssert(task.downloadId.isEqual(downloadId), "taskInfoWithIdentfier Should Return the task from the current tasks pool")
     }
@@ -814,6 +823,8 @@ class DownloadSessionTest: XCTestCase {
                                             failure: nil,
                                             completion: nil)
         
+        originalTask.resume()
+        
         DownloadSession.sharedInstance.inProgressDownloadsDictionary[originalTask.task!.taskIdentifier] = originalTask
         
         swizzleNSDataWithContentsOfFile(on: true)
@@ -845,6 +856,8 @@ class DownloadSessionTest: XCTestCase {
                                             success: nil,
                                             failure: nil,
                                             completion: nil)
+        
+        originalTask.resume()
         
         DownloadSession.sharedInstance.inProgressDownloadsDictionary[originalTask.task!.taskIdentifier] = originalTask
         
