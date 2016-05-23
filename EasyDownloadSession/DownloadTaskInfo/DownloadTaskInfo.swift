@@ -226,7 +226,6 @@ public class DownloadTaskInfo: NSObject
             else {
                 
                 EDSDebug("Starting task - \(downloadId)")
-                
             }
         }
         
