@@ -471,7 +471,9 @@ public class DownloadSession: NSObject, NSURLSessionDownloadDelegate {
         
         let task = DownloadSession.sharedInstance.taskInfoWithIdentfier(downloadId, stackIdentifier: stackIdentifier)
         
-        DownloadSession.sharedInstance.cancelTask(task)
+        guard let unWrappedTask = task else { return }
+        
+        DownloadSession.sharedInstance.cancelTask(unWrappedTask)
     }
     
     /**
@@ -645,7 +647,7 @@ public class DownloadSession: NSObject, NSURLSessionDownloadDelegate {
      
      - Returns: DownloadTaskInfo
      */
-    internal func taskInfoWithIdentfier(downloadId: String, stackIdentifier: String) -> DownloadTaskInfo {
+    internal func taskInfoWithIdentfier(downloadId: String, stackIdentifier: String) -> DownloadTaskInfo? {
         
         var resultingTask: DownloadTaskInfo?
         
@@ -664,8 +666,7 @@ public class DownloadSession: NSObject, NSURLSessionDownloadDelegate {
             if indexOfTask != NSNotFound {
                 
                 resultingTask = stack!.downloadsArray[indexOfTask]
-            }
-            
+            }            
         }
         else {
             
@@ -674,6 +675,6 @@ public class DownloadSession: NSObject, NSURLSessionDownloadDelegate {
             resultingTask = inProgressDownloadsDictionary[taskKey]
         }
         
-        return resultingTask!
+        return resultingTask
     }
 }
