@@ -1,7 +1,7 @@
 Pod::Spec.new do |s|
 
 s.name         = "EasyDownloadSession"
-s.version      = "2.0.2"
+s.version      = "2.0.3"
 s.summary      = "EasyDownloadSession allows to pause and resume downloads having a full control of the order of execution."
 
 s.homepage     = "https://github.com/lagubull/"

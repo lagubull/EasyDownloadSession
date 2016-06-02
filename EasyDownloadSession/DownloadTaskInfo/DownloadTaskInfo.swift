@@ -271,8 +271,6 @@ public class DownloadTaskInfo: NSObject
         
         let data: NSData? = NSData(contentsOfFile: path)
         
-        if data?.length > 0 {
-            
             if let success = success {
                 
                 callbackQueue.addOperationWithBlock( {
@@ -289,11 +287,6 @@ public class DownloadTaskInfo: NSObject
                     completion(downloadTask: self, responseData: data, error: nil)
                 })
             }
-        }
-        else {
-            
-            didFailWithError(nil)
-        }
     }
     
     //MARK: - - Failure

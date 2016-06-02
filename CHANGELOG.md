@@ -1,5 +1,6 @@
 ## Table Of Contents
 
+* [2.0.3](#2.0.3)
 * [2.0.2](#2.0.2)
 * [2.0.1](#2.0.1)
 * [2.0.0](#2.0.0)
@@ -11,6 +12,10 @@
 * [1.0.0](#1.0.0)
 * [0.5.0](#0.5.0)
 * [0.1.0](#0.1.0)
+
+## 2.0.3
+
+- Fixed bug when only headers are received, this is no longer considered an error. 
 
 ## 2.0.2
 

@@ -337,7 +337,6 @@ class DownloadSessionTest: XCTestCase {
         
         DownloadSession.resumeDownloadsInStack(stackIdentifier)
         
-        
         waitForExpectationsWithTimeout(0.1,
                                        handler:nil)
     }
@@ -510,8 +509,6 @@ class DownloadSessionTest: XCTestCase {
                                                 runningTask2Expectation?.fulfill()
         })
         
-        
-        
         waitForExpectationsWithTimeout(0.1,
                                        handler: { (error: NSError?) in
                                         
@@ -538,6 +535,8 @@ class DownloadSessionTest: XCTestCase {
         })
         
         DownloadSession.pauseDownloads()
+        
+        sleep(delay)
         
         DownloadSession.scheduleDownloadWithId("NEW\(downloadId)",
                                                fromURL: testURL,

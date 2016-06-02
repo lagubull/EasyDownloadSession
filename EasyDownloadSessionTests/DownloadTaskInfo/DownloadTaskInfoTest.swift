@@ -207,24 +207,7 @@ class DownloadTaskInfoTest: XCTestCase {
         
         swizzleNSDataWithContentsOfFile(on: false)
     }
-    
-    func test_didSucceedWithLocation_didFailWithErrorIsInvoked() {
-        
-        let task =  DownloadTaskInfoMock(downloadId: insertedTaskId,
-                                         URL: testURL,
-                                         session: self.session!,
-                                         stackIdentifier: stackIdentifier,
-                                         progress: nil,
-                                         success: nil,
-                                         failure: nil,
-                                         completion: nil)
-        
-        
-        task.didSucceedWithLocation(testURL)
-        
-        XCTAssertTrue(task.didInvokeDidFailWithError, "DidFailWithError was not invoked")
-    }
-    
+
     func test_didSucceedWithLocation_completionLocationIsUsed() {
         
         swizzleNSDataWithContentsOfFile(on: true)
@@ -658,7 +641,7 @@ class DownloadTaskInfoTest: XCTestCase {
         
         originalTask.coalesceWithTaskInfo(newTask)
         
-        originalTask.didSucceedWithLocation(NSURL(string: locationString)!)
+        originalTask.didFailWithError(nil)
         
         waitForExpectationsWithTimeout(0.1,
                                        handler: { (error: NSError?) in
